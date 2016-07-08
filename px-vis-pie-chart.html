@@ -1,0 +1,230 @@
+<!--
+    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
+    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
+    'grunt depserve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
+-->
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../px-vis/px-vis-behavior-chart.html"/>
+<link rel="import" href="../px-vis/px-vis-behavior-common.html"/>
+<link rel="import" href="../px-vis/px-vis-behavior-d3.html"/>
+<link rel="import" href="../px-vis/px-vis-scale.html"/>
+<link rel="import" href="../px-vis/px-vis-svg.html"/>
+<link rel="import" href="../px-vis/px-vis-pie.html"/>
+<link rel="import" href="../px-vis/px-vis-axis.html"/>
+<link rel="import" href="../px-vis/px-vis-tooltip.html"/>
+<link rel="import" href="../px-vis/px-vis-interaction-space.html"/>
+<link rel="import" href="../px-vis/px-vis-register.html"/>
+<link rel="import" href="../px-vis/px-vis-zoom.html"/>
+<link rel="import" href="../px-vis/px-vis-cursor.html"/>
+<link rel="import" href="../px-vis/px-vis-clip-path.html"/>
+
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Usage
+
+    <px-vis-pie-chart></px-vis-pie-chart>
+
+@element px-vis-pie-chart
+@blurb Element providing solution to no problem in particular.
+@homepage index.html
+@demo demo.html
+-->
+<dom-module id="px-vis-pie-chart">
+  <link rel="import" type="css" href  ="css/px-vis-pie-chart.css"/>
+  <template>
+    <div class$="{{_getWrapperClass(_registerType)}}">
+      <!-- Legend -->
+      <px-vis-register
+        id="register"
+        class$="{{_getHideClass(hideRegister)}}"
+        chart-data="[[chartData]]"
+        complete-series-config="[[completeSeriesConfig]]"
+        muted-series={{mutedSeries}}
+        type="{{_registerType}}"
+        x-axis-type="pie"
+        y-axis-type="pie"
+        units="[[units]]">
+      </px-vis-register>
+      <!-- Core -->
+      <px-vis-svg
+        id="svg"
+        width="[[width]]"
+        height="[[height]]"
+        margin="[[margin]]"
+        svg="{{svg}}"
+        px-svg-elem="{{pxSvgElem}}">
+      </px-vis-svg>
+    </div>
+    <px-vis-clip-path
+      svg="[[svg]]"
+      x="[[x]]"
+      y="[[y]]"
+      width="[[width]]"
+      height="[[height]]"
+      margin="[[margin]]"
+      clip-path="{{clipPath}}">
+    </px-vis-clip-path>
+    <!-- scatter series -->
+    <px-vis-pie
+      svg="[[svg]]"
+      series-id="pieId"
+      width="[[width]]"
+      height="[[height]]"
+      margin="[[margin]]"
+      chart-data="[[chartData]]"
+      muted-series="[[mutedSeries]]"
+      clip-path="[[clipPath]]"
+      complete-series-config="[[completeSeriesConfig]]"
+      inner-radius="[[innerRadius]]"
+      px-svg-elem="[[pxSvgElem]]"
+      units="[[units]]">
+    </px-vis-pie>
+    <px-vis-interaction-space
+      svg="[[svg]]"
+      width="[[width]]"
+      height="[[height]]"
+      margin="[[margin]]"
+      x="[[x]]"
+      y="[[y]]"
+      current-domain-x="[[currentDomainX]]"
+      current-domain-y="[[currentDomainY]]"
+      chart-data="[[chartData]]"
+      tooltip-data="{{tooltipData}}"
+      extents-data="{{extentsData}}"
+      x-axis-type="[[xAxisType]]"
+      y-axis-type="[[yAxisType]]"
+      complete-series-config="[[completeSeriesConfig]]">
+    </px-vis-interaction-space>
+    <!-- Tooltip -->
+    <px-vis-tooltip
+      class$="{{_getHideClass(hideTooltip)}}"
+      tooltip-data="[[tooltipData]]"
+      chart-data="[[chartData]]"
+      muted-series="[[mutedSeries]]"
+      px-svg-elem="[[pxSvgElem]]"
+      x-axis-type="[[xAxisType]]"
+      y-axis-type="[[yAxisType]]"
+      complete-series-config="[[completeSeriesConfig]]">
+    </px-vis-tooltip>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'px-vis-pie-chart',
+
+    behaviors: [
+      PxVisBehaviorD3.svg,
+      PxVisBehaviorD3.clipPath,
+      PxVisBehavior.dataset,
+      PxVisBehavior.mutedSeries,
+      PxVisBehavior.sizing,
+      PxVisBehavior.tooltipData,
+      PxVisBehavior.completeSeriesConfig,
+      PxVisBehaviorChart.chartCommon,
+      PxVisBehavior.units
+    ],
+    properties: {
+      /**
+       * Configuration object used to customize the tooltip.
+       * Please refer to px-tooltip (URL) for a list of supported proerties.
+       * Most interesting properties include:
+       * -width
+       * -height
+       * -units (array)
+       *
+       */
+      tooltipConfig: {
+        type: Object,
+        observer: '_tooltipConfigChanged'
+      },
+      /**
+       * Configuration object used to customize the tooltip.
+       * Please refer to px-tooltip (URL) for a list of supported proerties.
+       * Most interesting properties include:
+       * -width
+       * -height
+       * -units (array)
+       *
+       */
+      registerConfig: {
+        type: Object,
+        observer: '_registerConfigChanged'
+      },
+      /**
+       *
+       * Allows to hide the tooltip
+       */
+      hideTooltip: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       *
+       * Allows to hide the register
+       */
+      hideRegister: {
+        type: Boolean,
+        value: false
+      },
+      _registerType: {
+        type: String
+      }
+    },
+    observer: ['_xAxisConfigChanged(xAxisConfig.*)',
+               '_yAxisConfigChanged(yAxisConfig.*)'],
+    ready: function() {
+      this.xAxisType = 'pie';
+      this.yAxisType = 'pie';
+    },
+    _tooltipConfigChanged: function(conf) {
+
+      this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
+    },
+    _registerConfigChanged: function(conf) {
+
+      this._applyConfigToElement(this.registerConfig, this.$.register);
+    },
+    /**
+     * Applies the config object to the element. Each key in the config object
+     * is the name of the property to be applied
+     *
+     */
+    _applyConfigToElement: function(config, element) {
+      if(typeof(config) !== 'object') {
+        console.error('Configuration object must be valid JSON: ' + config);
+        return;
+      }
+      if(!element) {
+        console.error('Cannot apply config to undefined element');
+        return;
+      }
+
+      var keys = Object.keys(config);
+      for(var i = 0; i < keys.length; i++){
+        var key = keys[i];
+        element.set(key, config[key])
+      }
+    },
+    _getHideClass: function(hide) {
+      if(hide === true) {
+        return 'visuallyhidden';
+      }
+      return '';
+    },
+    _getWrapperClass: function(regType) {
+      var classList = "flex ";
+
+      if(regType === 'vertical') {
+        classList += "flex--row--rev";
+      }
+      else {
+        classList += "flex--col";
+      }
+      return classList;
+    }
+  });
+</script>

@@ -1,0 +1,53 @@
+ .<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      px-vis-pie-chart Demo</title>
+    <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+    <link rel="import" href="px-vis-pie-chart.html" />
+    <link rel="import" href="../iron-ajax/iron-ajax.html" />
+    <link rel="import" href="../px-theme/px-theme.html" />
+  </head>
+
+  <body>
+
+    <h3>Demo</h3>
+    <template id="demo" is="dom-bind">
+      <iron-ajax
+               url="demo_data.json"
+               handle-as="json"
+               last-response="{{data}}" auto></iron-ajax>
+        <div style="display:flex">
+          <px-vis-pie-chart
+            chart-data="{{data}}"
+            width="400"
+            height="400"
+            margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
+            register-config='{
+              "width": 150,
+              "type": "vertical"}'
+            include-all-series
+            units="pints">
+          </px-vis-pie-chart>
+          <px-vis-pie-chart
+            chart-data="{{data}}"
+            width="400"
+            height="400"
+            inner-radius="0.7"
+            include-all-series="true"
+            register-config='{
+              "height": 100,
+              "type": "horizontal"}'
+              units="L">
+          </px-vis-pie-chart>
+        </div>
+    </template>
+  </body>
+
+</html>
