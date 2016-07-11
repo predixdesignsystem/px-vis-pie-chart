@@ -45,6 +45,7 @@ Element providing solution to no problem in particular.
         type="{{_registerType}}"
         x-axis-type="pie"
         y-axis-type="pie"
+        use-percentage="[[usePercentage]]"
         units="[[units]]">
       </px-vis-register>
       <!-- Core -->
@@ -66,20 +67,23 @@ Element providing solution to no problem in particular.
       margin="[[margin]]"
       clip-path="{{clipPath}}">
     </px-vis-clip-path>
-    <!-- scatter series -->
+    <!-- pie series -->
     <px-vis-pie
       svg="[[svg]]"
-      series-id="pieId"
       width="[[width]]"
       height="[[height]]"
       margin="[[margin]]"
       chart-data="[[chartData]]"
+      series-id="[[_getSeriesId(completeSeriesConfig)]]"
       muted-series="[[mutedSeries]]"
       clip-path="[[clipPath]]"
       complete-series-config="[[completeSeriesConfig]]"
       inner-radius="[[innerRadius]]"
       px-svg-elem="[[pxSvgElem]]"
-      units="[[units]]">
+      use-percentage="[[usePercentage]]"
+      units="[[units]]"
+      show-title="[[showTitle]]"
+      total="[[_total]]">
     </px-vis-pie>
     <px-vis-interaction-space
       svg="[[svg]]"
@@ -97,17 +101,6 @@ Element providing solution to no problem in particular.
       y-axis-type="[[yAxisType]]"
       complete-series-config="[[completeSeriesConfig]]">
     </px-vis-interaction-space>
-    <!-- Tooltip -->
-    <px-vis-tooltip
-      class$="{{_getHideClass(hideTooltip)}}"
-      tooltip-data="[[tooltipData]]"
-      chart-data="[[chartData]]"
-      muted-series="[[mutedSeries]]"
-      px-svg-elem="[[pxSvgElem]]"
-      x-axis-type="[[xAxisType]]"
-      y-axis-type="[[yAxisType]]"
-      complete-series-config="[[completeSeriesConfig]]">
-    </px-vis-tooltip>
   </template>
 </dom-module>
 
@@ -170,15 +163,39 @@ Element providing solution to no problem in particular.
         type: Boolean,
         value: false
       },
+      /**
+       * Whether to show a title in the middle of the pie/donut with the total value.
+       * Meant to be used with a donut chart
+       */
+      showTitle: {
+        type: Boolean,
+        value: false
+      },
       _registerType: {
         type: String
+      },
+      /**
+       * Internal data used, same as chartData but with percentages infos
+       */
+      _internalChartData: {
+        type: Array,
+        computed: '_getInternalData(chartData, completeSeriesConfig)'
+      },
+      /**
+       * Total value of all slices
+       */
+      _total: {
+        type: Number,
+        value: 0
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)'],
+               '_yAxisConfigChanged(yAxisConfig.*)',
+               '_chartDataChanged(chartData)'],
     ready: function() {
       this.xAxisType = 'pie';
       this.yAxisType = 'pie';
+      this.includeAllSeries = true;
     },
     _tooltipConfigChanged: function(conf) {
 
@@ -187,6 +204,25 @@ Element providing solution to no problem in particular.
     _registerConfigChanged: function(conf) {
 
       this._applyConfigToElement(this.registerConfig, this.$.register);
+    },
+    _getInternalData: function(chartData, completeSeriesConfig) {
+      var total = 0,
+          id = this._returnKeys(completeSeriesConfig)[0],
+          xKey = this.completeSeriesConfig[id].x,
+          result = [];
+
+        //calculate total value of all data
+        for(var i=0; i<chartData.length; i++) {
+          total += chartData[i][xKey];
+          result.push(chartData[i]);
+        }
+
+        this.set('_total', total);
+
+        //make sure each slice is aware of its percentage value
+        for(var i=0; i<result.length; i++) {
+          result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(0);
+        }
     },
     /**
      * Applies the config object to the element. Each key in the config object
@@ -225,6 +261,10 @@ Element providing solution to no problem in particular.
         classList += "flex--col";
       }
       return classList;
+    },
+    _getSeriesId: function(completeSeriesConfig) {
+      //should always have only 1 key for pies
+      return this._returnKeys(completeSeriesConfig)[0];
     }
   });
 </script>

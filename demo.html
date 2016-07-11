@@ -28,23 +28,21 @@
             chart-data="{{data}}"
             width="400"
             height="400"
+            use-percentage
             margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
             register-config='{
               "width": 150,
-              "type": "vertical"}'
-            include-all-series
-            units="pints">
+              "type": "vertical"}'>
           </px-vis-pie-chart>
           <px-vis-pie-chart
             chart-data="{{data}}"
             width="400"
             height="400"
             inner-radius="0.7"
-            include-all-series="true"
+            show-title
             register-config='{
-              "height": 100,
               "type": "horizontal"}'
-              units="L">
+            units="Cans">
           </px-vis-pie-chart>
         </div>
     </template>

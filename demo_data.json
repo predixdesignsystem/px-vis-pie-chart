@@ -1,28 +1,28 @@
 [{
 	"x": 15,
-	"y": "IPA"
+	"y": "Blue"
 }, {
 	"x": 1,
-	"y": "Lager"
+	"y": "Orange"
 }, {
 	"x": 1,
-	"y": "Pils"
+	"y": "Green"
 }, {
 	"x": 8,
-	"y": "Sour"
+	"y": "Pink"
 }, {
 	"x": 12,
-	"y": "Stout"
+	"y": "Brownish"
 },
 {
 	"x": 7,
-	"y": "Pale"
+	"y": "Purple"
 },
 {
 	"x": 9,
-	"y": "Porter"
+	"y": "Mustard"
 },
 {
 	"x": 4,
-	"y": "Heffeweisse"
+	"y": "Red"
 }]
