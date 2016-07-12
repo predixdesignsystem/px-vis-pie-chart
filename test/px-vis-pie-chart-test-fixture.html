@@ -15,6 +15,7 @@
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
     <link rel="import" href="../../px-theme/px-theme.html"/>
+    <link rel="import" href="../iron-ajax/iron-ajax.html" />
     <!-- This script link will contain the generated script for basic wct test cases -->
     <script src="px-vis-pie-chart-base-tests.js"></script>
     <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
@@ -23,6 +24,35 @@
 
   <body>
     <h3>Web Component Test : Fixture for px-vis-pie-chart</h3>
-    <px-vis-pie-chart id="px_vis_pie_chart_1"></px-vis-pie-chart>
+    <template id="demo" is="dom-bind">
+      <iron-ajax
+               url="demo_data.json"
+               handle-as="json"
+               last-response="{{data}}" auto></iron-ajax>
+        <div style="display:flex">
+          <px-vis-pie-chart
+            id="pie"
+            chart-data="{{data}}"
+            width="400"
+            height="400"
+            use-percentage
+            margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
+            register-config='{
+              "width": 150,
+              "type": "vertical"}'>
+          </px-vis-pie-chart>
+          <px-vis-pie-chart
+            id="donut"
+            chart-data="{{data}}"
+            width="400"
+            height="400"
+            inner-radius="0.7"
+            show-title
+            register-config='{
+              "type": "horizontal"}'
+            units="Cans">
+          </px-vis-pie-chart>
+        </div>
+    </template>
   </body>
 </html>
