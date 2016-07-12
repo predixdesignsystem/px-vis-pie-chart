@@ -79,6 +79,7 @@ Element providing solution to no problem in particular.
       clip-path="[[clipPath]]"
       complete-series-config="[[completeSeriesConfig]]"
       inner-radius="[[innerRadius]]"
+      donut="[[donut]]"
       px-svg-elem="[[pxSvgElem]]"
       use-percentage="[[usePercentage]]"
       units="[[units]]"
@@ -187,7 +188,25 @@ Element providing solution to no problem in particular.
       _total: {
         type: Number,
         value: 0
-      }
+      },
+      /**
+       * Whether the chart should be disaplyed as a donut rather than a pie.
+       * If displayed as a donut it will by default use 30px as the ring size.
+       * It can be overriden by using the "innerRadius" property (between 0 and 1)
+       */
+      donut: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Number between 0 and 1 defining how much of the inner pie should be cut.
+       * Use it to override default donut ring size. 0 = full chart, 1 no chart
+       *
+       */
+      innerRadius: {
+        type: Number,
+        value: 0
+      },
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
                '_yAxisConfigChanged(yAxisConfig.*)',
