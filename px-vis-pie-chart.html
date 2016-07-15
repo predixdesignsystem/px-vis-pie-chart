@@ -35,6 +35,15 @@ Element providing solution to no problem in particular.
   <link rel="import" type="css" href  ="css/px-vis-pie-chart.css"/>
   <template>
     <div class$="{{_getWrapperClass(_registerType)}}">
+      <!-- Core -->
+      <px-vis-svg
+        id="svg"
+        width="[[width]]"
+        height="[[height]]"
+        margin="[[margin]]"
+        svg="{{svg}}"
+        px-svg-elem="{{pxSvgElem}}">
+      </px-vis-svg>
       <!-- Legend -->
       <px-vis-register
         id="register"
@@ -48,15 +57,6 @@ Element providing solution to no problem in particular.
         use-percentage="[[usePercentage]]"
         units="[[units]]">
       </px-vis-register>
-      <!-- Core -->
-      <px-vis-svg
-        id="svg"
-        width="[[width]]"
-        height="[[height]]"
-        margin="[[margin]]"
-        svg="{{svg}}"
-        px-svg-elem="{{pxSvgElem}}">
-      </px-vis-svg>
     </div>
     <px-vis-clip-path
       svg="[[svg]]"
@@ -274,10 +274,10 @@ Element providing solution to no problem in particular.
       var classList = "flex ";
 
       if(regType === 'vertical') {
-        classList += "flex--row--rev";
+        classList += "flex--row";
       }
       else {
-        classList += "flex--col";
+        classList += "flex--col--rev";
       }
       return classList;
     },
