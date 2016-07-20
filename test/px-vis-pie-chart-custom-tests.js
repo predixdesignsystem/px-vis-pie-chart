@@ -7,8 +7,30 @@ function runCustomTests() {
   // Use testCase(options) for a more convenient setup of the test cases
   suite('Pie tests', function() {
 
-    test('bof', function() {
+    test('register horizontal position', function() {
+        var svg = Polymer.dom(donut.root).querySelector('px-vis-svg'),
+            register = Polymer.dom(donut.root).querySelector('px-vis-register'),
+            svgRect = svg.getBoundingClientRect(),
+            regRect = register.getBoundingClientRect();
 
+        assert.equal(regRect.bottom, svgRect.top);
+
+    });
+
+    test('register vertical position', function() {
+        var svg = Polymer.dom(pie.root).querySelector('px-vis-svg'),
+            register = Polymer.dom(pie.root).querySelector('px-vis-register'),
+            svgRect = svg.getBoundingClientRect(),
+            regRect = register.getBoundingClientRect();
+
+        assert.equal(regRect.left, svgRect.right);
+
+    });
+
+    test('get hide class', function() {
+
+      assert.equal('visuallyhidden', pie._getHideClass(true));
+      assert.equal('', pie._getHideClass(false));
     });
 
   });

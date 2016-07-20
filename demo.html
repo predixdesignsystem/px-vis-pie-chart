@@ -32,7 +32,12 @@ grunt  .<!doctype html>
             margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
             register-config='{
               "width": 150,
-              "type": "vertical"}'>
+              "type": "vertical"}'
+            series-config='{
+              "mySerie" :{"xAxisUnit": "pints","y": "y",
+            "x": "x"}
+            }'
+            use-percentage>
           </px-vis-pie-chart>
           <px-vis-pie-chart
             chart-data="{{data}}"
@@ -42,7 +47,11 @@ grunt  .<!doctype html>
             show-title
             register-config='{
               "type": "horizontal"}'
-            units="L"
+            series-config='{
+              "mySerie" :{"xAxisUnit": "pints",
+            "y": "y",
+          "x": "x"}
+            }'
             margin='{ "top": "20", "bottom": "0", "left": "70", "right": "0" }'>
           </px-vis-pie-chart>
         </div>

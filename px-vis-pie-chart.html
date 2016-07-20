@@ -54,8 +54,7 @@ Element providing solution to no problem in particular.
         type="{{_registerType}}"
         x-axis-type="pie"
         y-axis-type="pie"
-        use-percentage="[[usePercentage]]"
-        units="[[units]]">
+        use-percentage="[[usePercentage]]">
       </px-vis-register>
     </div>
     <px-vis-clip-path
@@ -82,7 +81,6 @@ Element providing solution to no problem in particular.
       donut="[[donut]]"
       px-svg-elem="[[pxSvgElem]]"
       use-percentage="[[usePercentage]]"
-      units="[[units]]"
       show-title="[[showTitle]]"
       total="[[_total]]">
     </px-vis-pie>
@@ -118,8 +116,7 @@ Element providing solution to no problem in particular.
       PxVisBehavior.sizing,
       PxVisBehavior.tooltipData,
       PxVisBehavior.completeSeriesConfig,
-      PxVisBehaviorChart.chartCommon,
-      PxVisBehavior.units
+      PxVisBehaviorChart.chartCommon
     ],
     properties: {
       /**
@@ -128,7 +125,6 @@ Element providing solution to no problem in particular.
        * Most interesting properties include:
        * -width
        * -height
-       * -units (array)
        *
        */
       tooltipConfig: {
@@ -141,7 +137,6 @@ Element providing solution to no problem in particular.
        * Most interesting properties include:
        * -width
        * -height
-       * -units (array)
        *
        */
       registerConfig: {
@@ -207,6 +202,13 @@ Element providing solution to no problem in particular.
         type: Number,
         value: 0
       },
+      /**
+       * whether the values should be displayed in %
+       */
+      usePercentage: {
+        type: Boolean,
+        value: false
+      }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
                '_yAxisConfigChanged(yAxisConfig.*)',
