@@ -1,13 +1,174 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>px-vis-pie-chart API</title>
-    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../iron-component-page/iron-component-page.html"/>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>px-vis-pie-chart Demo</title>
+  <link rel="stylesheet" type="text/css" href="css/px-vis-pie-chart-demo.css"/>
+  <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../px-theme/px-theme.html"/>
+  <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
+  <link rel="import" href="../px-tabs/px-tab-set.html" />
+  <link rel="import" href="../iron-ajax/iron-ajax.html" />
+  <link rel="import" href="../iron-component-page/iron-component-page.html"/>
+  <link rel="import" href="px-vis-pie-chart.html"/>
+  <link rel="icon" href="px-favicon.png" type="image/x-icon"/>
+
+  <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
+  <link rel="import" href="../polymer-font-awesome/polymer-font-awesome.html">
+  <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+
   </head>
-  <body>
-    <iron-component-page src="px-vis-pie-chart.html" active="px-vis-pie-chart"></iron-component-page>
-  </body>
+
+<body>
+
+  <!-- Wrap elements with auto-binding template to -->
+  <!-- allow use of Polymer bindings in main document -->
+  <template id="just-for-demo" is="dom-bind" >
+    <iron-ajax
+      url="demo_data.json"
+      handle-as="json"
+      last-response="{{data}}" auto></iron-ajax>
+    <!-- discription -->
+    <div class="hero u-p++ text--shadow">
+  		<h1 class="delta">px-vis-pie-chart</h1>
+  		<p>
+  			The	<code>px-vis-pie-chart</code> component includes various elements used for structuring responsive layouts.
+  		</p>
+  		<div class="flex">
+  			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/bower/v/px-vis-pie-chart.svg?style=flat-square" alt="Bower" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/github/issues-raw/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Issues" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/github/watchers/PredixDev/px-vis-pie-chart.svg?style=social&label=Watch" onerror="this.style.display='none'"/>
+  		</div>
+  	</div>
+    <br />
+    <!-- mega demo -->
+    <div style="position: relative;" class="u-pb++ flex flex--col" id="defaultTab">
+      <div class="tabContainer u-pt++ u-pl++">
+        <px-tab-set selected="{{selected}}" bare no-bottom-border>
+          <template is="dom-repeat" items="{{optionsArray}}">
+            <px-tab>Configuration {{indexPlusOne(index)}}</px-tab>
+          </template>
+        </px-tab-set>
+      </div>
+      <px-tab-pages selected="{{selected}}">
+        <template is="dom-repeat" items="{{optionsArray}}">
+          <section class="tab-page flex flex--right flex--wrap">
+            <div class="mega-demo flex u-pb++">
+            <!-- Properties -->
+            <div class="properties u-ph+ u-pb+ u-mt++ u-mh++" id="properties">
+              <p class="epsilon">Properties</p>
+              <div class="flex u-mb-">
+                <input id="donut{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.donut::change}}">
+                <label for$="donut{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Donut</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="usePercentage{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.usePercentage::change}}">
+                <label for$="usePercentage{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Use percentage</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="showTitle{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.showTitle::change}}">
+                <label for$="showTitle{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Show title</div>
+              </div>
+              <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
+              <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
+              <div class="u-mb-">Height: <input id="height" class="text-input" type="text" placeholder="Number" value="{{item.height::input}}" /></div>
+            </div>
+
+            <div class="demoContainer u-mr++">
+              <!-- demo -->
+              <div class="flex flex--col">
+                <div class="flex__item demo u-ph+ u-pb+ u-mt++">
+                  <px-vis-pie-chart
+                    id="range"
+                    chart-data="{{data}}"
+                    width={{item.width}}
+                    height="{{item.height}}"
+                    usePercentage="{{item.usePercentage}}"
+                    innerRadius="{{item.innerRadius}}"
+                    donut="{{item.donut}}"
+                    showTitle="{{item.showTitle}}"
+                    margin='{ "top": "20", "bottom": "60", "left": "50", "right": "10" }'
+                    series-config='{
+                      "mySerie" :{"xAxisUnit": "pints",
+                      "y": "y",
+                      "x": "x"}
+                      }'
+                    use-percentage="{{item.usePercentage}}">
+                  </px-vis-pie-chart>
+                </div>
+                <div class="flex__item">
+                  <px-demo-snippet
+                    element-properties={{item}}
+                    element-name="px-vis-pie-chart">
+                  </px-demo-snippet>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="apiContainer">
+            <div class="flex flex--col api u-mt++" >
+              <div>
+                <px-api-viewer source="px-vis-pie-chart"></px-api-viewer>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
+    </px-tab-pages>
+  </div>
+  <footer class="footer flex flex--center">
+    <div class="footer__container u-pv++">
+      <div>
+        <a href="https://ge.com/digital" >
+          <img src="monogram-wdmk.png" alt="GE Monogram" class="footer__img">
+        </a>
+      </div>
+      <div class="footer__list">
+        <ul class="list-inline list-inline--delimited">
+          <li>
+            <a href="http://predix.io/legal" class="footer__list--lnk">Legal</a>
+          </li>
+          <li>
+            <a href="mailto:info@predix.io" class="footer__list--lnk">Contact Us</a>
+          </li>
+          <li>Copyright © 2016 General Electric Company. All rights reserved.</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</template>
+<script>
+window.addEventListener('WebComponentsReady', function() {
+  var template = document.querySelector('template[is=dom-bind]');
+
+  var optionsArray = [
+    {
+      "usePercentage":true,
+      "innerRadius": 0,
+      "donut": false,
+      "showTitle": false,
+      "width": 400,
+      "height": 400,
+      "register-config":{
+        "width": 150,
+        "type": "vertical"}
+    }
+  ];
+
+    var indexPlusOne = function(num) {
+      return num + 1;
+    };
+    template.selected = "0";
+    template.optionsArray = optionsArray;
+    template.indexPlusOne = indexPlusOne;
+});
+</script>
+
+</body>
 </html>

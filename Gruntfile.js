@@ -24,7 +24,8 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'css/noprefix/px-vis-pie-chart-sketch.css': 'sass/px-vis-pie-chart-sketch.scss',
-          'css/noprefix/px-vis-pie-chart.css': 'sass/px-vis-pie-chart-predix.scss'
+          'css/noprefix/px-vis-pie-chart.css': 'sass/px-vis-pie-chart-predix.scss',
+          'css/noprefix/px-vis-pie-chart-demo.css': 'sass/px-vis-pie-chart-demo.scss'
         }
       }
     },
