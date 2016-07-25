@@ -1,3 +1,7 @@
+v0.0.4
+==================
+* bump px-vis version to get donut transitioning
+
 v0.0.3
 ==================
 * Add interactive demo
