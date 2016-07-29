@@ -34,7 +34,9 @@
     <div class="hero u-p++ text--shadow">
   		<h1 class="delta">px-vis-pie-chart</h1>
   		<p>
-  			The	<code>px-vis-pie-chart</code> component includes various elements used for structuring responsive layouts.
+  			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register. 
+        When clicking on a slice the pie will rotate to display this slice at the top <br/>Initial height and width can be set but the component will try to 
+        fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
   		</p>
   		<div class="flex">
   			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
@@ -85,7 +87,6 @@
               <div class="flex flex--col">
                 <div class="flex__item demo u-ph+ u-pb+ u-mt++">
                   <px-vis-pie-chart
-                    id="range"
                     chart-data="{{data}}"
                     width={{item.width}}
                     height="{{item.height}}"
@@ -93,7 +94,7 @@
                     innerRadius="{{item.innerRadius}}"
                     donut="{{item.donut}}"
                     showTitle="{{item.showTitle}}"
-                    margin='{ "top": "20", "bottom": "60", "left": "50", "right": "10" }'
+                    margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
                       "y": "y",
@@ -148,18 +149,25 @@ window.addEventListener('WebComponentsReady', function() {
   var template = document.querySelector('template[is=dom-bind]');
 
   var optionsArray = [
-    {
-      "usePercentage":true,
-      "innerRadius": 0,
-      "donut": false,
-      "showTitle": false,
-      "width": 400,
-      "height": 400,
-      "register-config":{
-        "width": 150,
-        "type": "vertical"}
-    }
-  ];
+        {
+          "usePercentage":true,
+          "innerRadius": 0,
+          "donut": false,
+          "showTitle": false,
+          "width": 400,
+          "height": 400,
+          "register-config":{
+            "width": 150,
+            "type": "vertical"},
+          "margin":{ "top": "10", "bottom": "10", "left": "0", "right": "0" },
+          "series-config":{
+            "mySerie" :{"xAxisUnit": "pints",
+            "y": "y",
+            "x": "x"}
+            }
+        }
+      
+      ];
 
     var indexPlusOne = function(num) {
       return num + 1;

@@ -34,72 +34,78 @@ Element providing solution to no problem in particular.
 <dom-module id="px-vis-pie-chart">
   <link rel="import" type="css" href  ="css/px-vis-pie-chart.css"/>
   <template>
-    <div class$="{{_getWrapperClass(_registerType)}}">
-      <!-- Core -->
-      <px-vis-svg
-        id="svg"
+    <div id="wrapper" class="wrapper">
+      <div>
+        <div class$="{{_getWrapperClass(_registerType)}}">
+          <!-- Core -->
+          <px-vis-svg
+            id="svg"
+            class="inline--flex"
+            width="[[width]]"
+            height="[[height]]"
+            margin="[[margin]]"
+            svg="{{svg}}"
+            px-svg-elem="{{pxSvgElem}}">
+          </px-vis-svg>
+          <!-- Legend -->
+          <px-vis-register
+            id="register"
+            class$="{{_getHideClass(hideRegister)}}"
+            chart-data="[[chartData]]"
+            complete-series-config="[[completeSeriesConfig]]"
+            muted-series={{mutedSeries}}
+            type="{{_registerType}}"
+            x-axis-type="pie"
+            y-axis-type="pie"
+            use-percentage="[[usePercentage]]">
+          </px-vis-register>
+        </div>
+        <!-- pie series -->
+        <px-vis-pie
+          svg="[[svg]]"
+          class="absolute"
+          width="[[width]]"
+          height="[[height]]"
+          margin="[[margin]]"
+          chart-data="[[chartData]]"
+          series-id="[[_getSeriesId(completeSeriesConfig)]]"
+          muted-series="[[mutedSeries]]"
+          clip-path="[[clipPath]]"
+          complete-series-config="[[completeSeriesConfig]]"
+          inner-radius="[[innerRadius]]"
+          donut="[[donut]]"
+          px-svg-elem="[[pxSvgElem]]"
+          use-percentage="[[usePercentage]]"
+          show-title="[[showTitle]]"
+          total="[[_total]]">
+        </px-vis-pie>
+      </div>
+      <px-vis-clip-path
+        svg="[[svg]]"
+        x="[[x]]"
+        y="[[y]]"
         width="[[width]]"
         height="[[height]]"
         margin="[[margin]]"
-        svg="{{svg}}"
-        px-svg-elem="{{pxSvgElem}}">
-      </px-vis-svg>
-      <!-- Legend -->
-      <px-vis-register
-        id="register"
-        class$="{{_getHideClass(hideRegister)}}"
+        clip-path="{{clipPath}}">
+      </px-vis-clip-path>
+      <px-vis-interaction-space
+        svg="[[svg]]"
+        width="[[width]]"
+        height="[[height]]"
+        margin="[[margin]]"
+        x="[[x]]"
+        y="[[y]]"
+        current-domain-x="[[currentDomainX]]"
+        current-domain-y="[[currentDomainY]]"
         chart-data="[[chartData]]"
-        complete-series-config="[[completeSeriesConfig]]"
-        muted-series={{mutedSeries}}
-        type="{{_registerType}}"
-        x-axis-type="pie"
-        y-axis-type="pie"
-        use-percentage="[[usePercentage]]">
-      </px-vis-register>
+        tooltip-data="{{tooltipData}}"
+        extents-data="{{extentsData}}"
+        x-axis-type="[[xAxisType]]"
+        y-axis-type="[[yAxisType]]"
+        complete-series-config="[[completeSeriesConfig]]">
+      </px-vis-interaction-space>
     </div>
-    <!-- pie series -->
-    <px-vis-pie
-      svg="[[svg]]"
-      width="[[width]]"
-      height="[[height]]"
-      margin="[[margin]]"
-      chart-data="[[chartData]]"
-      series-id="[[_getSeriesId(completeSeriesConfig)]]"
-      muted-series="[[mutedSeries]]"
-      clip-path="[[clipPath]]"
-      complete-series-config="[[completeSeriesConfig]]"
-      inner-radius="[[innerRadius]]"
-      donut="[[donut]]"
-      px-svg-elem="[[pxSvgElem]]"
-      use-percentage="[[usePercentage]]"
-      show-title="[[showTitle]]"
-      total="[[_total]]">
-    </px-vis-pie>
-    <px-vis-clip-path
-      svg="[[svg]]"
-      x="[[x]]"
-      y="[[y]]"
-      width="[[width]]"
-      height="[[height]]"
-      margin="[[margin]]"
-      clip-path="{{clipPath}}">
-    </px-vis-clip-path>
-    <px-vis-interaction-space
-      svg="[[svg]]"
-      width="[[width]]"
-      height="[[height]]"
-      margin="[[margin]]"
-      x="[[x]]"
-      y="[[y]]"
-      current-domain-x="[[currentDomainX]]"
-      current-domain-y="[[currentDomainY]]"
-      chart-data="[[chartData]]"
-      tooltip-data="{{tooltipData}}"
-      extents-data="{{extentsData}}"
-      x-axis-type="[[xAxisType]]"
-      y-axis-type="[[yAxisType]]"
-      complete-series-config="[[completeSeriesConfig]]">
-    </px-vis-interaction-space>
   </template>
 </dom-module>
 
@@ -116,7 +122,8 @@ Element providing solution to no problem in particular.
       PxVisBehavior.sizing,
       PxVisBehavior.tooltipData,
       PxVisBehavior.completeSeriesConfig,
-      PxVisBehaviorChart.chartCommon
+      PxVisBehaviorChart.chartCommon,
+      Polymer.IronResizableBehavior
     ],
     properties: {
       /**
@@ -213,10 +220,16 @@ Element providing solution to no problem in particular.
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
                '_yAxisConfigChanged(yAxisConfig.*)',
                '_chartDataChanged(chartData)'],
+    listeners: {
+    'iron-resize': '_onIronResize'
+    },
     ready: function() {
       this.xAxisType = 'pie';
       this.yAxisType = 'pie';
       this.includeAllSeries = true;
+    },
+    attached: function() {
+      this._onIronResize();
     },
     _tooltipConfigChanged: function(conf) {
 
@@ -286,6 +299,20 @@ Element providing solution to no problem in particular.
     _getSeriesId: function(completeSeriesConfig) {
       //should always have only 1 key for pies
       return this._returnKeys(completeSeriesConfig)[0];
+    },
+    _onIronResize: function() {
+      this.debounce('ironresize', function() {
+        var wrapperRect = this.$.wrapper.getBoundingClientRect(),
+            registerRect = this.$.register.getBoundingClientRect();
+
+        if(this.$.register.type === 'horizontal') {
+          this.set('width', wrapperRect.width);
+          this.set('height', wrapperRect.height - registerRect.height);
+        } else {
+          this.set('width', wrapperRect.width - registerRect.width);
+          this.set('height', wrapperRect.height);
+        }
+      },50);
     }
   });
 </script>

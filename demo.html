@@ -1,4 +1,4 @@
-grunt  .<!doctype html>
+<!doctype html>
 
 <html>
 
@@ -15,7 +15,7 @@ grunt  .<!doctype html>
     <link rel="import" href="../px-theme/px-theme.html" />
   </head>
 
-  <body> 
+  <body>
 
     <h3>Demo</h3>
     <template id="demo" is="dom-bind">
@@ -24,36 +24,37 @@ grunt  .<!doctype html>
                handle-as="json"
                last-response="{{data}}" auto></iron-ajax>
         <div style="display:flex">
-          <px-vis-pie-chart
-            chart-data="{{data}}"
-            width="400"
-            height="400"
-            use-percentage
-            margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
-            register-config='{
-              "width": 150,
-              "type": "vertical"}'
-            series-config='{
-              "mySerie" :{"xAxisUnit": "pints","y": "y",
+
+          <div style="width:500px; height:400px">
+            <px-vis-pie-chart
+              chart-data="{{data}}"
+              use-percentage
+              margin='{ "top": "10", "bottom": "0", "left": "10", "right": "10" }'
+              register-config='{
+                "width": 140,
+                "type": "vertical"}'
+              series-config='{
+                "mySerie" :{"xAxisUnit": "pints","y": "y",
+              "x": "x"}
+              }'
+              use-percentage>
+            </px-vis-pie-chart>
+          </div>
+          <div style="width:400px; height:400px">
+            <px-vis-pie-chart
+              chart-data="{{data}}"
+              donut
+              show-title
+              register-config='{
+                "type": "horizontal"}'
+              series-config='{
+                "mySerie" :{"xAxisUnit": "pints",
+              "y": "y",
             "x": "x"}
-            }'
-            use-percentage>
-          </px-vis-pie-chart>
-          <px-vis-pie-chart
-            chart-data="{{data}}"
-            width="400"
-            height="400"
-            donut
-            show-title
-            register-config='{
-              "type": "horizontal"}'
-            series-config='{
-              "mySerie" :{"xAxisUnit": "pints",
-            "y": "y",
-          "x": "x"}
-            }'
-            margin='{ "top": "20", "bottom": "0", "left": "0", "right": "0" }'>
-          </px-vis-pie-chart>
+              }'
+              margin='{ "top": "20", "bottom": "0", "left": "0", "right": "0" }'>
+            </px-vis-pie-chart>
+          </div>
         </div>
     </template>
   </body>
