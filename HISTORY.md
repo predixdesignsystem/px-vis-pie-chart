@@ -1,3 +1,7 @@
+v0.0.7
+==================
+* added image to readme, removed watch, added view on github
+
 v0.0.6
 ==================
 * Support empty data

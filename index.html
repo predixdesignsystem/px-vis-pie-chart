@@ -13,10 +13,10 @@
   <link rel="import" href="../iron-ajax/iron-ajax.html" />
   <link rel="import" href="../iron-component-page/iron-component-page.html"/>
   <link rel="import" href="px-vis-pie-chart.html"/>
-  <link rel="icon" href="px-favicon.png" type="image/x-icon"/>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
   <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
-  <link rel="import" href="../polymer-font-awesome/polymer-font-awesome.html">
+  <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
   <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
 
   </head>
@@ -32,10 +32,11 @@
       last-response="{{data}}" auto></iron-ajax>
     <!-- discription -->
     <div class="hero u-p++ text--shadow">
+      <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-vis-pie-chart" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
   		<h1 class="delta">px-vis-pie-chart</h1>
   		<p>
-  			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register. 
-        When clicking on a slice the pie will rotate to display this slice at the top <br/>Initial height and width can be set but the component will try to 
+  			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register.
+        When clicking on a slice the pie will rotate to display this slice at the top <br/>Initial height and width can be set but the component will try to
         fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
   		</p>
   		<div class="flex">
@@ -166,7 +167,7 @@ window.addEventListener('WebComponentsReady', function() {
             "x": "x"}
             }
         }
-      
+
       ];
 
     var indexPlusOne = function(num) {
