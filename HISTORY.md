@@ -1,3 +1,7 @@
+v0.0.6
+==================
+* Support empty data
+
 v0.0.5
 ==================
 * auto resize based on parent container
