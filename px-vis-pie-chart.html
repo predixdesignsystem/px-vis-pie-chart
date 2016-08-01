@@ -77,7 +77,8 @@ Element providing solution to no problem in particular.
           px-svg-elem="[[pxSvgElem]]"
           use-percentage="[[usePercentage]]"
           show-title="[[showTitle]]"
-          total="[[_total]]">
+          total="[[_total]]"
+          empty="[[_empty]]">
         </px-vis-pie>
       </div>
       <px-vis-clip-path
@@ -182,7 +183,7 @@ Element providing solution to no problem in particular.
        */
       _internalChartData: {
         type: Array,
-        computed: '_getInternalData(chartData, completeSeriesConfig)'
+        computed: '_getInternalData(chartData, completeSeriesConfig, chartData.*)'
       },
       /**
        * Total value of all slices
@@ -215,11 +216,17 @@ Element providing solution to no problem in particular.
       usePercentage: {
         type: Boolean,
         value: false
+      },
+      /**
+       * allows to draw an empty pie chart when data is empty/null
+       */
+      _empty: {
+        type: Boolean,
+        value: false
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)',
-               '_chartDataChanged(chartData)'],
+               '_yAxisConfigChanged(yAxisConfig.*)'],
     listeners: {
     'iron-resize': '_onIronResize'
     },
@@ -230,6 +237,13 @@ Element providing solution to no problem in particular.
     },
     attached: function() {
       this._onIronResize();
+
+      //if no data after 500ms draw an empty chart
+      setTimeout(function() {
+        if(!this.chartData || this.chartData.length === 0) {
+          this.set('_empty', true);
+        }
+      }.bind(this), 500); 
     },
     _tooltipConfigChanged: function(conf) {
 
@@ -244,6 +258,12 @@ Element providing solution to no problem in particular.
           id = this._returnKeys(completeSeriesConfig)[0],
           xKey = this.completeSeriesConfig[id].x,
           result = [];
+        
+      if(!chartData || chartData.length ===0) {
+        this.set('_total', 0);
+        this.set('_empty', true);
+      } else {
+        this.set('_empty', false);
 
         //calculate total value of all data
         for(var i=0; i<chartData.length; i++) {
@@ -257,6 +277,7 @@ Element providing solution to no problem in particular.
         for(var i=0; i<result.length; i++) {
           result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(0);
         }
+      }
     },
     /**
      * Applies the config object to the element. Each key in the config object
