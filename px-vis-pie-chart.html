@@ -51,7 +51,7 @@ Element providing solution to no problem in particular.
           <px-vis-register
             id="register"
             class$="{{_getHideClass(hideRegister)}}"
-            chart-data="[[chartData]]"
+            chart-data="[[_internalChartData]]"
             complete-series-config="[[completeSeriesConfig]]"
             muted-series={{mutedSeries}}
             type="{{_registerType}}"
@@ -67,7 +67,7 @@ Element providing solution to no problem in particular.
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
-          chart-data="[[chartData]]"
+          chart-data="[[_internalChartData]]"
           series-id="[[_getSeriesId(completeSeriesConfig)]]"
           muted-series="[[mutedSeries]]"
           clip-path="[[clipPath]]"

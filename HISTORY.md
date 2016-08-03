@@ -1,3 +1,7 @@
+v0.0.8
+==================
+* Fix bug where chartData was passed down instead of _internalChartData
+
 v0.0.7
 ==================
 * added image to readme, removed watch, added view on github
