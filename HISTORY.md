@@ -1,3 +1,7 @@
+v0.1.0
+==================
+* Added maxRegisters property to limit number of registers
+
 v0.0.8
 ==================
 * Fix bug where chartData was passed down instead of _internalChartData

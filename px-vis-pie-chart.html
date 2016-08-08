@@ -51,7 +51,7 @@ Element providing solution to no problem in particular.
           <px-vis-register
             id="register"
             class$="{{_getHideClass(hideRegister)}}"
-            chart-data="[[_internalChartData]]"
+            chart-data="[[_internalRegisterData]]"
             complete-series-config="[[completeSeriesConfig]]"
             muted-series={{mutedSeries}}
             type="{{_registerType}}"
@@ -186,6 +186,13 @@ Element providing solution to no problem in particular.
         computed: '_getInternalData(chartData, completeSeriesConfig, chartData.*)'
       },
       /**
+       * Internal data used for register, depedning on data and max nuymebr of registers
+       */
+      _internalRegisterData: {
+        type: Array,
+        computed: '_getInternalRegisterData(_internalChartData, maxRegisters, completeSeriesConfig)'
+      },
+      /**
        * Total value of all slices
        */
       _total: {
@@ -223,6 +230,13 @@ Element providing solution to no problem in particular.
       _empty: {
         type: Boolean,
         value: false
+      },
+      /**
+       * Maximum number of registers the chart can display. 0 = no limit
+       */
+      maxRegisters: {
+        type: Number,
+        value: 0
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
@@ -277,6 +291,57 @@ Element providing solution to no problem in particular.
         for(var i=0; i<result.length; i++) {
           result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(0);
         }
+      }
+
+      return result;
+    },
+    /**
+     * Process data for the registers, limiting the max number of registers
+     */
+    _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig) {
+      
+      if(!maxRegisters || maxRegisters < 1) {
+
+        return _internalChartData;
+      } else {
+
+        //pass the ('maxRegisters'-1) biggest data slice and aggregate the rest in 'other'
+        var result = [],
+            id = this._returnKeys(completeSeriesConfig)[0],
+            xKey = this.completeSeriesConfig[id].x,
+           // yKey = this.completeSeriesConfig[id].y,
+            mapped = _internalChartData.map(function(el, i) {
+              return { index: i, value: el[xKey] };
+            }),
+            count = 0;
+            // lastSlice = {percentage: 0,
+            //             backgroundColor: commonColors.properties.colors.value['white']};
+            // lastSlice[xKey] = 0;
+            // lastSlice[yKey] = 'Other';
+
+        //sort mapped array
+        mapped.sort(function(a, b) {
+          return a.value < b.value;
+        });
+
+        //get slices we're interested in
+        mapped.map(function(el) {
+          if(count < maxRegisters) {
+            var slice = {};
+            slice = _internalChartData[el.index];
+            slice.backgroundColor = this._getPieColorForIndex(el.index);
+            result.push(slice);
+          }
+          // } else {
+          //   lastSlice[xKey] += Number(_internalChartData[el.index][xKey]);
+          //   lastSlice['percentage'] += Number(_internalChartData[el.index].percentage);
+          // }
+          
+          count++;
+        }.bind(this));
+
+        //result.push(lastSlice);
+        return result;
       }
     },
     /**

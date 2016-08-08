@@ -11,7 +11,7 @@
   <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
   <link rel="import" href="../px-tabs/px-tab-set.html" />
   <link rel="import" href="../iron-ajax/iron-ajax.html" />
-  <link rel="import" href="../iron-component-page/iron-component-page.html"/>
+
   <link rel="import" href="px-vis-pie-chart.html"/>
   <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
@@ -78,6 +78,7 @@
                 <label for$="showTitle{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                 <div class="u-ml-">Show title</div>
               </div>
+              <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
               <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
               <div class="u-mb-">Height: <input id="height" class="text-input" type="text" placeholder="Number" value="{{item.height::input}}" /></div>
@@ -101,7 +102,8 @@
                       "y": "y",
                       "x": "x"}
                       }'
-                    use-percentage="{{item.usePercentage}}">
+                    use-percentage="{{item.usePercentage}}"
+                    max-registers="{{item.maxRegisters}">
                   </px-vis-pie-chart>
                 </div>
                 <div class="flex__item">
@@ -165,7 +167,8 @@ window.addEventListener('WebComponentsReady', function() {
             "mySerie" :{"xAxisUnit": "pints",
             "y": "y",
             "x": "x"}
-            }
+            },
+          "maxRegisters": 0
         }
 
       ];
