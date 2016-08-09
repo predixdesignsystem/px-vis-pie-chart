@@ -237,6 +237,28 @@ Element providing solution to no problem in particular.
       maxRegisters: {
         type: Number,
         value: 0
+      },
+      /**
+       * User can manually set the width of the pie
+       */
+      width:{
+        type:Number,
+        value:0
+      },
+      /**
+       * User can manually set the height of the pie
+       */
+
+      height:{
+        type:Number,
+        value:0
+      },
+      /**
+       * whether the pie should resize as window size is adjusted
+       */
+      preventResize:{
+        type:Boolean,
+        value:false
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
@@ -387,6 +409,9 @@ Element providing solution to no problem in particular.
       return this._returnKeys(completeSeriesConfig)[0];
     },
     _onIronResize: function() {
+      if (this.preventResize){
+        return;
+      }
       this.debounce('ironresize', function() {
         var wrapperRect = this.$.wrapper.getBoundingClientRect(),
             registerRect = this.$.register.getBoundingClientRect();
