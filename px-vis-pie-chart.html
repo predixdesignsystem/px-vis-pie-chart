@@ -62,6 +62,7 @@ Element providing solution to no problem in particular.
         </div>
         <!-- pie series -->
         <px-vis-pie
+          id="pie"
           svg="[[svg]]"
           class="absolute"
           width="[[width]]"
@@ -399,6 +400,9 @@ Element providing solution to no problem in particular.
           this.set('height', wrapperRect.height);
         }
       },50);
+    },
+    _repositionTitle: function() {
+      this.$.pie._repositionTitle();
     }
   });
 </script>
