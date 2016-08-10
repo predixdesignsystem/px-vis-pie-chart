@@ -34,11 +34,13 @@
     <div class="hero u-p++ text--shadow">
       <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-vis-pie-chart" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
   		<h1 class="delta">px-vis-pie-chart</h1>
-  		<p>
-  			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register.
-        When clicking on a slice the pie will rotate to display this slice at the top <br/>Initial height and width can be set but the component will try to
-        fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
-  		</p>
+      <div class="description-text">
+    		<p>
+    			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register.
+          When clicking on a slice the pie will rotate to display this slice at the top. Initial height and width can be set but the component will try to
+          fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
+    		</p>
+      </div>
   		<div class="flex">
   			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
   			<img class="u-mr--" src="https://img.shields.io/bower/v/px-vis-pie-chart.svg?style=flat-square" alt="Bower" onerror="this.style.display='none'"/>
@@ -46,22 +48,22 @@
   			<img class="u-mr--" src="https://img.shields.io/github/watchers/PredixDev/px-vis-pie-chart.svg?style=social&label=Watch" onerror="this.style.display='none'"/>
   		</div>
   	</div>
-    <br />
+
     <!-- mega demo -->
     <div style="position: relative;" class="u-pb++ flex flex--col" id="defaultTab">
       <div class="tabContainer u-pt++ u-pl++">
         <px-tab-set selected="{{selected}}" bare no-bottom-border>
           <template is="dom-repeat" items="{{optionsArray}}">
-            <px-tab>Configuration {{indexPlusOne(index)}}</px-tab>
+            <px-tab>Option {{indexPlusOne(index)}}</px-tab>
           </template>
         </px-tab-set>
       </div>
       <px-tab-pages selected="{{selected}}">
         <template is="dom-repeat" items="{{optionsArray}}">
-          <section class="tab-page flex flex--right flex--wrap">
-            <div class="mega-demo flex u-pb++">
+          <section class="tab-page">
+            <div class="mega-demo flex flex--wrap u-ph++ u-pb++">
             <!-- Properties -->
-            <div class="properties u-ph+ u-pb+ u-mt++ u-mh++" id="properties">
+            <div class="properties u-ph+ u-pb+ u-mt+" id="properties">
               <p class="epsilon">Properties</p>
               <div class="flex u-mb-">
                 <input id="donut{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.donut::change}}">
@@ -84,10 +86,11 @@
               <div class="u-mb-">Height: <input id="height" class="text-input" type="text" placeholder="Number" value="{{item.height::input}}" /></div>
             </div>
 
-            <div class="demoContainer u-mr++">
-              <!-- demo -->
-              <div class="flex flex--col">
-                <div class="flex__item demo u-ph+ u-pb+ u-mt++">
+            <div class="demoContainer u-mt+">
+                <!-- demo -->
+                <div class="flex flex--col">
+                  <div class="flex__item demo u-p+">
+
                   <px-vis-pie-chart
                     chart-data="{{data}}"
                     width={{item.width}}
@@ -127,38 +130,38 @@
     </px-tab-pages>
   </div>
   <footer class="footer flex flex--center">
-    <div class="footer__container u-pv++">
-      <div>
-        <a href="https://ge.com/digital" >
-          <img src="monogram-wdmk.png" alt="GE Monogram" class="footer__img">
-        </a>
+      <div class="footer__container u-pv++">
+        <div>
+          <a href="https://ge.com/digital" >
+            <img src="monogram-wdmk.png" alt="GE Monogram" class="footer__img">
+          </a>
+        </div>
+        <div class="footer__list">
+          <ul class="list-inline list-inline--delimited">
+            <li>
+              <a href="http://predix.io/legal" class="footer__list--lnk">Legal</a>
+            </li>
+            <li>
+              <a href="mailto:info@predix.io" class="footer__list--lnk">Contact Us</a>
+            </li>
+            <li>Copyright &copy; {{year}} General Electric Company. All rights reserved.</li>
+          </ul>
+        </div>
       </div>
-      <div class="footer__list">
-        <ul class="list-inline list-inline--delimited">
-          <li>
-            <a href="http://predix.io/legal" class="footer__list--lnk">Legal</a>
-          </li>
-          <li>
-            <a href="mailto:info@predix.io" class="footer__list--lnk">Contact Us</a>
-          </li>
-          <li>Copyright © 2016 General Electric Company. All rights reserved.</li>
-        </ul>
-      </div>
-    </div>
-  </footer>
+    </footer>
 </template>
 <script>
 window.addEventListener('WebComponentsReady', function() {
   var template = document.querySelector('template[is=dom-bind]');
-
-  var optionsArray = [
+      year = new Date(),
+      optionsArray = [
         {
           "usePercentage":true,
           "innerRadius": 0,
           "donut": false,
           "showTitle": false,
-          "width": 400,
-          "height": 400,
+          "width": 350,
+          "height": 350,
           "register-config":{
             "width": 150,
             "type": "vertical"},
@@ -176,9 +179,13 @@ window.addEventListener('WebComponentsReady', function() {
     var indexPlusOne = function(num) {
       return num + 1;
     };
+    year = year.getFullYear();
+
     template.selected = "0";
     template.optionsArray = optionsArray;
     template.indexPlusOne = indexPlusOne;
+    template.year = year;
+
 });
 </script>
 
