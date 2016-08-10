@@ -1,3 +1,7 @@
+v0.1.2
+==================
+* Added preventResize and exposes _repositionTitle()
+
 v0.1.1
 ==================
 * updated mega demo styles and bower px-demo-snippet to ^
