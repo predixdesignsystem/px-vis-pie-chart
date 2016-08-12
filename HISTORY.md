@@ -1,3 +1,7 @@
+v0.1.3
+==================
+* Added support for exporting chart to image
+
 v0.1.2
 ==================
 * Added preventResize and exposes _repositionTitle()
