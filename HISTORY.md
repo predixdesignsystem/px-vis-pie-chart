@@ -1,3 +1,7 @@
+v0.1.4
+==================
+* Added support for decimals in percentages
+
 v0.1.3
 ==================
 * Added support for exporting chart to image

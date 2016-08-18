@@ -1,6 +1,6 @@
 {
   "name": "px-vis-pie-chart",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": [
     "px-vis-pie-chart.html"
   ],
