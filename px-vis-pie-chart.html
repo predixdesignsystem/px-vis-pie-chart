@@ -246,6 +246,13 @@ Element providing solution to no problem in particular.
       preventResize:{
         type:Boolean,
         value:false
+      },
+      /**
+       * how many digit of number should the percentage show after the decimal point, default is 0 digit.
+       */
+      decimalPercentage:{
+        type:Number,
+        value: 0
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
@@ -298,7 +305,7 @@ Element providing solution to no problem in particular.
 
         //make sure each slice is aware of its percentage value
         for(var i=0; i<result.length; i++) {
-          result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(0);
+          result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(this.decimalPercentage);
         }
       }
 
