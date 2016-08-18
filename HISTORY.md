@@ -1,3 +1,7 @@
+v0.1.4
+==================
+* added overflow to demoContainer and removed flex__wrap from mega-demo
+
 v0.1.3
 ==================
 * Added support for exporting chart to image
