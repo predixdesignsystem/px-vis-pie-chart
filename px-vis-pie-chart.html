@@ -31,9 +31,12 @@ Element providing solution to no problem in particular.
 @homepage index.html
 @demo demo.html
 -->
+<link rel="import" href="css/px-vis-pie-chart-styles.html">
+
 <dom-module id="px-vis-pie-chart">
-  <link rel="import" type="css" href  ="css/px-vis-pie-chart.css"/>
   <template>
+    <style include="px-vis-pie-chart-styles"></style>
+    <style include="px-theme-styles"></style>
     <div id="wrapper" class="wrapper">
       <div>
         <div class$="{{_getWrapperClass(_registerType)}}">
@@ -273,7 +276,7 @@ Element providing solution to no problem in particular.
         if(!this.chartData || this.chartData.length === 0) {
           this.set('_empty', true);
         }
-      }.bind(this), 500); 
+      }.bind(this), 500);
     },
     _tooltipConfigChanged: function(conf) {
 
@@ -288,7 +291,7 @@ Element providing solution to no problem in particular.
           id = this._returnKeys(completeSeriesConfig)[0],
           xKey = this.completeSeriesConfig[id].x,
           result = [];
-        
+
       if(!chartData || chartData.length ===0) {
         this.set('_total', 0);
         this.set('_empty', true);
@@ -315,7 +318,7 @@ Element providing solution to no problem in particular.
      * Process data for the registers, limiting the max number of registers
      */
     _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig) {
-      
+
       if(!maxRegisters || maxRegisters < 1) {
 
         return _internalChartData;
@@ -352,7 +355,7 @@ Element providing solution to no problem in particular.
           //   lastSlice[xKey] += Number(_internalChartData[el.index][xKey]);
           //   lastSlice['percentage'] += Number(_internalChartData[el.index].percentage);
           // }
-          
+
           count++;
         }.bind(this));
 
