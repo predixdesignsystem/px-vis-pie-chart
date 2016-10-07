@@ -1,3 +1,7 @@
+v0.2.0
+==================
+* Grunt to gulp conversion and style modules.
+
 v0.1.5
 ==================
 * Added support for decimals in percentages
