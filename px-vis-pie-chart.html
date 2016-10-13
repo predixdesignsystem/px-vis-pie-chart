@@ -414,11 +414,11 @@ Element providing solution to no problem in particular.
             registerRect = this.$.register.getBoundingClientRect();
 
         if(this.$.register.type === 'horizontal') {
-          this.set('width', wrapperRect.width);
-          this.set('height', wrapperRect.height - registerRect.height);
+          this.set('width', Math.max(wrapperRect.width,0));
+          this.set('height', Math.max(wrapperRect.height - registerRect.height,0));
         } else {
-          this.set('width', wrapperRect.width - registerRect.width);
-          this.set('height', wrapperRect.height);
+          this.set('width', Math.max(wrapperRect.width - registerRect.width,0));
+          this.set('height', Math.max(wrapperRect.height,0));
         }
       },50);
     },

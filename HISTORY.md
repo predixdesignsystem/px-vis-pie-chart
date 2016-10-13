@@ -1,3 +1,7 @@
+v0.2.1
+==================
+* Added math.max check on width and height
+
 v0.2.0
 ==================
 * Grunt to gulp conversion and style modules.
