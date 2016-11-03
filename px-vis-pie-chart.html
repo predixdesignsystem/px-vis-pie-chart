@@ -53,7 +53,7 @@ Element providing solution to no problem in particular.
           <!-- Legend -->
           <px-vis-register
             id="register"
-            class$="{{_getHideClass(hideRegister)}}"
+            class$="{{_calcRegisterClass(hideRegister)}}"
             chart-data="[[_internalRegisterData]]"
             complete-series-config="[[completeSeriesConfig]]"
             muted-series={{mutedSeries}}
@@ -384,11 +384,12 @@ Element providing solution to no problem in particular.
         element.set(key, config[key])
       }
     },
-    _getHideClass: function(hide) {
+    _calcRegisterClass: function(hide) {
+      var result = 'u-ml- '
       if(hide === true) {
-        return 'visuallyhidden';
+        result+= 'visuallyhidden';
       }
-      return '';
+      return result;
     },
     _getWrapperClass: function(regType) {
       var classList = "flex ";
