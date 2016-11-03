@@ -28,9 +28,8 @@ function runCustomTests() {
     });
 
     test('get hide class', function() {
-
-      assert.equal('visuallyhidden', pie._getHideClass(true));
-      assert.equal('', pie._getHideClass(false));
+      assert.equal('u-ml- visuallyhidden', pie._calcRegisterClass(true));
+      assert.equal('u-ml- ', pie._calcRegisterClass(false));
     });
 
   });
