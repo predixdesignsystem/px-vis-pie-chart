@@ -37,19 +37,9 @@ Element providing solution to no problem in particular.
   <template>
     <style include="px-vis-pie-chart-styles"></style>
     <style include="px-theme-styles"></style>
-    <div id="wrapper" class="wrapper">
+    <div id="wrapper" class$="{{_chartWrapperClass}}">
       <div>
-        <div class$="{{_getWrapperClass(_registerType)}}">
-          <!-- Core -->
-          <px-vis-svg
-            id="svg"
-            class="inline--flex"
-            width="[[width]]"
-            height="[[height]]"
-            margin="[[margin]]"
-            svg="{{svg}}"
-            px-svg-elem="{{pxSvgElem}}">
-          </px-vis-svg>
+        <div class$="{{_registerWrapperClass}}">
           <!-- Legend -->
           <px-vis-register
             id="register"
@@ -62,6 +52,16 @@ Element providing solution to no problem in particular.
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
           </px-vis-register>
+          <!-- Core -->
+          <px-vis-svg
+            id="svg"
+            class="inline--flex"
+            width="[[_smallerSide]]"
+            height="[[_smallerSide]]"
+            offset="[[_center]]"
+            svg="{{svg}}"
+            px-svg-elem="{{pxSvgElem}}">
+          </px-vis-svg>
         </div>
         <!-- pie series -->
         <px-vis-pie
@@ -71,6 +71,7 @@ Element providing solution to no problem in particular.
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
+          radius="[[_radius]]"
           chart-data="[[_internalChartData]]"
           series-id="[[_getSeriesId(completeSeriesConfig)]]"
           muted-series="[[mutedSeries]]"
@@ -128,8 +129,10 @@ Element providing solution to no problem in particular.
       PxVisBehavior.tooltipData,
       PxVisBehavior.completeSeriesConfig,
       PxVisBehaviorChart.chartCommon,
-      Polymer.IronResizableBehavior,
-      PxVisBehaviorChart.saveImage
+      PxVisBehaviorChart.saveImage,
+      PxVisBehaviorChart.chartAutoResize,
+      PxVisBehaviorChart.registerPositioning,
+      PxVisBehaviorChart.circleChart
     ],
     properties: {
       /**
@@ -165,23 +168,12 @@ Element providing solution to no problem in particular.
         value: false
       },
       /**
-       *
-       * Allows to hide the register
-       */
-      hideRegister: {
-        type: Boolean,
-        value: false
-      },
-      /**
        * Whether to show a title in the middle of the pie/donut with the total value.
        * Meant to be used with a donut chart
        */
       showTitle: {
         type: Boolean,
         value: false
-      },
-      _registerType: {
-        type: String
       },
       /**
        * Internal data used, same as chartData but with percentages infos
@@ -242,13 +234,6 @@ Element providing solution to no problem in particular.
       maxRegisters: {
         type: Number,
         value: 0
-      },
-      /**
-       * whether the pie should resize as window size is adjusted
-       */
-      preventResize:{
-        type:Boolean,
-        value:false
       },
       /**
        * how many digit of number should the percentage show after the decimal point, default is 0 digit.
@@ -383,23 +368,6 @@ Element providing solution to no problem in particular.
         var key = keys[i];
         element.set(key, config[key])
       }
-    },
-    _getHideClass: function(hide) {
-      if(hide === true) {
-        return 'visuallyhidden';
-      }
-      return '';
-    },
-    _getWrapperClass: function(regType) {
-      var classList = "flex ";
-
-      if(regType === 'vertical') {
-        classList += "flex--row";
-      }
-      else {
-        classList += "flex--col--rev";
-      }
-      return classList;
     },
     _getSeriesId: function(completeSeriesConfig) {
       //should always have only 1 key for pies

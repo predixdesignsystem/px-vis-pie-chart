@@ -83,6 +83,11 @@
                 <label for$="showTitle{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                 <div class="u-ml-">Show title</div>
               </div>
+              <div class="flex u-mb-">
+                <input id="hideRegister{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.hideRegister::change}}">
+                <label for$="hideRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Hide register</div>
+              </div>
               <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
               <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
@@ -98,10 +103,10 @@
                     chart-data="{{data}}"
                     width={{item.width}}
                     height="{{item.height}}"
-                    usePercentage="{{item.usePercentage}}"
-                    innerRadius="{{item.innerRadius}}"
+                    inner-radius="{{item.innerRadius}}"
                     donut="{{item.donut}}"
                     show-title="{{item.showTitle}}"
+                    hide-register="{{item.hideRegister}}"
                     margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
@@ -163,6 +168,7 @@ window.addEventListener('WebComponentsReady', function() {
           "innerRadius": 0,
           "donut": false,
           "showTitle": false,
+          "hideRegister": false,
           "width": 350,
           "height": 350,
           "register-config":{
