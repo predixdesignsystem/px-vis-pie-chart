@@ -1,3 +1,15 @@
+v0.2.5
+==================
+* fixed data format in demo to fix codepen
+
+v0.2.4
+==================
+* fixed tests
+
+v0.2.3
+==================
+* fixed codepen, fixed demo container height, and added 10px margin-left to the register
+
 v0.2.2
 ==================
 * Updated dependencies

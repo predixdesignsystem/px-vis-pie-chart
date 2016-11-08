@@ -152,7 +152,10 @@
                 <div>
                   <px-demo-snippet
                     element-properties={{item}}
-                    element-name="px-vis-pie-chart">
+                    element-name="px-vis-pie-chart"
+                    links-includes="[[linksIncludes]]"
+                    parent-component="[<div style='width:450px'></div>]"
+                    >
                   </px-demo-snippet>
                 </div>
               </div>
@@ -196,6 +199,16 @@ window.addEventListener('WebComponentsReady', function() {
       year = new Date(),
       optionsArray = [
         {
+          "chartData" : [
+            {"percentage": "26", "x": 15, "y": "IPA"},
+            {"percentage": "2",  "x": 1,  "y": "Pils"},
+            {"percentage": "2",  "x": 1,  "y": "Lager"},
+            {"percentage": "14", "x": 8,  "y": "Lambic"},
+            {"percentage": "21", "x": 12, "y": "Stout"},
+            {"percentage": "12", "x": 7,  "y": "Pale Ale"},
+            {"percentage": "16", "x": 9,  "y": "Porter"},
+            {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
+          ],
           "usePercentage":true,
           "innerRadius": 0,
           "donut": false,
@@ -214,7 +227,8 @@ window.addEventListener('WebComponentsReady', function() {
             },
           "maxRegisters": 0,
           "chartHorizontalAlignment": "center",
-          "chartVerticalAlignment": "center"
+          "chartVerticalAlignment": "center",
+          "parentComponent": ["<div style='width:450px'>","</div>"]
         }
 
       ];
@@ -228,6 +242,8 @@ window.addEventListener('WebComponentsReady', function() {
     template.optionsArray = optionsArray;
     template.indexPlusOne = indexPlusOne;
     template.year = year;
+
+    template.linksIncludes = ['px-vis/px-polygit-imports-vis.html', 'px-datetime-common/px-polygit-imports-datetime.html'];
 
 });
 </script>
