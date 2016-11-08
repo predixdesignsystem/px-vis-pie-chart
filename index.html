@@ -18,6 +18,7 @@
   <link rel="import" href="px-vis-pie-chart.html"/>
   <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
+  <link rel="import" href="../px-dropdown/px-dropdown.html"/>
   <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
   <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
   <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
@@ -92,13 +93,36 @@
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
               <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
               <div class="u-mb-">Height: <input id="height" class="text-input" type="text" placeholder="Number" value="{{item.height::input}}" /></div>
+              <div class="u-mb-">Horizontal Alignment:
+                <div style="width: 100%;">
+                  <px-dropdown id="chartHorizontalAlignment" value="{{item.chartHorizontalAlignment}}" display-value="{{item.chartHorizontalAlignment}}" bound-target="properties">
+                    <px-dropdown-content
+                      items='[
+                        {"key":"one", "val": "left"},
+                        {"key":"two", "val": "center"},
+                        {"key":"three", "val": "right"}]'>
+                    </px-dropdown-content>
+                  </px-dropdown>
+                </div>
+              </div>
+              <div class="u-mb-">Vertical Alignment:
+                <div style="width: 100%;">
+                  <px-dropdown id="chartVerticalAlignment" value="{{item.chartVerticalAlignment}}" display-value="{{item.chartVerticalAlignment}}" bound-target="properties">
+                    <px-dropdown-content
+                      items='[
+                        {"key":"one", "val": "top"},
+                        {"key":"two", "val": "center"},
+                        {"key":"three", "val": "bottom"}]'>
+                    </px-dropdown-content>
+                  </px-dropdown>
+                </div>
+              </div>
             </div>
 
             <div class="demoContainer u-mt+">
                 <!-- demo -->
-                <div class="flex flex--col">
-                  <div class="demo u-p+">
-
+                <div class="flex flex--col full-height">
+                  <div class="demo flex u-p+ full-height">
                   <px-vis-pie-chart
                     chart-data="{{data}}"
                     width={{item.width}}
@@ -114,7 +138,9 @@
                       "x": "x"}
                       }'
                     use-percentage="{{item.usePercentage}}"
-                    max-registers="{{item.maxRegisters}">
+                    max-registers="{{item.maxRegisters}"
+                    chart-horizontal-alignment="{{item.chartHorizontalAlignment}}"
+                    chart-vertical-alignment="{{item.chartVerticalAlignment}}">
                   </px-vis-pie-chart>
                 </div>
                 <div>
@@ -180,7 +206,9 @@ window.addEventListener('WebComponentsReady', function() {
             "y": "y",
             "x": "x"}
             },
-          "maxRegisters": 0
+          "maxRegisters": 0,
+          "chartHorizontalAlignment": "center",
+          "chartVerticalAlignment": "center"
         }
 
       ];
