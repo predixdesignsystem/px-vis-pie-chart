@@ -1,3 +1,7 @@
+v0.2.6
+==================
+* removed unused properties
+
 v0.2.5
 ==================
 * fixed data format in demo to fix codepen
