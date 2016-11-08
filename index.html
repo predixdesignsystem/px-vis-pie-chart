@@ -117,6 +117,11 @@
                   </px-dropdown>
                 </div>
               </div>
+              <div class="flex u-mb-">
+                <input id="preventResize{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preventResize::change}}">
+                <label for$="preventResize{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Prevent Resize</div>
+              </div>
             </div>
 
             <div class="demoContainer u-mt+">
@@ -128,6 +133,7 @@
                     width={{item.width}}
                     height="{{item.height}}"
                     inner-radius="{{item.innerRadius}}"
+                    prevent-resize = "{{item.preventResize}}"
                     donut="{{item.donut}}"
                     show-title="{{item.showTitle}}"
                     hide-register="{{item.hideRegister}}"
