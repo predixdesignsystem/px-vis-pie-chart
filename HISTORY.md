@@ -1,3 +1,8 @@
+
+v0.2.7
+==================
+* bower updating px-demo-snippet
+
 v0.2.6
 ==================
 * remove unused properties
