@@ -1,13 +1,13 @@
 {
     "name": "px-vis-pie-chart",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "main": [
         "px-vis-pie-chart.html"
     ],
     "ignore": [
         ".*",
         "npm-debug.log",
-        "Gruntfile.js",
+        "gulpfile.js",
         "sass",
         "bower_components",
         "node_modules",
