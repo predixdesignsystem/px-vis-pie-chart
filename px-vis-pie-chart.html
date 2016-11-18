@@ -301,7 +301,9 @@ Element providing solution to no problem in particular.
 
       if(!maxRegisters || maxRegisters < 1) {
 
-        return _internalChartData;
+        return _internalChartData.sort(function(a, b) {
+          return b.percentage - a.percentage;
+        });
       } else {
 
         //pass the ('maxRegisters'-1) biggest data slice and aggregate the rest in 'other'
