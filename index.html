@@ -32,7 +32,15 @@
     <iron-ajax
       url="demo_data.json"
       handle-as="json"
-      last-response="{{data}}" auto></iron-ajax>
+      last-response="{{data0}}" auto></iron-ajax>
+     <iron-ajax
+      url="demo_data2.json"
+      handle-as="json"
+      last-response="{{data1}}" auto></iron-ajax>
+    <iron-ajax
+      url="demo_data3.json"
+      handle-as="json"
+      last-response="{{data2}}" auto></iron-ajax>
     <!-- discription -->
     <div class="hero u-p++ text--shadow">
       <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-vis-pie-chart" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
@@ -68,6 +76,7 @@
             <!-- Properties -->
             <div class="properties u-ph+ u-pb+ u-mt+" id="properties">
               <p class="epsilon">Properties</p>
+              <button id="buttonData" class="u-mb">Click to update Data</button>
               <div class="flex u-mb-">
                 <input id="donut{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.donut::change}}">
                 <label for$="donut{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
@@ -76,12 +85,22 @@
               <div class="flex u-mb-">
                 <input id="usePercentage{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.usePercentage::change}}">
                 <label for$="usePercentage{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Use percentage</div>
+                <div class="u-ml-">Use Percentage</div>
               </div>
               <div class="flex u-mb-">
                 <input id="showTitle{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.showTitle::change}}">
                 <label for$="showTitle{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Show title</div>
+                <div class="u-ml-">Show Title</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="preserveDataOrder{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preserveDataOrder::change}}">
+                <label for$="preserveDataOrder{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Preserve Data Order</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="aggregateOtherRegister{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.aggregateOtherRegister::change}}">
+                <label for$="aggregateOtherRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Aggregate Other Register</div>
               </div>
               <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
@@ -95,10 +114,13 @@
                   <div class="demo u-p+">
 
                   <px-vis-pie-chart
-                    chart-data="{{data}}"
+                    id="chart"
+                    chart-data="[[data0]]"
                     width={{item.width}}
                     height="{{item.height}}"
                     usePercentage="{{item.usePercentage}}"
+                    aggregateOtherRegister="{{item.aggregateOtherRegister}}"
+                    preserve-data-order="{{item.preserveDataOrder}}"
                     innerRadius="{{item.innerRadius}}"
                     donut="{{item.donut}}"
                     show-title="{{item.showTitle}}"
@@ -158,7 +180,7 @@
 </template>
 <script>
 window.addEventListener('WebComponentsReady', function() {
-  var template = document.querySelector('template[is=dom-bind]');
+  var template = document.querySelector('template[is=dom-bind]'),
       year = new Date(),
       optionsArray = [
         {
@@ -173,11 +195,13 @@ window.addEventListener('WebComponentsReady', function() {
             {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
           ],
           "usePercentage":true,
+          "aggregateOtherRegister": false,
           "innerRadius": 0,
           "donut": false,
           "showTitle": false,
           "width": 350,
           "height": 350,
+          "preserveDataOrder": false,
           "register-config":{
             "width": 150,
             "type": "vertical"},
@@ -204,6 +228,18 @@ window.addEventListener('WebComponentsReady', function() {
     template.year = year;
 
     template.linksIncludes = ['px-vis/px-polygit-imports-vis.html', 'px-datetime-common/px-polygit-imports-datetime.html'];
+
+    setTimeout(function() {
+      var button = document.getElementById('buttonData'),
+          currentDataIndex = 0,
+          chart = document.getElementById('chart');
+
+      button.addEventListener('click', function() {
+        currentDataIndex++;
+        currentDataIndex = currentDataIndex % 3;
+        chart.set('chartData', template['data'+currentDataIndex]);
+      });
+    }, 250);
 
 });
 </script>

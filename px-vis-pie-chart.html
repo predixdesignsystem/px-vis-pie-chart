@@ -71,6 +71,7 @@ Element providing solution to no problem in particular.
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
+          preserve-data-order="[[preserveDataOrder]]"
           chart-data="[[_internalChartData]]"
           series-id="[[_getSeriesId(completeSeriesConfig)]]"
           muted-series="[[mutedSeries]]"
@@ -175,7 +176,7 @@ Element providing solution to no problem in particular.
        */
       _internalRegisterData: {
         type: Array,
-        computed: '_getInternalRegisterData(_internalChartData, maxRegisters, completeSeriesConfig)'
+        computed: '_getInternalRegisterData(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister)'
       },
       /**
        * Total value of all slices
@@ -226,16 +227,42 @@ Element providing solution to no problem in particular.
       /**
        * whether the pie should resize as window size is adjusted
        */
-      preventResize:{
-        type:Boolean,
-        value:false
+      preventResize: {
+        type: Boolean,
+        value: false
       },
       /**
        * how many digit of number should the percentage show after the decimal point, default is 0 digit.
        */
-      decimalPercentage:{
-        type:Number,
+      decimalPercentage: {
+        type: Number,
         value: 0
+      },
+      /**
+       * if using maxRegisters this boolean allows the aggregation of all non-included
+       * slices in the registers into a "Other" register entry
+       */
+      aggregateOtherRegister: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * By default the pie chart slices will be ordered by value. Set to false 
+       * to keep the data order
+       */
+      preserveDataOrder: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Internal mapping used to keep track of each slice color. Key is slice
+       * name (y) and value is index
+       */
+      _colorIndexMapping: {
+        type: Object,
+        value: function() {
+          return {};
+        }
       }
     },
     observer: ['_xAxisConfigChanged(xAxisConfig.*)',
@@ -270,18 +297,53 @@ Element providing solution to no problem in particular.
       var total = 0,
           id = this._returnKeys(completeSeriesConfig)[0],
           xKey = this.completeSeriesConfig[id].x,
+          yKey = this.completeSeriesConfig[id].y,
           result = [];
 
-      if(!chartData || chartData.length ===0) {
+      if(!chartData || chartData.length === 0) {
         this.set('_total', 0);
         this.set('_empty', true);
+        this._colorIndexMapping = {};
       } else {
         this.set('_empty', false);
 
-        //calculate total value of all data
+        var usedColors = [];
+
+        //process new data
         for(var i=0; i<chartData.length; i++) {
+
+          var colorIndex = this._colorIndexMapping[chartData[i][yKey]];
+
+          //calculate total value of all data
           total += chartData[i][xKey];
           result.push(chartData[i]);
+
+          //store used color indexes
+          if(colorIndex) {
+            usedColors.push(colorIndex);
+            result[i].colorIndex = colorIndex;
+          }
+        }
+
+        //reset color mapping
+        this._colorIndexMapping = {};
+
+        //assign colors
+        var freeIndex = 0;
+        for(var i=0; i<result.length; i++) {
+
+          //assign a new color if needed
+          if(!result[i].colorIndex) {
+            //find the first available index
+            while(usedColors.indexOf(freeIndex) !== -1) {
+              freeIndex++;
+            }
+            result[i].colorIndex = freeIndex;
+            usedColors.push(freeIndex);
+          } 
+
+          //rebuild our mapping
+          this._colorIndexMapping[result[i][yKey]] = result[i].colorIndex;
         }
 
         this.set('_total', total);
@@ -297,28 +359,38 @@ Element providing solution to no problem in particular.
     /**
      * Process data for the registers, limiting the max number of registers
      */
-    _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig) {
+    _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister) {
 
+      var result = [];
       if(!maxRegisters || maxRegisters < 1) {
 
-        return _internalChartData.sort(function(a, b) {
+        result = _internalChartData.slice(0).sort(function(a, b) {
           return b.percentage - a.percentage;
         });
+
+        for(var i=0; i<result.length; i++) {
+          result[i].backgroundColor = this._getPieColorForIndex(result[i].colorIndex);
+        }
+
       } else {
 
         //pass the ('maxRegisters'-1) biggest data slice and aggregate the rest in 'other'
-        var result = [],
-            id = this._returnKeys(completeSeriesConfig)[0],
+        var id = this._returnKeys(completeSeriesConfig)[0],
             xKey = this.completeSeriesConfig[id].x,
-           // yKey = this.completeSeriesConfig[id].y,
+            yKey = this.completeSeriesConfig[id].y,
             mapped = _internalChartData.map(function(el, i) {
               return { index: i, value: el[xKey] };
             }),
-            count = 0;
-            // lastSlice = {percentage: 0,
-            //             backgroundColor: commonColors.properties.colors.value['white']};
-            // lastSlice[xKey] = 0;
-            // lastSlice[yKey] = 'Other';
+            count = 0,
+            effectiveMaxRegisters = maxRegisters,
+            lastSlice = {percentage: 0,
+                        backgroundColor: commonColors.properties.colors.value['white']};
+            lastSlice[xKey] = 0;
+            lastSlice[yKey] = 'Other';
+
+        if(maxRegisters > 0 && aggregateOtherRegister) {
+          effectiveMaxRegisters -= 1;
+        }
 
         //sort mapped array
         mapped.sort(function(a, b) {
@@ -327,23 +399,26 @@ Element providing solution to no problem in particular.
 
         //get slices we're interested in
         mapped.map(function(el) {
-          if(count < maxRegisters) {
+          if(count < effectiveMaxRegisters) {
             var slice = {};
             slice = _internalChartData[el.index];
-            slice.backgroundColor = this._getPieColorForIndex(el.index);
+            slice.backgroundColor = this._getPieColorForIndex(_internalChartData[el.index].colorIndex);
             result.push(slice);
           }
-          // } else {
-          //   lastSlice[xKey] += Number(_internalChartData[el.index][xKey]);
-          //   lastSlice['percentage'] += Number(_internalChartData[el.index].percentage);
-          // }
+           else  if(aggregateOtherRegister) {
+            lastSlice[xKey] += Number(_internalChartData[el.index][xKey]);
+            lastSlice['percentage'] += Number(_internalChartData[el.index].percentage);
+          }
 
           count++;
         }.bind(this));
 
-        //result.push(lastSlice);
-        return result;
+        if(aggregateOtherRegister) {
+          result.push(lastSlice);
+        }
       }
+
+      return result;
     },
     /**
      * Applies the config object to the element. Each key in the config object
