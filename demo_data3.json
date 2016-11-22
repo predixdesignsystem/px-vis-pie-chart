@@ -1,0 +1,32 @@
+[{
+	"x": 6,
+	"y": "IPA"
+}, {
+	"x": 1,
+	"y": "Pils"
+}, {
+	"x": 1,
+	"y": "Lager"
+}, {
+	"x": 13,
+	"y": "Lambic"
+}, {
+	"x": 5,
+	"y": "Stout"
+},
+{
+	"x": 7,
+	"y": "Pale Ale"
+},
+{
+	"x": 4,
+	"y": "Heffeweisse"
+},
+{
+	"x": 5,
+	"y": "Barleywine"
+},
+{
+	"x": 6,
+	"y": "Old Ale"
+}]
