@@ -1,6 +1,6 @@
 {
     "name": "px-vis-pie-chart",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "main": [
         "px-vis-pie-chart.html"
     ],
@@ -26,13 +26,13 @@
     "devDependencies": {
         "iron-component-page": "~v1.1.7",
         "iron-ajax": "~1.4.3",
-        "px-starter-kit-design": "~0.6.0",
-        "px-forms-design": "~0.3.17",
-        "px-tables-design": "~0.3.13",
+        "px-starter-kit-design": "^0.6.0",
+        "px-forms-design": "^0.3.17",
+        "px-tables-design": "^0.3.13",
         "iron-demo-helpers": "~1.2.5",
         "px-polymer-font-awesome": "^0.1.9",
-        "px-tabs": "~0.5.2",
-        "px-api-viewer": "~0.1.0",
+        "px-tabs": "^0.5.2",
+        "px-api-viewer": "^0.1.0",
         "px-demo-snippet": "^0.6.9",
         "px-list-inline-design": "^0.2.11",
         "px-headings-design": "^0.2.14",
