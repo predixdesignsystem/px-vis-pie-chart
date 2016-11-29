@@ -39,9 +39,12 @@
                     chart-data="{{data}}"
                     height="500"
                     width="500"
-                    usePercentage
+                    use-percentage
+                    register-config='{
+                      "truncationLength": 500,
+                      "width": 500
+                    }'
                     aggregate-other-register
-                    innerRadius=0
                     margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
