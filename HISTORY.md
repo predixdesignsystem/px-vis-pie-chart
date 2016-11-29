@@ -7,6 +7,14 @@ v0.3.0
 * Added animations on data update/deletion/addition
 * Automatically sort registers from the biggest value to the smallest
 
+v0.2.11
+==================
+* changing all devDeps to ^
+
+v0.2.10
+==================
+* Update px-theme to 2.0.1 and update test fixtures
+
 v0.2.9
 ==================
 * removing px-theme style call
