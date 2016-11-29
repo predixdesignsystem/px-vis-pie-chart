@@ -394,7 +394,7 @@ Element providing solution to no problem in particular.
 
         //sort mapped array
         mapped.sort(function(a, b) {
-          return a.value < b.value;
+          return b.value - a.value;
         });
 
         //get slices we're interested in

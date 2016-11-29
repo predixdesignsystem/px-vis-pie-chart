@@ -1,3 +1,7 @@
+v0.3.1
+==================
+* Fix bug in ordering registers
+
 v0.3.0
 ==================
 * Added aggregateOtherRegister to allow to display the rest of the data in the register if maxRegisters is used
