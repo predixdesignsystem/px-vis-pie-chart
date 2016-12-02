@@ -267,7 +267,8 @@ Element providing solution to no problem in particular.
          * By default the chart will try to keep using the same color
          * for the same piece of data when updating data. This can be turned off
          * through this boolean (typically to "randomize" colors when having a
-         * big number of ordered slices)
+         * big number of ordered slices), with no guarantee whether the updated
+         * data will match or not match previous data color per slice
          */
         preventColorReuse: {
           type: Boolean,
