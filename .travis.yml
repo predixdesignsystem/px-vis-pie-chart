@@ -17,6 +17,7 @@ before_script:
   - npm install bower
   - 'export PATH=$PWD/node_modules/.bin:$PATH'
   - bower install
+  - sudo apt-get install default-jre
 script:
   - xvfb-run wct --skip-plugin sauce
   - >-
