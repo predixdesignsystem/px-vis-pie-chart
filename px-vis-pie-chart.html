@@ -361,7 +361,6 @@ Element providing solution to no problem in particular.
             
             result[i].colorIndex = freeIndex;
             usedColors.push(freeIndex);
-            console.log('idnex: ' + freeIndex + ' ' + result[i].y)
           } 
 
           //rebuild our mapping
@@ -392,10 +391,6 @@ Element providing solution to no problem in particular.
 
         for(var i=0; i<result.length; i++) {
           result[i].backgroundColor = this._getPieColorForIndex(result[i].colorIndex);
-          if(!result[i].backgroundColor) {
-            debugger
-          }
-          console.log('idnex: ' + i + ' ' + result[i].y + ' ' + result[i].backgroundColor)
         }
 
       } else {
@@ -429,7 +424,6 @@ Element providing solution to no problem in particular.
             var slice = {};
             slice = _internalChartData[el.index];
             slice.backgroundColor = this._getPieColorForIndex(_internalChartData[el.index].colorIndex);
-            console.log('idnex: ' + count + ' ' + slice.backgroundColor)
             result.push(slice);
           }
            else  if(aggregateOtherRegister) {

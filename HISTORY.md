@@ -1,3 +1,7 @@
+v0.3.3
+==================
+* remove console.log
+
 v0.3.2
 ==================
 * Loop through colors when having more slices than the max number of colors
