@@ -15,8 +15,7 @@ addons:
 before_script:
   - npm install web-component-tester
   - npm install bower
-  - export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre
-  - 'export PATH=$JAVA_HOME:$PWD/node_modules/.bin:$PATH'
+  - 'export PATH=$PWD/node_modules/.bin:$PATH'
   - bower install
 script:
   - xvfb-run wct --skip-plugin sauce
