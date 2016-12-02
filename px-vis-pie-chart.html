@@ -262,6 +262,16 @@ Element providing solution to no problem in particular.
         type: Object,
         value: function() {
           return {};
+        },
+        /**
+         * By default the chart will try to keep using the same color
+         * for the same piece of data when updating data. This can be turned off
+         * through this boolean (typically to "randomize" colors when having a
+         * big number of ordered slices)
+         */
+        preventColorReuse: {
+          type: Boolean,
+          value: false
         }
       }
     },
@@ -319,7 +329,7 @@ Element providing solution to no problem in particular.
           result.push(chartData[i]);
 
           //store used color indexes
-          if(colorIndex) {
+          if(colorIndex && !this.preventColorReuse) {
             usedColors.push(colorIndex);
             result[i].colorIndex = colorIndex;
           }
@@ -329,17 +339,28 @@ Element providing solution to no problem in particular.
         this._colorIndexMapping = {};
 
         //assign colors
-        var freeIndex = 0;
+        var freeIndex = 0,
+            maxColors = Math.min(Object.keys(commonColors.properties.dataVisColors.value).length,
+            commonColors.properties.seriesColorOrder.value.length);
         for(var i=0; i<result.length; i++) {
 
           //assign a new color if needed
           if(!result[i].colorIndex) {
-            //find the first available index
-            while(usedColors.indexOf(freeIndex) !== -1) {
+
+            if(usedColors.length === maxColors || usedColors.length > maxColors) {
+              //if we have used all colors just start looping again
               freeIndex++;
+              freeIndex = freeIndex % maxColors;
+            } else {
+              //find the first available index
+              while(usedColors.indexOf(freeIndex) !== -1) {
+                freeIndex++;
+              }
             }
+            
             result[i].colorIndex = freeIndex;
             usedColors.push(freeIndex);
+            console.log('idnex: ' + freeIndex + ' ' + result[i].y)
           } 
 
           //rebuild our mapping
@@ -370,6 +391,10 @@ Element providing solution to no problem in particular.
 
         for(var i=0; i<result.length; i++) {
           result[i].backgroundColor = this._getPieColorForIndex(result[i].colorIndex);
+          if(!result[i].backgroundColor) {
+            debugger
+          }
+          console.log('idnex: ' + i + ' ' + result[i].y + ' ' + result[i].backgroundColor)
         }
 
       } else {
@@ -403,6 +428,7 @@ Element providing solution to no problem in particular.
             var slice = {};
             slice = _internalChartData[el.index];
             slice.backgroundColor = this._getPieColorForIndex(_internalChartData[el.index].colorIndex);
+            console.log('idnex: ' + count + ' ' + slice.backgroundColor)
             result.push(slice);
           }
            else  if(aggregateOtherRegister) {

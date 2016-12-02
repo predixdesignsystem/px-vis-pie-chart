@@ -1,3 +1,8 @@
+v0.3.2
+==================
+* Loop through colors when having more slices than the max number of colors
+* Added preventColorReuse
+
 v0.3.1
 ==================
 * Fix bug in ordering registers
