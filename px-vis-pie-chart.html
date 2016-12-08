@@ -68,6 +68,8 @@ Element providing solution to no problem in particular.
           id="pie"
           svg="[[svg]]"
           class="absolute"
+          data-vis-colors="[[dataVisColors]]"
+          series-color-order="[[seriesColorOrder]]"
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
@@ -130,7 +132,8 @@ Element providing solution to no problem in particular.
       PxVisBehavior.completeSeriesConfig,
       PxVisBehaviorChart.chartCommon,
       Polymer.IronResizableBehavior,
-      PxVisBehaviorChart.saveImage
+      PxVisBehaviorChart.saveImage,
+      PxVisBehaviorChart.dataVisColorTheming 
     ],
     properties: {
       /**
