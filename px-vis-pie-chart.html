@@ -134,7 +134,8 @@ Element providing solution to no problem in particular.
       PxVisBehaviorChart.saveImage,
       PxVisBehaviorChart.chartAutoResize,
       PxVisBehaviorChart.registerPositioning,
-      PxVisBehaviorChart.circleChart
+      PxVisBehaviorChart.circleChart,
+      PxVisBehavior.getSeriesColors
     ],
     properties: {
       /**
@@ -362,7 +363,7 @@ Element providing solution to no problem in particular.
         });
 
         for(var i=0; i<result.length; i++) {
-          result[i].backgroundColor = this._getPieColorForIndex(result[i].colorIndex);
+          result[i].backgroundColor = this._getColor(result[i].colorIndex);
         }
 
       } else {
@@ -395,7 +396,7 @@ Element providing solution to no problem in particular.
           if(count < effectiveMaxRegisters) {
             var slice = {};
             slice = _internalChartData[el.index];
-            slice.backgroundColor = this._getPieColorForIndex(_internalChartData[el.index].colorIndex);
+            slice.backgroundColor = this._getColor(_internalChartData[el.index].colorIndex);
             result.push(slice);
           }
            else  if(aggregateOtherRegister) {
