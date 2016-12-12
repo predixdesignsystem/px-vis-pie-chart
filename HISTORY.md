@@ -1,3 +1,7 @@
+v0.4.0
+==================
+* Updated dependencies
+
 v0.3.3
 ==================
 * remove console.log
