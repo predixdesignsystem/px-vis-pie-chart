@@ -17,6 +17,7 @@
 <link rel="import" href="../px-vis/px-vis-zoom.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
+<link rel="import" href="../px-colors-design/colors.html" />
 
 
 <!--
@@ -36,7 +37,7 @@ Element providing solution to no problem in particular.
 <dom-module id="px-vis-pie-chart">
   <template>
     <style include="px-vis-pie-chart-styles"></style>
-    
+
     <div id="wrapper" class="wrapper">
       <div>
         <div class$="{{_getWrapperClass(_registerType)}}">
@@ -133,7 +134,9 @@ Element providing solution to no problem in particular.
       PxVisBehaviorChart.chartCommon,
       Polymer.IronResizableBehavior,
       PxVisBehaviorChart.saveImage,
-      PxVisBehaviorChart.dataVisColorTheming 
+      baseColors,
+      dataVisColors,
+      PxVisBehaviorChart.dataVisColorTheming
     ],
     properties: {
       /**
@@ -250,7 +253,7 @@ Element providing solution to no problem in particular.
         value: false
       },
       /**
-       * By default the pie chart slices will be ordered by value. Set to false 
+       * By default the pie chart slices will be ordered by value. Set to false
        * to keep the data order
        */
       preserveDataOrder: {
@@ -344,8 +347,8 @@ Element providing solution to no problem in particular.
 
         //assign colors
         var freeIndex = 0,
-            maxColors = Math.min(Object.keys(commonColors.properties.dataVisColors.value).length,
-            commonColors.properties.seriesColorOrder.value.length);
+            maxColors = Math.min(Object.keys(dataVisColors.properties.dataVisColors.value).length,
+            dataVisColors.properties.seriesColorOrder.value.length);
         for(var i=0; i<result.length; i++) {
 
           //assign a new color if needed
@@ -361,10 +364,10 @@ Element providing solution to no problem in particular.
                 freeIndex++;
               }
             }
-            
+
             result[i].colorIndex = freeIndex;
             usedColors.push(freeIndex);
-          } 
+          }
 
           //rebuild our mapping
           this._colorIndexMapping[result[i][yKey]] = result[i].colorIndex;
@@ -408,7 +411,7 @@ Element providing solution to no problem in particular.
             count = 0,
             effectiveMaxRegisters = maxRegisters,
             lastSlice = {percentage: 0,
-                        backgroundColor: commonColors.properties.colors.value['white']};
+                        backgroundColor: baseColors.properties.colors.value['white']};
             lastSlice[xKey] = 0;
             lastSlice[yKey] = 'Other';
 
