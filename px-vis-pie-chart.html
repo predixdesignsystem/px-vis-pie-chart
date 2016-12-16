@@ -17,7 +17,7 @@
 <link rel="import" href="../px-vis/px-vis-zoom.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
-<link rel="import" href="../px-colors-design/colors.html"/>
+<link rel="import" href="../px-colors-design/colors.html" />
 
 
 <!--
@@ -70,6 +70,8 @@ Element providing solution to no problem in particular.
           id="pie"
           svg="[[svg]]"
           class="absolute"
+          data-vis-colors="[[dataVisColors]]"
+          series-color-order="[[seriesColorOrder]]"
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
@@ -137,7 +139,10 @@ Element providing solution to no problem in particular.
       PxVisBehaviorChart.registerPositioning,
       PxVisBehaviorChart.circleChart,
       PxVisBehavior.getSeriesColors,
-      baseColors
+      Polymer.IronResizableBehavior,
+      baseColors,
+      dataVisColors,
+      PxVisBehaviorChart.dataVisColorTheming
     ],
     properties: {
       /**
@@ -243,7 +248,7 @@ Element providing solution to no problem in particular.
         value: false
       },
       /**
-       * By default the pie chart slices will be ordered by value. Set to false 
+       * By default the pie chart slices will be ordered by value. Set to false
        * to keep the data order
        */
       preserveDataOrder: {
@@ -258,6 +263,17 @@ Element providing solution to no problem in particular.
         type: Object,
         value: function() {
           return {};
+        },
+        /**
+         * By default the chart will try to keep using the same color
+         * for the same piece of data when updating data. This can be turned off
+         * through this boolean (typically to "randomize" colors when having a
+         * big number of ordered slices), with no guarantee whether the updated
+         * data will match or not match previous data color per slice
+         */
+        preventColorReuse: {
+          type: Boolean,
+          value: false
         }
       }
     },
@@ -315,7 +331,7 @@ Element providing solution to no problem in particular.
           result.push(chartData[i]);
 
           //store used color indexes
-          if(colorIndex) {
+          if(colorIndex && !this.preventColorReuse) {
             usedColors.push(colorIndex);
             result[i].colorIndex = colorIndex;
           }
@@ -325,18 +341,28 @@ Element providing solution to no problem in particular.
         this._colorIndexMapping = {};
 
         //assign colors
-        var freeIndex = 0;
+        var freeIndex = 0,
+            maxColors = Math.min(Object.keys(dataVisColors.properties.dataVisColors.value).length,
+            dataVisColors.properties.seriesColorOrder.value.length);
         for(var i=0; i<result.length; i++) {
 
           //assign a new color if needed
           if(!result[i].colorIndex) {
-            //find the first available index
-            while(usedColors.indexOf(freeIndex) !== -1) {
+
+            if(usedColors.length === maxColors || usedColors.length > maxColors) {
+              //if we have used all colors just start looping again
               freeIndex++;
+              freeIndex = freeIndex % maxColors;
+            } else {
+              //find the first available index
+              while(usedColors.indexOf(freeIndex) !== -1) {
+                freeIndex++;
+              }
             }
+
             result[i].colorIndex = freeIndex;
             usedColors.push(freeIndex);
-          } 
+          }
 
           //rebuild our mapping
           this._colorIndexMapping[result[i][yKey]] = result[i].colorIndex;
@@ -390,7 +416,7 @@ Element providing solution to no problem in particular.
 
         //sort mapped array
         mapped.sort(function(a, b) {
-          return a.value < b.value;
+          return b.value - a.value;
         });
 
         //get slices we're interested in

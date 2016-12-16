@@ -112,6 +112,11 @@
                 <label for$="hideRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                 <div class="u-ml-">Hide register</div>
               </div>
+              <div class="flex u-mb-">
+                <input id="preventColorReuse{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preventColorReuse::change}}">
+                <label for$="preventColorReuse{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Prevent Color Reuse</div>
+              </div>
               <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
               <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
@@ -156,13 +161,14 @@
                     chart-data="[[data0]]"
                     width={{item.width}}
                     height="{{item.height}}"
-                    inner-radius="{{item.innerRadius}}"
                     prevent-resize = "{{item.preventResize}}"
+                    hide-register="{{item.hideRegister}}"
                     aggregate-other-register="{{item.aggregateOtherRegister}}"
                     preserve-data-order="{{item.preserveDataOrder}}"
+                    inner-radius="{{item.innerRadius}}"
                     donut="{{item.donut}}"
                     show-title="{{item.showTitle}}"
-                    hide-register="{{item.hideRegister}}"
+                    prevent-color-reuse="{{item.preventColorReuse}}"
                     margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
@@ -236,6 +242,7 @@ window.addEventListener('WebComponentsReady', function() {
             {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
           ],
           "usePercentage":true,
+          "preventColorReuse": false,
           "aggregateOtherRegister": false,
           "innerRadius": 0,
           "donut": false,
