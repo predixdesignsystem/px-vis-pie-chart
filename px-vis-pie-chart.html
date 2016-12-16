@@ -17,6 +17,7 @@
 <link rel="import" href="../px-vis/px-vis-zoom.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
+<link rel="import" href="../px-colors-design/colors.html"/>
 
 
 <!--
@@ -135,7 +136,8 @@ Element providing solution to no problem in particular.
       PxVisBehaviorChart.chartAutoResize,
       PxVisBehaviorChart.registerPositioning,
       PxVisBehaviorChart.circleChart,
-      PxVisBehavior.getSeriesColors
+      PxVisBehavior.getSeriesColors,
+      baseColors
     ],
     properties: {
       /**
@@ -378,7 +380,7 @@ Element providing solution to no problem in particular.
             count = 0,
             effectiveMaxRegisters = maxRegisters,
             lastSlice = {percentage: 0,
-                        backgroundColor: commonColors.properties.colors.value['white']};
+                        backgroundColor: this.colors['white']};
             lastSlice[xKey] = 0;
             lastSlice[yKey] = 'Other';
 

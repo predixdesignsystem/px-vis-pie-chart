@@ -42,6 +42,10 @@
       url="demo_data3.json"
       handle-as="json"
       last-response="{{data2}}" auto></iron-ajax>
+    <iron-ajax
+      url="demo_data4.json"
+      handle-as="json"
+      last-response="{{data3}}" auto></iron-ajax>
     <!-- discription -->
     <div class="hero u-p++ text--shadow">
       <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-vis-pie-chart" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
@@ -276,7 +280,7 @@ window.addEventListener('WebComponentsReady', function() {
 
       button.addEventListener('click', function() {
         currentDataIndex++;
-        currentDataIndex = currentDataIndex % 3;
+        currentDataIndex = currentDataIndex % 4;
         chart.set('chartData', template['data'+currentDataIndex]);
       });
     }, 250);
