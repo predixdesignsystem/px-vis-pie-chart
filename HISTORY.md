@@ -1,10 +1,24 @@
-v0.2.11
-==================
-* changing all devDeps to ^
 
-v0.2.10
+v0.4.1
 ==================
-* Update px-theme to 2.0.1 and update test fixtures
+* Themeable
+
+v0.4.0
+==================
+* Updated dependencies
+
+v0.3.3
+==================
+* remove console.log
+
+v0.3.2
+==================
+* Loop through colors when having more slices than the max number of colors
+* Added preventColorReuse
+
+v0.3.1
+==================
+* Fix bug in ordering registers
 
 v0.3.0
 ==================
@@ -14,6 +28,14 @@ v0.3.0
 * Fixed data update/deletion/addition issues
 * Added animations on data update/deletion/addition
 * Automatically sort registers from the biggest value to the smallest
+
+v0.2.11
+==================
+* changing all devDeps to ^
+
+v0.2.10
+==================
+* Update px-theme to 2.0.1 and update test fixtures
 
 v0.2.9
 ==================

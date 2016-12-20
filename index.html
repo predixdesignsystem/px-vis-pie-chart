@@ -53,7 +53,7 @@
     		</p>
       </div>
   		<div class="flex">
-  			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart/master.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
   			<img class="u-mr--" src="https://img.shields.io/bower/v/px-vis-pie-chart.svg?style=flat-square" alt="Bower" onerror="this.style.display='none'"/>
   			<img class="u-mr--" src="https://img.shields.io/github/issues-raw/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Issues" onerror="this.style.display='none'"/>
   			<img class="u-mr--" src="https://img.shields.io/github/watchers/PredixDev/px-vis-pie-chart.svg?style=social&label=Watch" onerror="this.style.display='none'"/>
@@ -102,6 +102,11 @@
                 <label for$="aggregateOtherRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                 <div class="u-ml-">Aggregate Other Register</div>
               </div>
+              <div class="flex u-mb-">
+                <input id="preventColorReuse{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preventColorReuse::change}}">
+                <label for$="preventColorReuse{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Prevent Color Reuse</div>
+              </div>
               <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
               <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
               <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
@@ -118,12 +123,13 @@
                     chart-data="[[data0]]"
                     width={{item.width}}
                     height="{{item.height}}"
-                    usePercentage="{{item.usePercentage}}"
-                    aggregateOtherRegister="{{item.aggregateOtherRegister}}"
+                    use-percentage="{{item.usePercentage}}"
+                    aggregate-other-register="{{item.aggregateOtherRegister}}"
                     preserve-data-order="{{item.preserveDataOrder}}"
-                    innerRadius="{{item.innerRadius}}"
+                    inner-radius="{{item.innerRadius}}"
                     donut="{{item.donut}}"
                     show-title="{{item.showTitle}}"
+                    prevent-color-reuse="{{item.preventColorReuse}}"
                     margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
@@ -195,6 +201,7 @@ window.addEventListener('WebComponentsReady', function() {
             {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
           ],
           "usePercentage":true,
+          "preventColorReuse": false,
           "aggregateOtherRegister": false,
           "innerRadius": 0,
           "donut": false,
