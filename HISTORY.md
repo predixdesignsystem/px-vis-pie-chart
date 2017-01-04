@@ -2,7 +2,7 @@ v1.0.0
 ==================
 * modified internal mechanism for resizing
 * added chartHorizontalAlignment and chartVerticalAlignment to alignt the chart drawing when smaller than its container
-* alignment of the chart is now centered by default
+* alignment of the chart is now centered by default with register next to it
 
 v0.4.1
 ==================
