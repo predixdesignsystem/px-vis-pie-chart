@@ -66,7 +66,7 @@ rm .jshintrc
 
 # Overwrite whatever is in root .bowerrc to force installation of bower packages at the root
 echo "{ \"directory\": \".\" }" > .bowerrc
-
+npm install bower -g
 bower cache clean
 # Install your new tag through bower (use --force because it will fail without forcing it)
 bower install ${REPO_NAME} px-dark-theme
