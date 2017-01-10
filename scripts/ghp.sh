@@ -29,6 +29,7 @@ fi
 # PREPARE FILESYSTEM
 # ------------------------------------------------------------------------------
 
+cd $TRAVIS_BUILD_DIR
 
 # Find out our repo name from the bower file
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
