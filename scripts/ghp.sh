@@ -35,8 +35,8 @@ cd $TRAVIS_BUILD_DIR
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
-shopt -s extglob
-rm -fr !(.git) # THIS DELETES ALL FILES EXCEPT .git
+rm -f $TRAVIS_BUILD_DIR
+find $TRAVIS_BUILD_DIR ! -name '.git' -type d -exec rm -rf {} +
 
 
 # Overwrite whatever is in root .bowerrc to force installation of bower packages at the root
