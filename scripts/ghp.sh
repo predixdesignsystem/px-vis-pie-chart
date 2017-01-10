@@ -35,7 +35,7 @@ cd $TRAVIS_BUILD_DIR
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
-rm -f *  $TRAVIS_BUILD_DIR
+rm * $TRAVIS_BUILD_DIR
 find $TRAVIS_BUILD_DIR ! -name '.git' -type d -exec rm -rf {} +
 
 
