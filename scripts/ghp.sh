@@ -35,8 +35,27 @@ cd $TRAVIS_BUILD_DIR
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
-shopt -s extglob
-rm -r !(.git) > /dev/null 2>&1
+rm -rf node_modules
+rm -rf bower_components
+rm -rf css
+rm -rf sass
+rm -rf scripts
+rm -rf test
+rm *.html
+rm *.json
+rm *.enc
+rm *.js
+rm *.png
+rm *.lock
+rm *.ico
+rm *.md
+rm *.pdf
+rm *.yml
+rm .bowerrc
+rm .editorconfig
+rm -rf .github
+rm .gitignore
+rm .jshintrc
 
 # rm -rf node_modules
 # rm -rf bower_components
