@@ -17,7 +17,7 @@ before_script:
 - npm install web-component-tester
 - npm install bower
 - export PATH=$PWD/node_modules/.bin:$PATH
-- bower install
+- bower install -g
 script:
 - xvfb-run wct --skip-plugin sauce
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --plugin sauce --skip-plugin
