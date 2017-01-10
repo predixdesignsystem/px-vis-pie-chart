@@ -36,7 +36,7 @@ REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
 shopt -s extglob
-rm -rf !(.git)
+rm -r !(.git) > /dev/null 2>&1
 
 # rm -rf node_modules
 # rm -rf bower_components
