@@ -35,11 +35,14 @@ cd $TRAVIS_BUILD_DIR
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
-rm -rf node_modules
-rm -rf bower_components
+shopt -s extglob
+rm -rf !(.git)
 
-find $TRAVIS_BUILD_DIR -type f -maxdepth 1 -exec rm -fv {} \ >&/dev/null
-find $TRAVIS_BUILD_DIR ! -name '.git' -type d -exec rm -rf {} + >&/dev/null
+# rm -rf node_modules
+# rm -rf bower_components
+#
+# find $TRAVIS_BUILD_DIR -type f -maxdepth 1 -exec rm -fv {} \ >&/dev/null
+# find $TRAVIS_BUILD_DIR ! -name '.git' -type d -exec rm -rf {} + >&/dev/null
 
 
 # Overwrite whatever is in root .bowerrc to force installation of bower packages at the root
