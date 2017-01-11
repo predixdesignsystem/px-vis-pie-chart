@@ -66,6 +66,8 @@ rm .jshintrc
 
 # Overwrite whatever is in root .bowerrc to force installation of bower packages at the root
 echo "{ \"directory\": \".\" }" > .bowerrc
+#make sure the deploy key isn't saved into the git repo
+echo "deploy_key" > .gitignore
 npm install bower -g
 bower cache clean
 # Install your new tag through bower (use --force because it will fail without forcing it)
@@ -109,9 +111,6 @@ perl -pi -w -e 's/px-theme\/px-theme-styles.html/px-dark-theme\/px-dark-theme-st
 
 # Remember to exit out of the component before we do any git stuff
 cd ../
-
-#don't forget to remove the deploy key!
-rm deploy_key
 
 # Do the git stuff
 
