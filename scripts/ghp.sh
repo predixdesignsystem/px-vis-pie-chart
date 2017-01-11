@@ -71,6 +71,11 @@ bower cache clean
 # Install your new tag through bower (use --force because it will fail without forcing it)
 bower install ${REPO_NAME} px-dark-theme
 
+#copy the bower file into our root
+cp ${REPO_NAME}/bower.json bower.json
+
+#and run install
+bower install
 # Overwrite whatever is in root `index.html` to create the redirect
 # Note: We are not overwriting the component's documentation `index.html` file
 # here, we are making sure that http://url/px-something/ redirects to
@@ -105,6 +110,8 @@ perl -pi -w -e 's/px-theme\/px-theme-styles.html/px-dark-theme\/px-dark-theme-st
 # Remember to exit out of the component before we do any git stuff
 cd ../
 
+#don't forget to remove the deploy key!
+rm deploy_key
 
 # Do the git stuff
 
