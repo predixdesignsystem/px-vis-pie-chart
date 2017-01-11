@@ -35,6 +35,7 @@ cd $TRAVIS_BUILD_DIR
 REPO_NAME=$(grep "name" bower.json | sed 's/"name": "//' | sed 's/",//')
 echo "repo name is ${REPO_NAME}"
 
+#delete all the files!
 rm -rf node_modules
 rm -rf bower_components
 rm -rf css
@@ -57,33 +58,34 @@ rm -rf .github
 rm .gitignore
 rm .jshintrc
 
-# rm -rf node_modules
-# rm -rf bower_components
-#
-# find $TRAVIS_BUILD_DIR -type f -maxdepth 1 -exec rm -fv {} \ >&/dev/null
-# find $TRAVIS_BUILD_DIR ! -name '.git' -type d -exec rm -rf {} + >&/dev/null
-
-
-# Overwrite whatever is in root .bowerrc to force installation of bower packages at the root
+# force installation of bower packages at the root
 echo "{ \"directory\": \".\" }" > .bowerrc
+
 #make sure the deploy key isn't saved into the git repo
 echo "deploy_key" > .gitignore
-npm install bower -g
-bower cache clean
-# Install your new tag through bower (use --force because it will fail without forcing it)
-bower install ${REPO_NAME} px-dark-theme
 
-#copy the bower file into our root
-cp ${REPO_NAME}/bower.json bower.json
-
-#and run install
-bower install
-# Overwrite whatever is in root `index.html` to create the redirect
+# add the redirect.
 # Note: We are not overwriting the component's documentation `index.html` file
 # here, we are making sure that http://url/px-something/ redirects to
 # http://url/px-something/px-something/, where the demo page is installed
 meta_temp='<META http-equiv=refresh content="0;URL=COMPONENT_NAME/">'
 echo ${meta_temp/'COMPONENT_NAME'/$REPO_NAME} > index.html
+
+# ------------------------------------------------------------------------------
+# BOWER
+# ------------------------------------------------------------------------------
+#
+#for some reason, bower isn't available here, so, install it globally, so it doesn't end up as another folder.
+npm install bower -g
+bower cache clean
+# Install the repo and the dark-theme.
+bower install ${REPO_NAME} px-dark-theme
+
+#copy the bower file into our root
+yes | cp ${REPO_NAME}/bower.json bower.json
+
+#and run install
+bower install
 
 # ------------------------------------------------------------------------------
 # BUILD PROJECT
@@ -96,7 +98,7 @@ cd ${REPO_NAME}
 yes | cp index.html index-dark.html
 
 # @DARK_THEME: Import dark-theme on the `index-dark.html` page
-perl -pi -w -e 's/px-theme\/px-theme-styles.html/px-dark-theme\/px-dark-theme-styles.html/g;' index-dark.html
+sed 's/px-theme\/px-theme-styles.html/px-dark-theme\/px-dark-theme-styles.html/g;' index-dark.html
 
 # ------------------------------------------------------------------------------
 # SW-PRECACHE
