@@ -1,6 +1,6 @@
 {
   "name": "px-vis-pie-chart",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": [
     "px-vis-pie-chart.html"
   ],
@@ -37,6 +37,7 @@
     "px-list-inline-design": "^0.3.0",
     "px-headings-design": "^0.3.0",
     "px-actionable-text-icons-design": "^1.1.0",
-    "px-toggle-design": "^1.1.0"
+    "px-toggle-design": "^1.1.0",
+    "px-code-design": "^1.1.3"
   }
 }
