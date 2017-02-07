@@ -1,12 +1,9 @@
-v1.0.1
-==================
-* changing ghp.sh to account for Alpha releases
-
 v1.0.0
 ==================
 * modified internal mechanism for resizing
 * added chartHorizontalAlignment and chartVerticalAlignment to alignt the chart drawing when smaller than its container
 * alignment of the chart is now centered by default with register next to it
+* changing ghp.sh to account for Alpha releases
 
 v0.4.1
 ==================
