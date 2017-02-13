@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>px-vis-pie-chart Demo</title>
+  <link rel="stylesheet" type="text/css" href="css/px-vis-pie-chart-demo.css"/>
+  <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../px-theme/px-theme-styles.html">
+  <style include="px-theme-styles" is="custom-style"></style>
+
+  <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
+  <link rel="import" href="../px-tabs/px-tab-set.html" />
+  <link rel="import" href="../iron-ajax/iron-ajax.html" />
+
+  <link rel="import" href="px-vis-pie-chart.html"/>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+
+  <link rel="import" href="../px-dropdown/px-dropdown.html"/>
+  <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
+  <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
+  <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+
+  </head>
+
+<body>
+
+  <!-- Wrap elements with auto-binding template to -->
+  <!-- allow use of Polymer bindings in main document -->
+  <template id="just-for-demo" is="dom-bind" >
+    <iron-ajax
+      url="demo_data.json"
+      handle-as="json"
+      last-response="{{data0}}" auto></iron-ajax>
+     <iron-ajax
+      url="demo_data2.json"
+      handle-as="json"
+      last-response="{{data1}}" auto></iron-ajax>
+    <iron-ajax
+      url="demo_data3.json"
+      handle-as="json"
+      last-response="{{data2}}" auto></iron-ajax>
+    <iron-ajax
+      url="demo_data4.json"
+      handle-as="json"
+      last-response="{{data3}}" auto></iron-ajax>
+    <!-- discription -->
+    <div class="hero u-p++ text--shadow">
+      <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-vis-pie-chart" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
+  		<h1 class="delta">px-vis-pie-chart</h1>
+      <div class="description-text">
+    		<p>
+    			The	<code>px-vis-pie-chart</code> allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register.
+          When clicking on a slice the pie will rotate to display this slice at the top. Initial height and width can be set but the component will try to
+          fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
+    		</p>
+      </div>
+  		<div class="flex">
+  			<img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-vis-pie-chart/master.svg?style=flat-square" alt="Travis" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/bower/v/px-vis-pie-chart.svg?style=flat-square" alt="Bower" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/github/issues-raw/PredixDev/px-vis-pie-chart.svg?style=flat-square" alt="Issues" onerror="this.style.display='none'"/>
+  			<img class="u-mr--" src="https://img.shields.io/github/watchers/PredixDev/px-vis-pie-chart.svg?style=social&label=Watch" onerror="this.style.display='none'"/>
+  		</div>
+  	</div>
+
+    <!-- mega demo -->
+    <div style="position: relative;" class="u-pb++ flex flex--col" id="defaultTab">
+      <div class="tabContainer u-pt++ u-pl++">
+        <px-tab-set selected="{{selected}}" bare no-bottom-border>
+          <template is="dom-repeat" items="{{optionsArray}}">
+            <px-tab>Option {{indexPlusOne(index)}}</px-tab>
+          </template>
+        </px-tab-set>
+      </div>
+      <px-tab-pages selected="{{selected}}">
+        <template is="dom-repeat" items="{{optionsArray}}">
+          <section class="tab-page">
+            <div class="mega-demo flex u-ph++ u-pb++">
+            <!-- Properties -->
+            <div class="properties u-ph+ u-pb+ u-mt+" id="properties">
+              <p class="epsilon">Properties</p>
+              <button id="buttonData" class="u-mb">Click to update Data</button>
+              <div class="flex u-mb-">
+                <input id="donut{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.donut::change}}">
+                <label for$="donut{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Donut</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="usePercentage{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.usePercentage::change}}">
+                <label for$="usePercentage{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Use Percentage</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="showTitle{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.showTitle::change}}">
+                <label for$="showTitle{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Show Title</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="preserveDataOrder{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preserveDataOrder::change}}">
+                <label for$="preserveDataOrder{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Preserve Data Order</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="aggregateOtherRegister{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.aggregateOtherRegister::change}}">
+                <label for$="aggregateOtherRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Aggregate Other Register</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="hideRegister{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.hideRegister::change}}">
+                <label for$="hideRegister{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Hide register</div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="preventColorReuse{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preventColorReuse::change}}">
+                <label for$="preventColorReuse{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Prevent Color Reuse</div>
+              </div>
+              <div class="u-mb-">Maximum registers: <input id="maxRegisters" class="text-input" type="text" placeholder="0 = no limit" value="{{item.maxRegisters::input}}" /></div>
+              <div class="u-mb-">Inner radius: <input id="innerRadius" class="text-input" type="text" placeholder="0-1" value="{{item.innerRadius::input}}" /></div>
+              <div class="u-mb-">Width: <input id="width" class="text-input" type="text" placeholder="Number" value="{{item.width::input}}" /></div>
+              <div class="u-mb-">Height: <input id="height" class="text-input" type="text" placeholder="Number" value="{{item.height::input}}" /></div>
+              <div class="u-mb-">Horizontal Alignment:
+                <div style="width: 100%;">
+                  <px-dropdown id="chartHorizontalAlignment" value="{{item.chartHorizontalAlignment}}" display-value="{{item.chartHorizontalAlignment}}" bound-target="properties">
+                    <px-dropdown-content
+                      items='[
+                        {"key":"one", "val": "left"},
+                        {"key":"two", "val": "center"},
+                        {"key":"three", "val": "right"}]'>
+                    </px-dropdown-content>
+                  </px-dropdown>
+                </div>
+              </div>
+              <div class="u-mb-">Vertical Alignment:
+                <div style="width: 100%;">
+                  <px-dropdown id="chartVerticalAlignment" value="{{item.chartVerticalAlignment}}" display-value="{{item.chartVerticalAlignment}}" bound-target="properties">
+                    <px-dropdown-content
+                      items='[
+                        {"key":"one", "val": "top"},
+                        {"key":"two", "val": "center"},
+                        {"key":"three", "val": "bottom"}]'>
+                    </px-dropdown-content>
+                  </px-dropdown>
+                </div>
+              </div>
+              <div class="flex u-mb-">
+                <input id="preventResize{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.preventResize::change}}">
+                <label for$="preventResize{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                <div class="u-ml-">Prevent Resize</div>
+              </div>
+            </div>
+
+            <div class="demoContainer u-mt+">
+                <!-- demo -->
+                <div class="flex flex--col full-height">
+                  <div class="demo flex u-p+ full-height">
+                  <px-vis-pie-chart
+                    id="chart"
+                    chart-data="[[data0]]"
+                    width={{item.width}}
+                    height="{{item.height}}"
+                    prevent-resize = "{{item.preventResize}}"
+                    hide-register="{{item.hideRegister}}"
+                    aggregate-other-register="{{item.aggregateOtherRegister}}"
+                    preserve-data-order="{{item.preserveDataOrder}}"
+                    inner-radius="{{item.innerRadius}}"
+                    donut="{{item.donut}}"
+                    show-title="{{item.showTitle}}"
+                    prevent-color-reuse="{{item.preventColorReuse}}"
+                    margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
+                    series-config='{
+                      "mySerie" :{"xAxisUnit": "pints",
+                      "y": "y",
+                      "x": "x"}
+                      }'
+                    use-percentage="{{item.usePercentage}}"
+                    max-registers="{{item.maxRegisters}"
+                    chart-horizontal-alignment="{{item.chartHorizontalAlignment}}"
+                    chart-vertical-alignment="{{item.chartVerticalAlignment}}">
+                  </px-vis-pie-chart>
+                </div>
+                <div>
+                  <px-demo-snippet
+                    element-properties={{item}}
+                    element-name="px-vis-pie-chart"
+                    links-includes="[[linksIncludes]]"
+                    parent-component="[<div style='width:450px'></div>]"
+                    >
+                  </px-demo-snippet>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="apiContainer">
+            <div class="flex flex--col api u-mt++" >
+              <div>
+                <px-api-viewer source="px-vis-pie-chart"></px-api-viewer>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
+    </px-tab-pages>
+  </div>
+  <footer class="footer flex flex--center">
+      <div class="footer__container u-pv++">
+        <div>
+          <a href="https://ge.com/digital" >
+            <img src="monogram-wdmk.png" alt="GE Monogram" class="footer__img">
+          </a>
+        </div>
+        <div class="footer__list">
+          <ul class="list-inline list-inline--delimited">
+            <li>
+              <a href="http://predix.io/legal" class="footer__list--lnk">Legal</a>
+            </li>
+            <li>
+              <a href="mailto:info@predix.io" class="footer__list--lnk">Contact Us</a>
+            </li>
+            <li>Copyright &copy; {{year}} General Electric Company. All rights reserved.</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+</template>
+<script>
+window.addEventListener('WebComponentsReady', function() {
+  var template = document.querySelector('template[is=dom-bind]'),
+      year = new Date(),
+      optionsArray = [
+        {
+          "chartData" : [
+            {"percentage": "26", "x": 15, "y": "IPA"},
+            {"percentage": "2",  "x": 1,  "y": "Pils"},
+            {"percentage": "2",  "x": 1,  "y": "Lager"},
+            {"percentage": "14", "x": 8,  "y": "Lambic"},
+            {"percentage": "21", "x": 12, "y": "Stout"},
+            {"percentage": "12", "x": 7,  "y": "Pale Ale"},
+            {"percentage": "16", "x": 9,  "y": "Porter"},
+            {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
+          ],
+          "usePercentage":true,
+          "preventColorReuse": false,
+          "aggregateOtherRegister": false,
+          "innerRadius": 0,
+          "donut": false,
+          "showTitle": false,
+          "hideRegister": false,
+          "width": 350,
+          "height": 350,
+          "preserveDataOrder": false,
+          "register-config":{
+            "width": 150,
+            "type": "vertical"},
+          "margin":{ "top": "10", "bottom": "10", "left": "0", "right": "0" },
+          "series-config":{
+            "mySerie" :{"xAxisUnit": "pints",
+            "y": "y",
+            "x": "x"}
+            },
+          "maxRegisters": 0,
+          "chartHorizontalAlignment": "center",
+          "chartVerticalAlignment": "center",
+          "parentComponent": ["<div style='width:450px'>","</div>"]
+        }
+
+      ];
+
+    var indexPlusOne = function(num) {
+      return num + 1;
+    };
+    year = year.getFullYear();
+
+    template.selected = "0";
+    template.optionsArray = optionsArray;
+    template.indexPlusOne = indexPlusOne;
+    template.year = year;
+
+    template.linksIncludes = ['px-vis/px-polygit-imports-vis.html', 'px-datetime-common/px-polygit-imports-datetime.html'];
+
+    setTimeout(function() {
+      var button = document.getElementById('buttonData'),
+          currentDataIndex = 0,
+          chart = document.getElementById('chart');
+
+      button.addEventListener('click', function() {
+        currentDataIndex++;
+        currentDataIndex = currentDataIndex % 4;
+        chart.set('chartData', template['data'+currentDataIndex]);
+      });
+    }, 250);
+
+});
+</script>
+
+</body>
+</html>

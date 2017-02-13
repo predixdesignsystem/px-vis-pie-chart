@@ -1,43 +1,34 @@
 {
-    "name": "px-vis-pie-chart",
-    "version": "1.0.0",
-    "main": [
-        "px-vis-pie-chart.html"
-    ],
-    "ignore": [
-        ".*",
-        "npm-debug.log",
-        "gulpfile.js",
-        "sass",
-        "bower_components",
-        "node_modules",
-        "test",
-        "OSS_Notice.pdf",
-        "scripts",
-        ".github",
-        "px-vis-pie-chart.png"
-    ],
-    "dependencies": {
-        "polymer": "^1.6.0",
-        "px-theme": "^2.0.1",
-        "px-colors-design": "^0.3.0",
-        "px-vis": "^1.0.0",
-        "iron-resizable-behavior": "^1.0.5"
-    },
-    "devDependencies": {
-        "iron-component-page": "~v1.1.7",
-        "iron-ajax": "~1.4.3",
-        "px-starter-kit-design": "^0.7.0",
-        "px-forms-design": "^1.1.0",
-        "px-tables-design": "^1.1.0",
-        "iron-demo-helpers": "~1.2.5",
-        "px-polymer-font-awesome": "^1.1.0",
-        "px-tabs": "^0.6.0",
-        "px-api-viewer": "^0.1.0",
-        "px-demo-snippet": "^0.6.9",
-        "px-list-inline-design": "^0.3.0",
-        "px-headings-design": "^0.3.0",
-        "px-actionable-text-icons-design": "^1.1.0",
-        "px-toggle-design": "^1.1.0"
-    }
+  "name": "px-vis-pie-chart",
+  "version": "1.0.0",
+  "main": [
+    "px-vis-pie-chart.html"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    "*.md",
+    "scripts",
+    ".github",
+    "gulpfile.js",
+    "monogram-wdmk.png",
+    "wct.conf.json",
+    "test",
+    "OSS_Notice.pdf",
+    "*.png"
+  ],
+  "dependencies": {
+    "polymer": "^1.6.0",
+    "px-theme": "^2.0.1",
+    "px-colors-design": "^0.3.0",
+    "px-vis": "^1.0.0",
+    "iron-resizable-behavior": "^1.0.5"
+  },
+  "devDependencies": {
+    "iron-ajax": "~1.4.3",
+    "px-starter-kit-design": "^0.7.0",
+    "px-demo": "~1.4.3"
+  }
 }
