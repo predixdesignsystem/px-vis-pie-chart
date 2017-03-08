@@ -49,18 +49,19 @@ Custom property | Description | Default
   <template>
     <style include="px-vis-pie-chart-styles"></style>
     <style include="px-theme-styles"></style>
-    <div id="wrapper" class$="{{_chartWrapperClass}}">
+    <div id="wrapper" class$="[[_chartWrapperClass]]">
       <!-- empty div for tooltip, do not remove !-->
       <div>
-        <div class$="{{_registerWrapperClass}}">
+        <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]]">
           <!-- Legend -->
           <px-vis-register
             id="register"
-            class$="{{_getHideClass(hideRegister)}} u-ml-"
-            chart-data="[[_internalRegisterData]]"
-            complete-series-config="[[completeSeriesConfig]]"
-            muted-series={{mutedSeries}}
+            class$="[[_getHideClass(hideRegister)]] u-ml-"
             type="{{_registerType}}"
+            chart-data="[[_internalRegisterData]]"
+            chart-width="[[width]]"
+            dynamic-menu-config="[[dynamicMenuConfig]]"
+            complete-series-config="[[completeSeriesConfig]]"
             x-axis-type="pie"
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
@@ -68,7 +69,7 @@ Custom property | Description | Default
           <!-- Core -->
           <px-vis-svg
             id="svg"
-            class="inline--flex"
+            style="height:[[_smallerSide]]px;width:[[_smallerSide]]px"
             width="[[_smallerSide]]"
             height="[[_smallerSide]]"
             offset="[[_center]]"
@@ -102,32 +103,7 @@ Custom property | Description | Default
           empty="[[_empty]]">
         </px-vis-pie>
       </div>
-      <px-vis-clip-path
-        svg="[[svg]]"
-        x="[[x]]"
-        y="[[y]]"
-        width="[[width]]"
-        height="[[height]]"
-        margin="[[margin]]"
-        clip-path="{{clipPath}}">
-      </px-vis-clip-path>
-      <px-vis-interaction-space
-        svg="[[svg]]"
-        width="[[width]]"
-        height="[[height]]"
-        margin="[[margin]]"
-        x="[[x]]"
-        y="[[y]]"
-        current-domain-x="[[currentDomainX]]"
-        current-domain-y="[[currentDomainY]]"
-        chart-data="[[chartData]]"
-        tooltip-data="{{tooltipData}}"
-        extents-data="{{extentsData}}"
-        x-axis-type="[[xAxisType]]"
-        y-axis-type="[[yAxisType]]"
-        complete-series-config="[[completeSeriesConfig]]">
-      </px-vis-interaction-space>
-    </div>
+</div>
   </template>
 </dom-module>
 
@@ -151,7 +127,9 @@ Custom property | Description | Default
       PxVisBehaviorChart.circleChart,
       PxVisBehavior.getSeriesColors,
       Polymer.IronResizableBehavior,
-      PxColorsBehavior.dataVisColorTheming
+      PxColorsBehavior.dataVisColorTheming,
+      PxVisBehavior.dynamicMenuConfig,
+      PxVisBehaviorChart.actionRequest
     ],
     properties: {
       /**
@@ -377,7 +355,7 @@ Custom property | Description | Default
           this._colorIndexMapping[result[i][yKey]] = result[i].colorIndex;
         }
 
-        this.set('_total', total);
+        this.set('_total', total.toFixed(this.decimalPercentage));
 
         //make sure each slice is aware of its percentage value
         for(var i=0; i<result.length; i++) {
@@ -495,6 +473,47 @@ Custom property | Description | Default
     },
     _repositionTitle: function() {
       this.$.pie._repositionTitle();
+    },
+
+    _getAlignment: function(hor, vert, type) {
+      var base = '';
+      
+      if(type === 'horizontal') {
+        if(hor === 'center') {
+          base += 'flex--middle ';
+        } else if(hor === 'right') {
+          base += 'flex--bottom ';
+        } else {
+          base += 'flex--top ';
+        }
+
+        if(vert === 'center') {
+          base += 'flex--center';
+        } else if(vert === 'bottom') {
+          base += 'flex--right';
+        } else {
+          base += 'flex--left';
+        }
+      } else {
+
+        if(hor === 'center') {
+          base += 'flex--center ';
+        } else if(hor === 'right') {
+          base += 'flex--right ';
+        } else {
+          base += 'flex--left ';
+        }
+
+        if(vert === 'center') {
+          base += 'flex--middle';
+        } else if(vert === 'bottom') {
+          base += 'flex--bottom';
+        } else {
+          base += 'flex--top';
+        }
+      }
+
+      return base;
     }
   });
 </script>
