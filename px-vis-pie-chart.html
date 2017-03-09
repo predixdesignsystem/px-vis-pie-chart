@@ -51,7 +51,7 @@ Custom property | Description | Default
     <style include="px-theme-styles"></style>
     <div id="wrapper" class$="[[_chartWrapperClass]]">
       <!-- empty div for tooltip, do not remove !-->
-      <div>
+      <div class="flex">
         <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]]">
           <!-- Legend -->
           <px-vis-register
@@ -66,6 +66,18 @@ Custom property | Description | Default
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
           </px-vis-register>
+          <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
+            <px-popover 
+              id="popover" 
+              style="position:relative"
+              position="relative" 
+              popover-title="" 
+              orientation="top" 
+              hide-overlay 
+              for="popAnchor">
+            </px-popover>
+            <div id="popAnchor"></div>
+          </div>
           <!-- Core -->
           <px-vis-svg
             id="svg"
@@ -264,10 +276,12 @@ Custom property | Description | Default
         }
       }
     },
-    observer: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)'],
+    observers: ['_xAxisConfigChanged(xAxisConfig.*)',
+               '_yAxisConfigChanged(yAxisConfig.*)',
+               '_marginChanged(_center, _radius)'],
     listeners: {
-    'iron-resize': '_onIronResize'
+      'iron-resize': '_onIronResize',
+      'px-vis-pie-centered-on-slice': '_showPopover'
     },
     ready: function() {
       this.xAxisType = 'pie';
@@ -514,6 +528,15 @@ Custom property | Description | Default
       }
 
       return base;
+    },
+    _showPopover: function(evt) {
+      this.$.popover.popoverTitle = evt.detail.name;
+      this.$.popover.popoverBody = evt.detail.value;
+
+      this.$.popover.show();
+    },
+    _marginChanged: function() {
+      this.$.popover.style['top'] = this._center[1] - this._radius;
     }
   });
 </script>
