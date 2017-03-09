@@ -54,6 +54,12 @@ Custom property | Description | Default
       <div class="flex">
         <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]]">
           <!-- Legend -->
+          <px-tooltip id="tooltip" for="popAnchor" orientation="top" delay="10" follow-mouse>
+            <div style="display:flex; flex-direction:column; align-items:center">
+              <span>{{_ttTitle}}</span>
+              <span>{{_ttMessage}}</span>
+            </div>
+          </px-tooltip>
           <px-vis-register
             id="register"
             class$="[[_getHideClass(hideRegister)]] u-ml-"
@@ -66,34 +72,31 @@ Custom property | Description | Default
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
           </px-vis-register>
-          <px-tooltip id="tooltip" orientation="top" delay="10" follow-mouse>
-            <div style="display:flex; flex-direction:column; align-items:center">
-              <span>{{_ttTitle}}</span>
-              <span>{{_ttMessage}}</span>
+          <!-- popover + svg -->
+          <div>
+            <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
+              <px-popover 
+                id="popover" 
+                style="position:relative"
+                position="relative" 
+                popover-title="" 
+                orientation="top" 
+                hide-overlay 
+                for="popAnchor">
+              </px-popover>
+              <div id="popAnchor"></div>
             </div>
-          </px-tooltip>
-          <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
-            <px-popover 
-              id="popover" 
-              style="position:relative"
-              position="relative" 
-              popover-title="" 
-              orientation="top" 
-              hide-overlay 
-              for="popAnchor">
-            </px-popover>
-            <div id="popAnchor"></div>
+            <!-- Core -->
+            <px-vis-svg
+              id="svg"
+              style="height:[[_smallerSide]]px;width:[[_smallerSide]]px"
+              width="[[_smallerSide]]"
+              height="[[_smallerSide]]"
+              offset="[[_center]]"
+              svg="{{svg}}"
+              px-svg-elem="{{pxSvgElem}}">
+            </px-vis-svg>
           </div>
-          <!-- Core -->
-          <px-vis-svg
-            id="svg"
-            style="height:[[_smallerSide]]px;width:[[_smallerSide]]px"
-            width="[[_smallerSide]]"
-            height="[[_smallerSide]]"
-            offset="[[_center]]"
-            svg="{{svg}}"
-            px-svg-elem="{{pxSvgElem}}">
-          </px-vis-svg>
         </div>
         <!-- pie series -->
         <px-vis-pie
@@ -108,7 +111,6 @@ Custom property | Description | Default
           radius="[[_radius]]"
           preserve-data-order="[[preserveDataOrder]]"
           chart-data="[[_internalChartData]]"
-          series-id="[[_getSeriesId(completeSeriesConfig)]]"
           muted-series="[[mutedSeries]]"
           clip-path="[[clipPath]]"
           complete-series-config="[[completeSeriesConfig]]"
@@ -132,11 +134,8 @@ Custom property | Description | Default
 
     behaviors: [
       PxVisBehaviorD3.svg,
-      PxVisBehaviorD3.clipPath,
       PxVisBehavior.dataset,
-      PxVisBehavior.mutedSeries,
       PxVisBehavior.sizing,
-      PxVisBehavior.tooltipData,
       PxVisBehavior.completeSeriesConfig,
       PxVisBehaviorChart.chartCommon,
       PxVisBehaviorChart.saveImage,
@@ -144,7 +143,6 @@ Custom property | Description | Default
       PxVisBehaviorChart.registerPositioning,
       PxVisBehaviorChart.circleChart,
       PxVisBehavior.getSeriesColors,
-      Polymer.IronResizableBehavior,
       PxColorsBehavior.dataVisColorTheming,
       PxVisBehavior.dynamicMenuConfig,
       PxVisBehaviorChart.actionRequest
@@ -268,39 +266,65 @@ Custom property | Description | Default
         type: Object,
         value: function() {
           return {};
-        },
-        /**
-         * By default the chart will try to keep using the same color
-         * for the same piece of data when updating data. This can be turned off
-         * through this boolean (typically to "randomize" colors when having a
-         * big number of ordered slices), with no guarantee whether the updated
-         * data will match or not match previous data color per slice
-         */
-        preventColorReuse: {
-          type: Boolean,
-          value: false
-        },
-        /**
-         * Message used for tooltip and popover, containing info on current slice
-         *
-         */
-        _ttMessage: {
-          type: String,
-          value: ''
-        },
-        /**
-         * Title used for tooltip and popover, containing info on current slice
-         *
-         */
-        _ttTitle: {
-          type: String,
-          value: ''
-        },
+        }
+      },
+      /**
+       * By default the chart will try to keep using the same color
+       * for the same piece of data when updating data. This can be turned off
+       * through this boolean (typically to "randomize" colors when having a
+       * big number of ordered slices), with no guarantee whether the updated
+       * data will match or not match previous data color per slice
+       */
+      preventColorReuse: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Message used for tooltip and popover, containing info on current slice
+       *
+       */
+      _ttMessage: {
+        type: String,
+        value: ''
+      },
+      /**
+       * Title used for tooltip and popover, containing info on current slice
+       *
+       */
+      _ttTitle: {
+        type: String,
+        value: ''
+      },
+      /** 
+       * title before the total value if showTitle is true
+       */
+      title: {
+        type: String,
+        value: 'Total'
+      },
+      /**
+       * the vertical half size, in pixels, for the spacing between the title and its value
+       */ 
+      titleSpacing: {
+        type: Number,
+        value: 5
+      },
+      /**
+       * Unit currently in use: unit or %
+       */
+      _internalUnits: {
+        type: String,
+        computed: '_computeInternalUnits(_currentConfig, usePercentage)'
+      },
+      _currentConfig: {
+        type: String,
+        computed: '_computeSeriesId(completeSeriesConfig)'
       }
     },
     observers: ['_xAxisConfigChanged(xAxisConfig.*)',
                '_yAxisConfigChanged(yAxisConfig.*)',
-               '_positionChanged(_center, _radius)'],
+               '_positionChanged(_center, _radius)',
+               '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'],
     listeners: {
       'iron-resize': '_onIronResize',
       'px-vis-pie-centered-on-slice': '_showPopover',
@@ -324,12 +348,52 @@ Custom property | Description | Default
       }.bind(this), 500);
     },
     _tooltipConfigChanged: function(conf) {
-
       this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
     },
     _registerConfigChanged: function(conf) {
-
       this._applyConfigToElement(this.registerConfig, this.$.register);
+    },
+
+    _drawTitle: function() {
+      if(this.showTitle) {
+        if(!this._titleGroup) {
+
+          this._titleGroup = this.svg.append('g')
+            .attr('class','title-group');
+            
+          this._titleGroup.append('text')
+              .attr('class','title')
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.grey6))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', 45) + 'px')
+              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .text(this.title)
+              .attr('text-anchor', 'middle')
+              .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+
+          this._titleGroup.append('text')
+              .attr('class','value')
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', this.colors.black))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', 45) + 'px')
+              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+              .attr('text-anchor', 'middle')
+              .attr('alignment-baseline', 'hanging')
+              .attr('transform','translate(0,' + this.titleSpacing + ')');
+        } else {
+          this._titleGroup.select('text.title')
+                          .text(this.title)
+                          .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+          
+          this._titleGroup.select('text.value')
+              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+              .attr('transform','translate(0,' + this.titleSpacing + ')');
+        }
+      } else if (this._titleGroup) {
+        this._titleGroup.remove();
+        this._titleGroup = null;
+      }
     },
     _getInternalData: function(chartData, completeSeriesConfig) {
       var total = 0,
@@ -535,28 +599,31 @@ Custom property | Description | Default
         }
       } else {
 
-        if(hor === 'center') {
-          base += 'flex--center ';
-        } else if(hor === 'right') {
-          base += 'flex--right ';
-        } else {
-          base += 'flex--left ';
-        }
+        //when vertical just align the register at the top until
+        //we provide similar config as horizontal
+        base += 'flex--top';
+        // if(hor === 'center') {
+        //   base += 'flex--center ';
+        // } else if(hor === 'right') {
+        //   base += 'flex--right ';
+        // } else {
+        //   base += 'flex--left ';
+        // }
 
-        if(vert === 'center') {
-          base += 'flex--middle';
-        } else if(vert === 'bottom') {
-          base += 'flex--bottom';
-        } else {
-          base += 'flex--top';
-        }
+        // if(vert === 'center') {
+        //   base += 'flex--middle';
+        // } else if(vert === 'bottom') {
+        //   base += 'flex--bottom';
+        // } else {
+        //   base += 'flex--top';
+        // }
       }
 
       return base;
     },
     _showPopover: function(evt) {
-      this.$.popover.popoverTitle = evt.detail.name;
-      this.$.popover.popoverBody = evt.detail.value;
+      this.$.popover.popoverTitle = evt.detail.datum.data[this._currentConfig.y];
+      this.$.popover.popoverBody = this._getSliceValue(evt.detail.datum);
 
       this.$.popover.show();
     },
@@ -566,36 +633,38 @@ Custom property | Description | Default
         this.set('_ttTitle', 'Empty');
         this.set('_ttMessage', '');
       } else {
-        this.set('_ttTitle', evt.detail.name);
-        this.set('_ttMessage', evt.detail.value);
+        this.set('_ttTitle', evt.detail.datum.data[this._currentConfig.y]);
+        this.set('_ttMessage', this._getSliceValue(evt.detail.datum));
       }
 
       var center = Px.d3.arc().centroid(evt.detail.rotatedDatum),
           rect = this.pxSvgElem.getBoundingClientRect();
 
-      this.$.tooltip.mouseCoords = [ center[0] + rect.left + this._center[0],
-                                     center[1] + rect.top + this._center[1]];
+      this.$.tooltip.mouseCoords = [ center[0] + rect.left + this._center[0] + window. window.pageXOffset,
+                                     center[1] + rect.top + this._center[1] + window. window.pageYOffset];
       this.$.tooltip._show();
     },
     _hideTooltip: function(evt) {
-      //close if we aren't moving over the tooltip
-      if(!Px.d3.event.relatedTarget || (this.$.tooltip !== Px.d3.event.relatedTarget && Px.d3.event.relatedTarget.offsetParent !== this.$.tooltip)) {
-
-        this.$.tooltip._hide();
-      } else {
-
-        //if we moved over our tooltip don't close it
-        //but make sure that if we leave the tooltip for something else it will close...
-        var close = function(evt) {
-          //TODO: if we're moving back to the slice this is going to make the tooltip flicker
-          this.$.tooltip.removeEventListener('mouseleave', close);
-          this.$.tooltip._hide();
-        }.bind(this);
-        this.$.tooltip.addEventListener('mouseleave', close);
-      }
+      this.$.tooltip._hide();
     },
     _positionChanged: function() {
       this.$.popover.style['top'] = this._center[1] - this._radius;
+    },
+    _computeInternalUnits: function() {
+      return this.usePercentage ? '%' : this._currentConfig.xAxisUnit;
+    },
+    /**
+     * Return the value or the slice datum depending on use of percentages
+     */
+    _getSliceValue: function(datum) {
+      if(this.usePercentage) {
+        return datum.data.percentage + this._internalUnits;
+      } else {
+        return datum.data[this._currentConfig.x] + ' ' + this._internalUnits;
+      }
+    },
+    _computeSeriesId: function(completeSeriesConfig) {
+      return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
     }
   });
 </script>

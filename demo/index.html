@@ -43,14 +43,15 @@
       <px-demo-code-editor props="{{props}}"></px-demo-code-editor>
 
       <!-- Component ---------------------------------------------------------->
-      <px-demo-component class="flex__item flex">
-        <div style="width:100%;">
+      <px-demo-component class="flex__item flex flex--col" style="width:100%">
+        <button id="buttonData" class="u-mb" style="width: 130px; height: 20px">Click to update Data</button>
+        <div class="flex--column flex__item" style="width:100%;">
           <px-vis-pie-chart
             id="chart"
             chart-data="[[props.chartData.value]]"
-            width={{props.width.value}}
-            height="{{props.height.value}}"
-            prevent-resize = "{{props.preventResize.value}}"
+            width="{{appliedWidth}}"
+            height="{{appliedHeight}}"
+            prevent-resize
             hide-register="{{props.hideRegister.value}}"
             aggregate-other-register="{{props.aggregateOtherRegister.value}}"
             preserve-data-order="{{props.preserveDataOrder.value}}"
@@ -63,7 +64,11 @@
             use-percentage="{{props.usePercentage.value}}"
             max-registers="{{props.maxRegisters}"
             chart-horizontal-alignment="{{props.chartHorizontalAlignment.value}}"
-            chart-vertical-alignment="{{props.chartVerticalAlignment.value}}">
+            chart-vertical-alignment="{{props.chartVerticalAlignment.value}}"
+            dynamic-menu-config="{{props.dynamicMenuConfig.value}}"
+            title-spacing="{{props.titleSpacing.value}}"
+            register-config="{{props.registerConfig.value}}"
+            title="{{props.title.value}}">
           </px-vis-pie-chart>
       </div>
       </px-demo-component>
@@ -223,10 +228,7 @@
         type: Array,
         value: function(){
           return [
-            { configName: "Default",
-              configReset: true,
-              width: 700,
-              height: 400 }
+            { configName: 'Default'}
           ]
         }
       },
@@ -235,14 +237,28 @@
         type: Array,
         value: function() {
           return [
-            "observer"
+            'observer',
+            'offset',
+            'svg',
+            'includeAllSeries',
+            'mutedSeries',
+            'cloneSVGElem',
+            'addClipPath',
+            'generateRandomID',
           ]
         }
       },
       apiMarkPrivate: {
         type: Array,
         value: function() {
-          return []
+          return [
+            'pxSvgElem',
+            'seriesClipPath',
+            'clipPath',
+            'defaultSeriesConfig',
+            'xAxisType',
+            'yAxisType'
+            ]
         }
       },
       apliMarkReadOnly: {
@@ -277,6 +293,55 @@
         value: function() {
           return ['numbro*+MeTaNoV+*'];
         }
+      },
+      appliedWidth: {
+        type: Number
+      },
+
+      appliedHeight: {
+        type: Number
+      },
+      currentDataIndex: {
+        type: Number,
+        value: 0
+      },
+      dataSet: {
+        type: Array,
+        value: [
+            [ {"x": 15, "y": "IPA"},
+              {"x": 1,  "y": "Pils"},
+              {"x": 1,  "y": "Lager"},
+              {"x": 8,  "y": "Lambic"},
+              {"x": 12, "y": "Stout"},
+              {"x": 7,  "y": "Pale Ale"},
+              {"x": 9,  "y": "Porter"},
+              {"x": 4,  "y": "Heffeweisse"}
+          ],
+          [{"x": 6,	"y": "IPA"},
+            {	"x": 1,	"y": "Pils"},
+            {	"x": 1,	"y": "Lager"},
+            {	"x": 13,"y": "Lambic"},
+            {	"x": 5,	"y": "Stout"},
+            {	"x": 7,	"y": "Pale Ale"},
+            {	"x": 4,	"y": "Heffeweisse"}
+          ],
+          [{"x": 6,"y": "IPA"}, 
+            {"x": 1,"y": "Pils"}, 
+            {"x": 1,"y": "Lager"}, 
+            {"x": 13,"y": "Lambic"}, 
+            {"x": 5,"y": "Stout"},
+            {"x": 7,"y": "Pale Ale"},
+            {"x": 4,"y": "Heffeweisse"},
+            {"x": 5,"y": "Barleywine"},
+            {"x": 6,"y": "Old Ale"}],
+          [{"x": 45,"y": "Sky"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 12,"y": "Shady side of pyramid"},
+            {"x": 0,"y": "dummy"},
+            {"x": 9,"y": "Sunny side of pyramid"}]
+        ]
       }
     },
 
@@ -286,20 +351,38 @@
     demoProps: {
       preventResize: {
         type: Boolean,
-        defaultValue: false,
+        defaultValue: true,
         inputType: 'toggle'
       },
 
+      //we need inputDisabled: false to be able to dynamically turn it on
       width: {
         type: Number,
-        defaultValue: 0,
+        defaultValue: 450,
+        inputDisabled: false,
         inputType: 'text'
       },
 
+      //we need inputDisabled: false to be able to dynamically turn it on
       height: {
         type: Number,
-        defaultValue: 0,
+        defaultValue: 450,
+        inputDisabled: false,
         inputType: 'text'
+      },
+      
+      chartHorizontalAlignment: {
+        type: String,
+        defaultValue: 'center',
+        inputType: 'dropdown',
+        inputChoices: ['left', 'center', 'right']
+      },
+
+      chartVerticalAlignment: {
+        type: String,
+        defaultValue: 'top',
+        inputType: 'dropdown',
+        inputChoices: ['top', 'center', 'bottom']
       },
 
       margin: {
@@ -308,17 +391,16 @@
         inputType: 'code:JSON'
       },
 
-      chartHorizontalAlignment: {
-        type: String,
-        defaultValue: 'center',
-        inputType: 'dropdown',
-        inputChoices: ['left', 'center', 'right']
+      hideRegister: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
       },
-      chartVerticalAlignment: {
-        type: String,
-        defaultValue: 'top',
-        inputType: 'dropdown',
-        inputChoices: ['top', 'center', 'bottom']
+
+      registerConfig: {
+        type: Object,
+        defaultValue: { "type": "vertical", "width": 200},
+        inputType: 'code:JSON'
       },
 
       chartData: {
@@ -346,12 +428,6 @@
           }
         },
         inputType: 'code:JSON'
-      },
-
-      includeAllSeries: {
-        type: Boolean,
-        defaultValue: true,
-        inputType: 'toggle'
       },
 
       preserveDataOrder: {
@@ -385,23 +461,22 @@
         inputType: 'toggle'
       },
 
+      title: {
+        type: String,
+        defaultValue: 'Total',
+        inputType: 'text'
+      },
+
+      titleSpacing: {
+        type: Number,
+        defaultValue: 5,
+        inputType: 'text'
+      },
+
       usePercentage: {
         type: Boolean,
         defaultValue: false,
         inputType: 'toggle'
-      },
-
-      hideRegister: {
-        type: Boolean,
-        defaultValue: false,
-        inputType: 'toggle'
-      },
-
-      registerLocation: {
-        type: String,
-        defaultValue: 'top',
-        inputType: 'dropdown',
-        inputChoices: ['none', 'top', 'side', 'both']
       },
 
       aggregateOtherRegister: {
@@ -416,31 +491,57 @@
         inputType: 'text'
       },
 
-
-      showTooltip: {
-        type: Boolean,
-        defaultValue: false,
-        inputType: 'toggle'
-      }
+      dynamicMenuConfig: {
+        type: Array,
+        defaultValue: [
+          {
+            'name': 'Log message',
+            'action': "function(data) {console.log(\"logging message\")}",
+            'eventName': 'delete',
+            'icon': 'fa-trash',
+          }
+        ],
+        inputType: 'code:JSON'
+      },
 
     },
 
-    listeners: {
-      'px-demo-component-light-dom-loaded' : '_handleDemoLoaded'
+    observers: [
+      '_preventResizeChanged(props.preventResize.value)',
+      '_appliedWidthChanged(appliedWidth)',
+      '_appliedHeightChanged(appliedHeight)',
+      '_widthChanged(props.width.value)',
+      '_heightChanged(props.height.value)'
+    ],
+
+    attached: function() {
+      this.$.buttonData.addEventListener('click', function() {
+        this.currentDataIndex++;
+        this.currentDataIndex = this.currentDataIndex % 4;
+        this.$.chart.set('chartData', this.dataSet[this.currentDataIndex]);
+      }.bind(this));
     },
 
-    /**
-     * When the chart is loaded, try to call `notifyResize()` on it to ensure
-     * that it resizes to the correct dimensions.
-     */
-    _handleDemoLoaded: function() {
-      var chart = this.$$('px-vis-pie-chart');
-      if (chart && typeof chart.notifyResize === 'function') {
-        // Wait 1000ms to make sure the parent is sized and ready for the redraw
-        this.async(function(){
-          chart.notifyResize();
-        }, 1000);
+    _preventResizeChanged: function() {
+      this.set('props.width.inputDisabled', !this.props.preventResize.value);
+      this.set('props.height.inputDisabled', !this.props.preventResize.value);
+      this.$.chart.set('preventResize', this.props.preventResize.value);
+    },
+    _widthChanged: function() {
+      if(this.props.preventResize.value) {
+       this.set('appliedWidth', this.props.width.value);
       }
+    },
+    _heightChanged: function() {
+      if(this.props.preventResize.value) {
+       this.set('appliedHeight', this.props.height.value);
+      }
+    },
+    _appliedWidthChanged: function() {
+      this.set('props.width.value', this.appliedWidth);
+    },
+    _appliedHeightChanged: function() {
+      this.set('props.height.value', this.appliedHeight);
     }
   });
 </script>
