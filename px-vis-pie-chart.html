@@ -66,6 +66,12 @@ Custom property | Description | Default
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
           </px-vis-register>
+          <px-tooltip id="tooltip" orientation="top" delay="10" follow-mouse>
+            <div style="display:flex; flex-direction:column; align-items:center">
+              <span>{{_ttTitle}}</span>
+              <span>{{_ttMessage}}</span>
+            </div>
+          </px-tooltip>
           <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
             <px-popover 
               id="popover" 
@@ -273,15 +279,34 @@ Custom property | Description | Default
         preventColorReuse: {
           type: Boolean,
           value: false
-        }
+        },
+        /**
+         * Message used for tooltip and popover, containing info on current slice
+         *
+         */
+        _ttMessage: {
+          type: String,
+          value: ''
+        },
+        /**
+         * Title used for tooltip and popover, containing info on current slice
+         *
+         */
+        _ttTitle: {
+          type: String,
+          value: ''
+        },
       }
     },
     observers: ['_xAxisConfigChanged(xAxisConfig.*)',
                '_yAxisConfigChanged(yAxisConfig.*)',
-               '_marginChanged(_center, _radius)'],
+               '_positionChanged(_center, _radius)'],
     listeners: {
       'iron-resize': '_onIronResize',
-      'px-vis-pie-centered-on-slice': '_showPopover'
+      'px-vis-pie-centered-on-slice': '_showPopover',
+      'px-vis-pie-mouse-enter-slice': '_showTooltip',
+      'px-vis-pie-slice-clicked': '_hideTooltip',
+      'px-vis-pie-mouse-leave-slice': '_hideTooltip'
     },
     ready: function() {
       this.xAxisType = 'pie';
@@ -535,7 +560,41 @@ Custom property | Description | Default
 
       this.$.popover.show();
     },
-    _marginChanged: function() {
+    _showTooltip: function(evt) {
+      //get label and value
+      if(this._empty) {
+        this.set('_ttTitle', 'Empty');
+        this.set('_ttMessage', '');
+      } else {
+        this.set('_ttTitle', evt.detail.name);
+        this.set('_ttMessage', evt.detail.value);
+      }
+
+      var center = Px.d3.arc().centroid(evt.detail.rotatedDatum),
+          rect = this.pxSvgElem.getBoundingClientRect();
+
+      this.$.tooltip.mouseCoords = [ center[0] + rect.left + this._center[0],
+                                     center[1] + rect.top + this._center[1]];
+      this.$.tooltip._show();
+    },
+    _hideTooltip: function(evt) {
+      //close if we aren't moving over the tooltip
+      if(!Px.d3.event.relatedTarget || (this.$.tooltip !== Px.d3.event.relatedTarget && Px.d3.event.relatedTarget.offsetParent !== this.$.tooltip)) {
+
+        this.$.tooltip._hide();
+      } else {
+
+        //if we moved over our tooltip don't close it
+        //but make sure that if we leave the tooltip for something else it will close...
+        var close = function(evt) {
+          //TODO: if we're moving back to the slice this is going to make the tooltip flicker
+          this.$.tooltip.removeEventListener('mouseleave', close);
+          this.$.tooltip._hide();
+        }.bind(this);
+        this.$.tooltip.addEventListener('mouseleave', close);
+      }
+    },
+    _positionChanged: function() {
       this.$.popover.style['top'] = this._center[1] - this._radius;
     }
   });
