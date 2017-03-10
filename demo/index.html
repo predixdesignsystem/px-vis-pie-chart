@@ -62,13 +62,14 @@
             margin='{{props.margin.value}}'
             series-config='{{props.seriesConfig.value}}'
             use-percentage="{{props.usePercentage.value}}"
-            max-registers="{{props.maxRegisters}"
+            max-registers="{{props.maxRegisters.value}}"
             chart-horizontal-alignment="{{props.chartHorizontalAlignment.value}}"
             chart-vertical-alignment="{{props.chartVerticalAlignment.value}}"
             dynamic-menu-config="{{props.dynamicMenuConfig.value}}"
             title-spacing="{{props.titleSpacing.value}}"
             register-config="{{props.registerConfig.value}}"
-            title="{{props.title.value}}">
+            title="{{props.title.value}}"
+            decimal-percentage="{{props.decimalPercentage.value}}">
           </px-vis-pie-chart>
       </div>
       </px-demo-component>
@@ -308,7 +309,7 @@
       dataSet: {
         type: Array,
         value: [
-            [ {"x": 15, "y": "IPA"},
+            [ {"x": 1, "y": "IPA"},
               {"x": 1,  "y": "Pils"},
               {"x": 1,  "y": "Lager"},
               {"x": 8,  "y": "Lambic"},
@@ -380,7 +381,7 @@
 
       chartVerticalAlignment: {
         type: String,
-        defaultValue: 'top',
+        defaultValue: 'center',
         inputType: 'dropdown',
         inputChoices: ['top', 'center', 'bottom']
       },
@@ -451,7 +452,7 @@
       innerRadius: {
         type: Number,
         defaultValue: 0,
-        inputType: 'text',
+        inputType: 'Number',
         inputLabel: 'Inner Radius (0 - 1)'
       },
 
@@ -470,13 +471,19 @@
       titleSpacing: {
         type: Number,
         defaultValue: 5,
-        inputType: 'text'
+        inputType: 'number'
       },
 
       usePercentage: {
         type: Boolean,
         defaultValue: false,
         inputType: 'toggle'
+      },
+
+      decimalPercentage: {
+        type: Number,
+        defaultValue: 0,
+        inputType: 'number'
       },
 
       aggregateOtherRegister: {
@@ -488,7 +495,7 @@
       maxRegisters: {
         type: Number,
         defaultValue: 0,
-        inputType: 'text'
+        inputType: 'number'
       },
 
       dynamicMenuConfig: {
