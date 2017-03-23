@@ -75,13 +75,13 @@ Custom property | Description | Default
           <!-- popover + svg -->
           <div>
             <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
-              <px-popover 
-                id="popover" 
+              <px-popover
+                id="popover"
                 style="position:relative"
-                position="relative" 
-                popover-title="" 
-                orientation="top" 
-                hide-overlay 
+                position="relative"
+                popover-title=""
+                orientation="top"
+                hide-overlay
                 for="popAnchor">
               </px-popover>
               <div id="popAnchor"></div>
@@ -295,7 +295,7 @@ Custom property | Description | Default
         type: String,
         value: ''
       },
-      /** 
+      /**
        * title before the total value if showTitle is true
        */
       title: {
@@ -304,7 +304,7 @@ Custom property | Description | Default
       },
       /**
        * the vertical half size, in pixels, for the spacing between the title and its value
-       */ 
+       */
       titleSpacing: {
         type: Number,
         value: 5
@@ -360,7 +360,7 @@ Custom property | Description | Default
 
           this._titleGroup = this.svg.append('g')
             .attr('class','title-group');
-            
+
           this._titleGroup.append('text')
               .attr('class','title')
               .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.grey6))
@@ -385,7 +385,7 @@ Custom property | Description | Default
           this._titleGroup.select('text.title')
                           .text(this.title)
                           .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
-          
+
           this._titleGroup.select('text.value')
               .text(this._total + ' ' + this._currentConfig.xAxisUnit)
               .attr('transform','translate(0,' + this.titleSpacing + ')');
@@ -572,7 +572,7 @@ Custom property | Description | Default
           this.set('width', Math.max(wrapperRect.width - registerRect.width,0));
           this.set('height', Math.max(wrapperRect.height,0));
         }
-      },50);
+      }, this.debounceResizeTiming);
     },
     _repositionTitle: function() {
       this.$.pie._repositionTitle();
@@ -580,7 +580,7 @@ Custom property | Description | Default
 
     _getAlignment: function(hor, vert, type) {
       var base = '';
-      
+
       if(type === 'horizontal') {
         if(hor === 'center') {
           base += 'flex--middle ';
