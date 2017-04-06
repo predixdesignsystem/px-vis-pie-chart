@@ -14,7 +14,6 @@
 <link rel="import" href="../px-vis/px-vis-tooltip.html"/>
 <link rel="import" href="../px-vis/px-vis-interaction-space.html"/>
 <link rel="import" href="../px-vis/px-vis-register.html"/>
-<link rel="import" href="../px-vis/px-vis-zoom.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
 <link rel="import" href="../px-colors-design/colors.html" />
@@ -27,6 +26,18 @@ Element providing solution to no problem in particular.
 
     <px-vis-pie-chart></px-vis-pie-chart>
 
+### Styling
+The following custom properties are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+  `--px-vis-pie-empty-color` | The color for an empty pie chart | `$dv-light-gray`
+  `--px-vis-pie-title-color` | The color for the title name | `$gray6`
+  `--px-vis-pie-title-font-size` | The size for the title name | `45px`
+  `--px-vis-pie-title-value-color` | The color for the title data value | `$black`
+  `--px-vis-pie-title-value-font-size` | The size for the title data value | `45px`
+
+
 @element px-vis-pie-chart
 @blurb Element providing solution to no problem in particular.
 @homepage index.html
@@ -37,32 +48,55 @@ Element providing solution to no problem in particular.
 <dom-module id="px-vis-pie-chart">
   <template>
     <style include="px-vis-pie-chart-styles"></style>
-
-    <div id="wrapper" class="wrapper">
-      <div>
-        <div class$="{{_getWrapperClass(_registerType)}}">
-          <!-- Core -->
-          <px-vis-svg
-            id="svg"
-            class="inline--flex"
-            width="[[width]]"
-            height="[[height]]"
-            margin="[[margin]]"
-            svg="{{svg}}"
-            px-svg-elem="{{pxSvgElem}}">
-          </px-vis-svg>
+    <style include="px-theme-styles"></style>
+    <div id="wrapper" class$="[[_chartWrapperClass]]">
+      <!-- empty div for tooltip, do not remove !-->
+      <div class="flex">
+        <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]]">
           <!-- Legend -->
+          <px-tooltip id="tooltip" for="popAnchor" orientation="top" delay="10" follow-mouse>
+            <div style="display:flex; flex-direction:column; align-items:center">
+              <span>{{_ttTitle}}</span>
+              <span>{{_ttMessage}}</span>
+            </div>
+          </px-tooltip>
           <px-vis-register
             id="register"
-            class$="{{_calcRegisterClass(hideRegister)}}"
-            chart-data="[[_internalRegisterData]]"
-            complete-series-config="[[completeSeriesConfig]]"
-            muted-series={{mutedSeries}}
+            class$="[[_getHideClass(hideRegister)]] u-ml-"
             type="{{_registerType}}"
+            chart-data="[[_internalRegisterData]]"
+            chart-width="[[width]]"
+            dynamic-menu-config="[[dynamicMenuConfig]]"
+            complete-series-config="[[completeSeriesConfig]]"
             x-axis-type="pie"
             y-axis-type="pie"
             use-percentage="[[usePercentage]]">
           </px-vis-register>
+          <!-- popover + svg -->
+          <div>
+            <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
+              <px-popover
+                id="popover"
+                style="position:relative"
+                position="relative"
+                popover-title=""
+                orientation="top"
+                hide-overlay
+                for="popAnchor">
+              </px-popover>
+              <div id="popAnchor"></div>
+            </div>
+            <!-- Core -->
+            <px-vis-svg
+              id="svg"
+              style="height:[[_smallerSide]]px;width:[[_smallerSide]]px"
+              width="[[_smallerSide]]"
+              height="[[_smallerSide]]"
+              offset="[[_center]]"
+              svg="{{svg}}"
+              px-svg-elem="{{pxSvgElem}}">
+            </px-vis-svg>
+          </div>
         </div>
         <!-- pie series -->
         <px-vis-pie
@@ -76,9 +110,9 @@ Element providing solution to no problem in particular.
           margin="[[margin]]"
           series-color-order="[[seriesColorOrder]]"
           data-vis-colors="[[dataVisColors]]"
+          radius="[[_radius]]"
           preserve-data-order="[[preserveDataOrder]]"
           chart-data="[[_internalChartData]]"
-          series-id="[[_getSeriesId(completeSeriesConfig)]]"
           muted-series="[[mutedSeries]]"
           clip-path="[[clipPath]]"
           complete-series-config="[[completeSeriesConfig]]"
@@ -91,32 +125,7 @@ Element providing solution to no problem in particular.
           empty="[[_empty]]">
         </px-vis-pie>
       </div>
-      <px-vis-clip-path
-        svg="[[svg]]"
-        x="[[x]]"
-        y="[[y]]"
-        width="[[width]]"
-        height="[[height]]"
-        margin="[[margin]]"
-        clip-path="{{clipPath}}">
-      </px-vis-clip-path>
-      <px-vis-interaction-space
-        svg="[[svg]]"
-        width="[[width]]"
-        height="[[height]]"
-        margin="[[margin]]"
-        x="[[x]]"
-        y="[[y]]"
-        current-domain-x="[[currentDomainX]]"
-        current-domain-y="[[currentDomainY]]"
-        chart-data="[[chartData]]"
-        tooltip-data="{{tooltipData}}"
-        extents-data="{{extentsData}}"
-        x-axis-type="[[xAxisType]]"
-        y-axis-type="[[yAxisType]]"
-        complete-series-config="[[completeSeriesConfig]]">
-      </px-vis-interaction-space>
-    </div>
+</div>
   </template>
 </dom-module>
 
@@ -127,23 +136,23 @@ Element providing solution to no problem in particular.
 
     behaviors: [
       PxVisBehaviorD3.svg,
-      PxVisBehaviorD3.clipPath,
       PxVisBehavior.dataset,
-      PxVisBehavior.mutedSeries,
       PxVisBehavior.sizing,
-      PxVisBehavior.tooltipData,
       PxVisBehavior.completeSeriesConfig,
       PxVisBehaviorChart.chartCommon,
-      Polymer.IronResizableBehavior,
       PxVisBehaviorChart.saveImage,
-      baseColors,
-      dataVisColors,
-      PxVisBehaviorChart.dataVisColorTheming
+      PxVisBehaviorChart.chartAutoResize,
+      PxVisBehaviorChart.registerPositioning,
+      PxVisBehaviorChart.circleChart,
+      PxVisBehavior.getSeriesColors,
+      PxColorsBehavior.dataVisColorTheming,
+      PxVisBehavior.dynamicMenuConfig,
+      PxVisBehaviorChart.actionRequest
     ],
     properties: {
       /**
-       * Configuration object used to customize the tooltip.
-       * Please refer to px-tooltip (URL) for a list of supported proerties.
+       * Configuration object used to customize the register.
+       * Please refer to px-vis-register (URL) for a list of supported proerties.
        * Most interesting properties include:
        * -width
        * -height
@@ -154,23 +163,12 @@ Element providing solution to no problem in particular.
         observer: '_registerConfigChanged'
       },
       /**
-       *
-       * Allows to hide the register
-       */
-      hideRegister: {
-        type: Boolean,
-        value: false
-      },
-      /**
        * Whether to show a title in the middle of the pie/donut with the total value.
        * Meant to be used with a donut chart
        */
       showTitle: {
         type: Boolean,
         value: false
-      },
-      _registerType: {
-        type: String
       },
       /**
        * Internal data used, same as chartData but with percentages infos
@@ -270,24 +268,71 @@ Element providing solution to no problem in particular.
         type: Object,
         value: function() {
           return {};
-        },
-        /**
-         * By default the chart will try to keep using the same color
-         * for the same piece of data when updating data. This can be turned off
-         * through this boolean (typically to "randomize" colors when having a
-         * big number of ordered slices), with no guarantee whether the updated
-         * data will match or not match previous data color per slice
-         */
-        preventColorReuse: {
-          type: Boolean,
-          value: false
         }
+      },
+      /**
+       * By default the chart will try to keep using the same color
+       * for the same piece of data when updating data. This can be turned off
+       * through this boolean (typically to "randomize" colors when having a
+       * big number of ordered slices), with no guarantee whether the updated
+       * data will match or not match previous data color per slice
+       */
+      preventColorReuse: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Message used for tooltip and popover, containing info on current slice
+       *
+       */
+      _ttMessage: {
+        type: String,
+        value: ''
+      },
+      /**
+       * Title used for tooltip and popover, containing info on current slice
+       *
+       */
+      _ttTitle: {
+        type: String,
+        value: ''
+      },
+      /**
+       * title before the total value if showTitle is true
+       */
+      title: {
+        type: String,
+        value: 'Total'
+      },
+      /**
+       * the vertical half size, in pixels, for the spacing between the title and its value
+       */
+      titleSpacing: {
+        type: Number,
+        value: 5
+      },
+      /**
+       * Unit currently in use: unit or %
+       */
+      _internalUnits: {
+        type: String,
+        computed: '_computeInternalUnits(_currentConfig, usePercentage)'
+      },
+      _currentConfig: {
+        type: String,
+        computed: '_computeSeriesId(completeSeriesConfig)'
       }
     },
-    observer: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)'],
+    observers: ['_xAxisConfigChanged(xAxisConfig.*)',
+               '_yAxisConfigChanged(yAxisConfig.*)',
+               '_positionChanged(_center, _radius)',
+               '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'],
     listeners: {
-    'iron-resize': '_onIronResize'
+      'iron-resize': '_onIronResize',
+      'px-vis-pie-centered-on-slice': '_showPopover',
+      'px-vis-pie-mouse-enter-slice': '_showTooltip',
+      'px-vis-pie-slice-clicked': '_hideTooltip',
+      'px-vis-pie-mouse-leave-slice': '_hideTooltip'
     },
     ready: function() {
       this.xAxisType = 'pie';
@@ -305,12 +350,52 @@ Element providing solution to no problem in particular.
       }.bind(this), 500);
     },
     _tooltipConfigChanged: function(conf) {
-
       this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
     },
     _registerConfigChanged: function(conf) {
-
       this._applyConfigToElement(this.registerConfig, this.$.register);
+    },
+
+    _drawTitle: function() {
+      if(this.showTitle) {
+        if(!this._titleGroup) {
+
+          this._titleGroup = this.svg.append('g')
+            .attr('class','title-group');
+
+          this._titleGroup.append('text')
+              .attr('class','title')
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.grey6))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', 45) + 'px')
+              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .text(this.title)
+              .attr('text-anchor', 'middle')
+              .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+
+          this._titleGroup.append('text')
+              .attr('class','value')
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', this.colors.black))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', 45) + 'px')
+              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+              .attr('text-anchor', 'middle')
+              .attr('alignment-baseline', 'hanging')
+              .attr('transform','translate(0,' + this.titleSpacing + ')');
+        } else {
+          this._titleGroup.select('text.title')
+                          .text(this.title)
+                          .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+
+          this._titleGroup.select('text.value')
+              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+              .attr('transform','translate(0,' + this.titleSpacing + ')');
+        }
+      } else if (this._titleGroup) {
+        this._titleGroup.remove();
+        this._titleGroup = null;
+      }
     },
     _getInternalData: function(chartData, completeSeriesConfig) {
       var total = 0,
@@ -375,7 +460,7 @@ Element providing solution to no problem in particular.
           this._colorIndexMapping[result[i][yKey]] = result[i].colorIndex;
         }
 
-        this.set('_total', total);
+        this.set('_total', total.toFixed(this.decimalPercentage));
 
         //make sure each slice is aware of its percentage value
         for(var i=0; i<result.length; i++) {
@@ -398,7 +483,7 @@ Element providing solution to no problem in particular.
         });
 
         for(var i=0; i<result.length; i++) {
-          result[i].backgroundColor = this._getPieColorForIndex(result[i].colorIndex);
+          result[i].backgroundColor = this._getColor(result[i].colorIndex);
         }
 
       } else {
@@ -413,7 +498,7 @@ Element providing solution to no problem in particular.
             count = 0,
             effectiveMaxRegisters = maxRegisters,
             lastSlice = {percentage: 0,
-                        backgroundColor: baseColors.properties.colors.value['white']};
+                        backgroundColor: this.colors['white']};
             lastSlice[xKey] = 0;
             lastSlice[yKey] = 'Other';
 
@@ -431,7 +516,7 @@ Element providing solution to no problem in particular.
           if(count < effectiveMaxRegisters) {
             var slice = {};
             slice = _internalChartData[el.index];
-            slice.backgroundColor = this._getPieColorForIndex(_internalChartData[el.index].colorIndex);
+            slice.backgroundColor = this._getColor(_internalChartData[el.index].colorIndex);
             result.push(slice);
           }
            else  if(aggregateOtherRegister) {
@@ -470,24 +555,6 @@ Element providing solution to no problem in particular.
         element.set(key, config[key])
       }
     },
-    _calcRegisterClass: function(hide) {
-      var result = 'u-ml- '
-      if(hide === true) {
-        result+= 'visuallyhidden';
-      }
-      return result;
-    },
-    _getWrapperClass: function(regType) {
-      var classList = "flex ";
-
-      if(regType === 'vertical') {
-        classList += "flex--row";
-      }
-      else {
-        classList += "flex--col--rev";
-      }
-      return classList;
-    },
     _getSeriesId: function(completeSeriesConfig) {
       //should always have only 1 key for pies
       return this._returnKeys(completeSeriesConfig)[0];
@@ -507,10 +574,99 @@ Element providing solution to no problem in particular.
           this.set('width', Math.max(wrapperRect.width - registerRect.width,0));
           this.set('height', Math.max(wrapperRect.height,0));
         }
-      },50);
+      }, this.debounceResizeTiming);
     },
     _repositionTitle: function() {
       this.$.pie._repositionTitle();
+    },
+
+    _getAlignment: function(hor, vert, type) {
+      var base = '';
+
+      if(type === 'horizontal') {
+        if(hor === 'center') {
+          base += 'flex--middle ';
+        } else if(hor === 'right') {
+          base += 'flex--bottom ';
+        } else {
+          base += 'flex--top ';
+        }
+
+        if(vert === 'center') {
+          base += 'flex--center';
+        } else if(vert === 'bottom') {
+          base += 'flex--right';
+        } else {
+          base += 'flex--left';
+        }
+      } else {
+
+        //when vertical just align the register at the top until
+        //we provide similar config as horizontal
+        base += 'flex--top';
+        // if(hor === 'center') {
+        //   base += 'flex--center ';
+        // } else if(hor === 'right') {
+        //   base += 'flex--right ';
+        // } else {
+        //   base += 'flex--left ';
+        // }
+
+        // if(vert === 'center') {
+        //   base += 'flex--middle';
+        // } else if(vert === 'bottom') {
+        //   base += 'flex--bottom';
+        // } else {
+        //   base += 'flex--top';
+        // }
+      }
+
+      return base;
+    },
+    _showPopover: function(evt) {
+      this.$.popover.popoverTitle = evt.detail.datum.data[this._currentConfig.y];
+      this.$.popover.popoverBody = this._getSliceValue(evt.detail.datum);
+
+      this.$.popover.show();
+    },
+    _showTooltip: function(evt) {
+      //get label and value
+      if(this._empty) {
+        this.set('_ttTitle', 'Empty');
+        this.set('_ttMessage', '');
+      } else {
+        this.set('_ttTitle', evt.detail.datum.data[this._currentConfig.y]);
+        this.set('_ttMessage', this._getSliceValue(evt.detail.datum));
+      }
+
+      var center = Px.d3.arc().centroid(evt.detail.rotatedDatum),
+          rect = this.pxSvgElem.getBoundingClientRect();
+
+      this.$.tooltip.mouseCoords = [ center[0] + rect.left + this._center[0] + window. window.pageXOffset,
+                                     center[1] + rect.top + this._center[1] + window. window.pageYOffset];
+      this.$.tooltip._show();
+    },
+    _hideTooltip: function(evt) {
+      this.$.tooltip._hide();
+    },
+    _positionChanged: function() {
+      this.$.popover.style['top'] = this._center[1] - this._radius;
+    },
+    _computeInternalUnits: function() {
+      return this.usePercentage ? '%' : this._currentConfig.xAxisUnit;
+    },
+    /**
+     * Return the value or the slice datum depending on use of percentages
+     */
+    _getSliceValue: function(datum) {
+      if(this.usePercentage) {
+        return datum.data.percentage + this._internalUnits;
+      } else {
+        return datum.data[this._currentConfig.x] + ' ' + this._internalUnits;
+      }
+    },
+    _computeSeriesId: function(completeSeriesConfig) {
+      return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
     }
   });
 </script>

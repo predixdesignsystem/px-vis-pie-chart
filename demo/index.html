@@ -1,0 +1,554 @@
+<!-- Common imports -->
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../px-polymer-font-awesome/polymer-font-awesome.html" />
+
+<!-- Common demo imports -->
+<link rel="import" href="../../px-demo/px-demo-header.html" />
+<link rel="import" href="../../px-demo/px-demo-api-viewer.html" />
+<link rel="import" href="../../px-demo/px-demo-footer.html" />
+<link rel="import" href="../../px-demo/px-demo-configs.html" />
+<link rel="import" href="../../px-demo/px-demo-props.html" />
+<link rel="import" href="../../px-demo/px-demo-interactive.html" />
+<link rel="import" href="../../px-demo/px-demo-component-snippet.html" />
+<link rel="import" href="../../px-demo/px-demo-code-editor.html" />
+<link rel="import" href="../../px-demo/css/px-demo-styles.html" />
+
+<!-- Imports for this componnent -->
+<link rel="import" href="../../px-colors-design/colors.html" />
+<link rel="import" href="../px-vis-pie-chart.html"/>
+
+<!-- Demo DOM module -->
+<dom-module id="local-element-demo">
+  <template>
+    <style include="px-demo-styles" is="custom-style"></style>
+
+    <!-- Header -->
+    <px-demo-header
+        module-name="px-vis-pie-chart"
+        description="	The	px-vis-pie-chart allows to draw a pie or donut chart for some data. It can automatically use percentages or use the raw data in tooltip and register. When clicking on a slice the pie will rotate to display this slice at the top. Initial height and width can be set but the component will try to fill its parent container on resize. It can be manually notified to recalculate its size by using notifyResize().
+
+
+        The chart is built off px-vis components which utilize d3.js 4.0+.">
+    </px-demo-header>
+
+    <!-- Interactive -->
+    <px-demo-interactive>
+      <!-- Configs -->
+      <px-demo-configs configs="[[configs]]" props="{{props}}" chosen-config="{{chosenConfig}}"></px-demo-configs>
+
+      <!-- Props -->
+      <px-demo-props props="{{props}}" config="[[chosenConfig]]"></px-demo-props>
+
+      <!-- Code Editor -->
+      <px-demo-code-editor props="{{props}}"></px-demo-code-editor>
+
+      <!-- Component ---------------------------------------------------------->
+      <px-demo-component class="flex__item flex flex--col" style="width:100%">
+        <button id="buttonData" class="u-mb" style="width: 130px; height: 20px">Click to update Data</button>
+        <div class="flex--column flex__item" style="width:100%;">
+          <px-vis-pie-chart
+            id="chart"
+            chart-data="[[props.chartData.value]]"
+            width="{{appliedWidth}}"
+            height="{{appliedHeight}}"
+            prevent-resize
+            hide-register="{{props.hideRegister.value}}"
+            aggregate-other-register="{{props.aggregateOtherRegister.value}}"
+            preserve-data-order="{{props.preserveDataOrder.value}}"
+            inner-radius="{{props.innerRadius.value}}"
+            donut="{{props.donut.value}}"
+            show-title="{{props.showTitle.value}}"
+            prevent-color-reuse="{{props.preventColorReuse.value}}"
+            margin='{{props.margin.value}}'
+            series-config='{{props.seriesConfig.value}}'
+            use-percentage="{{props.usePercentage.value}}"
+            max-registers="{{props.maxRegisters.value}}"
+            chart-horizontal-alignment="{{props.chartHorizontalAlignment.value}}"
+            chart-vertical-alignment="{{props.chartVerticalAlignment.value}}"
+            dynamic-menu-config="{{props.dynamicMenuConfig.value}}"
+            title-spacing="{{props.titleSpacing.value}}"
+            register-config="{{props.registerConfig.value}}"
+            title="{{props.title.value}}"
+            decimal-percentage="{{props.decimalPercentage.value}}">
+          </px-vis-pie-chart>
+      </div>
+      </px-demo-component>
+      <!-- END Component ------------------------------------------------------>
+
+      <px-demo-component-snippet
+          element-properties="{{props}}"
+          element-name="px-vis-pie-chart"
+          links-includes="[[linksIncludes]]"
+          scripts-includes="[[scriptsIncludes]]"
+          polygit-includes="[[polygitIncludes]]">
+      </px-demo-component-snippet>
+    </px-demo-interactive>
+
+    <!-- API Viewer -->
+    <px-demo-api-viewer
+      source="px-vis-pie-chart"
+      hide="[[apiHide]]"
+      mark-private="[[apiMarkPrivate]]"
+      mark-read-only="[[apliMarkReadOnly]]"
+      change-description="[[apiChangeDescription]]">
+    </px-demo-api-viewer>
+
+    <!-- Footer -->
+    <px-demo-footer></px-demo-footer>
+
+  </template>
+
+</dom-module>
+<script>
+  Polymer({
+    is: 'local-element-demo',
+
+    properties: {
+
+      /**
+       * Note: The actual data/values for `props` are placed in `this.demoProps`
+       * to create a static reference that Polymer shouldn't overwrite.
+       *
+       * On object containing all the properties the user can configure for this
+       * demo. Usually a pretty similar copy of the component's `properties` block
+       * with some additional sugar added to describe what kind of input the
+       * user will be shown and how that input should be configured.
+       *
+       * Note that `value` for each property is the default that will be set
+       * unless a config from `configs` is applied by default.
+       *
+       * @example
+       *
+       * `demoProps` is an object containing multipe objects. Each sub-object has
+       * should have a key with the name of the configurable property, and a set
+       * of values that describe that property. At a high level, you might have:
+       *
+       * ```
+       *     {
+       *       preventRangeSelection: { ... },
+       *       displayMode: { ... },
+       *       blockDatesBefore: { ... }
+       *     }
+       * ```
+       *
+       * Each sub-object should contain information about the configurable property's
+       * `type` (a reference to the JavaScript literal), a default value, and a set
+       * of additional keys that describe the input it can be changed with.
+       * The following inputs types are currently available:
+       *
+       * - 'toggle' - A toggle switch input to set Boolean values
+       * - 'text' - A simple single-line text input to set String or stringified Array/Object values
+       * - 'dropdown' - A dropdown picker that can be used to select any kind of value from a list of available options
+       *
+       * Full examples for each input:
+       *
+       * ```
+       *     {
+       *       preventRangeSelection: {
+       *         type: Boolean,
+       *         value: false,
+       *         inputType: 'toggle'
+       *       },
+       *       displayMode: {
+       *         type: String,
+       *         value: 'day',
+       *         inputType: 'dropdown',
+       *         inputChoices: ['day', 'month', 'year']
+       *       },
+       *       blockDatesBefore: {
+       *         type: String,
+       *         value: '2016-10-10T00:00:00.000Z',
+       *         inputType: 'text',
+       *         inputPlaceholder: 'ISO 8601 String'
+       *       }
+       *     }
+       * ```
+       *
+       * By default, the configurable property names are converted from camelCase
+       * to Title Case and used as input labels (e.g. 'displayMode' -> 'Display Mode').
+       * Labels can be set manually through the key `inputLabel`:
+       *
+       * ```
+       *     {
+       *       preventRangeSelection: {
+       *         type: Boolean,
+       *         value: false,
+       *         inputType: 'toggle',
+       *         inputLabel: "Stop range selection"
+       *       }
+       *     }
+       * ```
+       *
+       * @property demoProps
+       * @type {Object}
+       */
+      props: {
+        type: Object,
+        value: function(){ return this.demoProps; }
+      },
+
+      /**
+       * An array of pre-configured `props` that can be used to provide the user
+       * with a set of common examples. These configs will be made available
+       * as a set of tabs the user can click that will automatically change
+       * the `props` to specific values.
+       *
+       * @example
+       *
+       * Each config is an object. Its keys should be the names of the configurable
+       * properties defined in your `demoProps` above. Each key's value should
+       * be the new prop value for the configuration. You can also include these
+       * optional keys:
+       *
+       * - `configName` - a String value that will be used for the title of the tab
+       * - `configReset` - a Boolean, if `true` resets all props (even those not specified in the config) when this config is selected. Defaults to `false`.
+       *
+       * Example of two configs:
+       *
+       * ```
+       *     [
+       *       {
+       *         configName: "Basic",
+       *         preventRangeSelection: true,
+       *         displayMode: 'year',
+       *         blockDatesBefore: '2016-10-10T00:00:00.000Z'
+       *       },
+       *       {
+       *         configName: "Advanced",
+       *         preventRangeSelection: false,
+       *         displayMode: 'day',
+       *         blockDatesBefore: '2010-10-10T00:00:00.000Z'
+       *       }
+       *     ]
+       * ```
+       *
+       * @property demoProps
+       * @type {Array}
+       */
+      configs: {
+        type: Array,
+        value: function(){
+          return [
+            { configName: 'Default'}
+          ]
+        }
+      },
+
+      apiHide: {
+        type: Array,
+        value: function() {
+          return [
+            'observer',
+            'offset',
+            'svg',
+            'includeAllSeries',
+            'mutedSeries',
+            'cloneSVGElem',
+            'addClipPath',
+            'generateRandomID',
+          ]
+        }
+      },
+      apiMarkPrivate: {
+        type: Array,
+        value: function() {
+          return [
+            'pxSvgElem',
+            'seriesClipPath',
+            'clipPath',
+            'defaultSeriesConfig',
+            'xAxisType',
+            'yAxisType'
+            ]
+        }
+      },
+      apliMarkReadOnly: {
+        type: Array,
+        value: function() {
+          return []
+        }
+      },
+      apiChangeDescription: {
+        type: Array,
+        value: function() {
+          return []
+        }
+      },
+
+      scriptsIncludes: {
+        type: Array,
+        value: function() {
+          return ['https://cdn.rawgit.com/foretagsplatsen/numbro/1.7.1/numbro.js'];
+        }
+      },
+
+      linksIncludes: {
+        type: Array,
+        value: function() {
+          return ['px-vis/px-polygit-imports-vis.html', 'px-datetime-common/px-polygit-imports-datetime.html', 'numbro-element/numbro-element.html'];
+        }
+      },
+
+      polygitIncludes: {
+        type: Array,
+        value: function() {
+          return ['numbro*+MeTaNoV+*'];
+        }
+      },
+      appliedWidth: {
+        type: Number
+      },
+
+      appliedHeight: {
+        type: Number
+      },
+      currentDataIndex: {
+        type: Number,
+        value: 0
+      },
+      dataSet: {
+        type: Array,
+        value: [
+            [ {"x": 1, "y": "IPA"},
+              {"x": 1,  "y": "Pils"},
+              {"x": 1,  "y": "Lager"},
+              {"x": 8,  "y": "Lambic"},
+              {"x": 12, "y": "Stout"},
+              {"x": 7,  "y": "Pale Ale"},
+              {"x": 9,  "y": "Porter"},
+              {"x": 4,  "y": "Heffeweisse"}
+          ],
+          [{"x": 6,	"y": "IPA"},
+            {	"x": 1,	"y": "Pils"},
+            {	"x": 1,	"y": "Lager"},
+            {	"x": 13,"y": "Lambic"},
+            {	"x": 5,	"y": "Stout"},
+            {	"x": 7,	"y": "Pale Ale"},
+            {	"x": 4,	"y": "Heffeweisse"}
+          ],
+          [{"x": 6,"y": "IPA"}, 
+            {"x": 1,"y": "Pils"}, 
+            {"x": 1,"y": "Lager"}, 
+            {"x": 13,"y": "Lambic"}, 
+            {"x": 5,"y": "Stout"},
+            {"x": 7,"y": "Pale Ale"},
+            {"x": 4,"y": "Heffeweisse"},
+            {"x": 5,"y": "Barleywine"},
+            {"x": 6,"y": "Old Ale"}],
+          [{"x": 45,"y": "Sky"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 0,"y": "dummy"}, 
+            {"x": 12,"y": "Shady side of pyramid"},
+            {"x": 0,"y": "dummy"},
+            {"x": 9,"y": "Sunny side of pyramid"}]
+        ]
+      }
+    },
+
+    /**
+     * A reference for `this.props`. Read the documentation there.
+     */
+    demoProps: {
+      preventResize: {
+        type: Boolean,
+        defaultValue: true,
+        inputType: 'toggle'
+      },
+
+      //we need inputDisabled: false to be able to dynamically turn it on
+      width: {
+        type: Number,
+        defaultValue: 450,
+        inputDisabled: false,
+        inputType: 'text'
+      },
+
+      //we need inputDisabled: false to be able to dynamically turn it on
+      height: {
+        type: Number,
+        defaultValue: 450,
+        inputDisabled: false,
+        inputType: 'text'
+      },
+      
+      chartHorizontalAlignment: {
+        type: String,
+        defaultValue: 'center',
+        inputType: 'dropdown',
+        inputChoices: ['left', 'center', 'right']
+      },
+
+      chartVerticalAlignment: {
+        type: String,
+        defaultValue: 'center',
+        inputType: 'dropdown',
+        inputChoices: ['top', 'center', 'bottom']
+      },
+
+      margin: {
+        type: Object,
+        defaultValue: { "top": "10", "bottom": "10", "left": "0", "right": "0" },
+        inputType: 'code:JSON'
+      },
+
+      hideRegister: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      registerConfig: {
+        type: Object,
+        defaultValue: { "type": "vertical", "width": 200},
+        inputType: 'code:JSON'
+      },
+
+      chartData: {
+        type: Array,
+        defaultValue: [
+          {"percentage": "26", "x": 15, "y": "IPA"},
+          {"percentage": "2",  "x": 1,  "y": "Pils"},
+          {"percentage": "2",  "x": 1,  "y": "Lager"},
+          {"percentage": "14", "x": 8,  "y": "Lambic"},
+          {"percentage": "21", "x": 12, "y": "Stout"},
+          {"percentage": "12", "x": 7,  "y": "Pale Ale"},
+          {"percentage": "16", "x": 9,  "y": "Porter"},
+          {"percentage": "7",  "x": 4,  "y": "Heffeweisse"}
+        ],
+        inputType: 'code:JSON'
+      },
+
+      seriesConfig: {
+        type: Object,
+        defaultValue: {
+          "mySerie" : {
+            "xAxisUnit": "pints",
+            "y": "y",
+            "x": "x"
+          }
+        },
+        inputType: 'code:JSON'
+      },
+
+      preserveDataOrder: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      preventColorReuse: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      donut: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      innerRadius: {
+        type: Number,
+        defaultValue: 0,
+        inputType: 'Number',
+        inputLabel: 'Inner Radius (0 - 1)'
+      },
+
+      showTitle: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      title: {
+        type: String,
+        defaultValue: 'Total',
+        inputType: 'text'
+      },
+
+      titleSpacing: {
+        type: Number,
+        defaultValue: 5,
+        inputType: 'number'
+      },
+
+      usePercentage: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      decimalPercentage: {
+        type: Number,
+        defaultValue: 0,
+        inputType: 'number'
+      },
+
+      aggregateOtherRegister: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
+      },
+
+      maxRegisters: {
+        type: Number,
+        defaultValue: 0,
+        inputType: 'number'
+      },
+
+      dynamicMenuConfig: {
+        type: Array,
+        defaultValue: [
+          {
+            'name': 'Log message',
+            'action': "function(data) {console.log(\"logging message\")}",
+            'eventName': 'delete',
+            'icon': 'fa-trash',
+          }
+        ],
+        inputType: 'code:JSON'
+      },
+
+    },
+
+    observers: [
+      '_preventResizeChanged(props.preventResize.value)',
+      '_appliedWidthChanged(appliedWidth)',
+      '_appliedHeightChanged(appliedHeight)',
+      '_widthChanged(props.width.value)',
+      '_heightChanged(props.height.value)'
+    ],
+
+    attached: function() {
+      this.$.buttonData.addEventListener('click', function() {
+        this.currentDataIndex++;
+        this.currentDataIndex = this.currentDataIndex % 4;
+        this.$.chart.set('chartData', this.dataSet[this.currentDataIndex]);
+      }.bind(this));
+    },
+
+    _preventResizeChanged: function() {
+      this.set('props.width.inputDisabled', !this.props.preventResize.value);
+      this.set('props.height.inputDisabled', !this.props.preventResize.value);
+      this.$.chart.set('preventResize', this.props.preventResize.value);
+    },
+    _widthChanged: function() {
+      if(this.props.preventResize.value) {
+       this.set('appliedWidth', this.props.width.value);
+      }
+    },
+    _heightChanged: function() {
+      if(this.props.preventResize.value) {
+       this.set('appliedHeight', this.props.height.value);
+      }
+    },
+    _appliedWidthChanged: function() {
+      this.set('props.width.value', this.appliedWidth);
+    },
+    _appliedHeightChanged: function() {
+      this.set('props.height.value', this.appliedHeight);
+    }
+  });
+</script>

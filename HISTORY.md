@@ -1,3 +1,19 @@
+v1.1.0
+==================
+* upgraded to vis 1.1.0
+* added debounceResizeTiming to control the debounce timing on auto resize, changed default from 50ms to 250ms
+
+v1.0.0
+==================
+* modified internal mechanism for resizing
+* added chartHorizontalAlignment and chartVerticalAlignment to alignt the chart drawing when smaller than its container
+* alignment of the chart is now centered by default with register next to it
+* changing ghp.sh to account for Alpha releases
+* reworked title, tooltip and popover so that their position stays true
+* added 'title' to customize the non-value part of the title
+* added 'titleSpacing' for customizing space between title and value
+* ensure horizontal registers gets a scrollbar when needed
+* horizontal registers layout can be customized through 'registerConfig.horizontalAlignment'
 
 v0.4.1
 ==================

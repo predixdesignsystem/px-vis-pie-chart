@@ -1,4 +1,3 @@
-<!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -25,7 +24,7 @@
 
   </head>
 
-<body style="padding:100px;">
+<body>
 <!-- <body style="padding:100px; background-color: rgb(27,42,51);"> -->
 
   <!-- Wrap elements with auto-binding template to -->
@@ -36,25 +35,37 @@
       handle-as="json"
       last-response="{{data}}" auto></iron-ajax>
 
-
+<div style="height:800px; background-color: salmon">
                   <px-vis-pie-chart
                     chart-data="{{data}}"
                     height="500"
+                    donut
+
                     width="500"
-                    use-percentage
+                   show-title
                     register-config='{
-                      "truncationLength": 500,
-                      "width": 500
+                      "type": "horizontal",
+                      "horizontalAlignment": "center"
                     }'
+                    chart-horizontal-alignment="center"
+                    chart-vertical-alignment="center"
                     aggregate-other-register
-                    margin='{ "top": "10", "bottom": "10", "left": "0", "right": "0" }'
+                    margin='{ "top": "50", "bottom": "10", "left": "80", "right": "80" }'
                     series-config='{
                       "mySerie" :{"xAxisUnit": "pints",
                       "y": "y",
                       "x": "x"}
                       }'
-                    max-registers=0>
+                    max-registers=0
+                    dynamic-menu-config='[{
+              "name": "Delete",
+              "action": "function(data) { console.log(\"bite\")}",
+              "eventName": "delete",
+              "icon": "fa-trash"
+            }
+          ]'>
                   </px-vis-pie-chart>
+</div>
                 </div>
 
 </template>
