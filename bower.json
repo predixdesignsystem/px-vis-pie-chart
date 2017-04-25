@@ -5,6 +5,7 @@
     "px-vis-pie-chart.html"
   ],
   "ignore": [
+    "*.enc",
     "**/.*",
     "node_modules",
     "bower_components",
