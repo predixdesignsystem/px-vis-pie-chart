@@ -3,19 +3,19 @@
     siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
     'grunt depserve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
 -->
-<link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../px-vis/px-vis-behavior-chart.html"/>
-<link rel="import" href="../px-vis/px-vis-behavior-common.html"/>
-<link rel="import" href="../px-vis/px-vis-behavior-d3.html"/>
-<link rel="import" href="../px-vis/px-vis-scale.html"/>
-<link rel="import" href="../px-vis/px-vis-svg.html"/>
-<link rel="import" href="../px-vis/px-vis-pie.html"/>
-<link rel="import" href="../px-vis/px-vis-axis.html"/>
-<link rel="import" href="../px-vis/px-vis-tooltip.html"/>
-<link rel="import" href="../px-vis/px-vis-interaction-space.html"/>
-<link rel="import" href="../px-vis/px-vis-register.html"/>
-<link rel="import" href="../px-vis/px-vis-cursor.html"/>
-<link rel="import" href="../px-vis/px-vis-clip-path.html"/>
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../px-vis/px-vis-behavior-chart.html" />
+<link rel="import" href="../px-vis/px-vis-behavior-common.html" />
+<link rel="import" href="../px-vis/px-vis-behavior-d3.html" />
+<link rel="import" href="../px-vis/px-vis-scale.html" />
+<link rel="import" href="../px-vis/px-vis-svg.html" />
+<link rel="import" href="../px-vis/px-vis-pie.html" />
+<link rel="import" href="../px-vis/px-vis-axis.html" />
+<link rel="import" href="../px-vis/px-vis-tooltip.html" />
+<link rel="import" href="../px-vis/px-vis-interaction-space.html" />
+<!--<link rel="import" href="../px-vis/px-vis-register.html"/>-->
+<link rel="import" href="../px-vis/px-vis-cursor.html" />
+<link rel="import" href="../px-vis/px-vis-clip-path.html" />
 <link rel="import" href="../px-colors-design/colors.html" />
 
 
@@ -49,6 +49,7 @@ Custom property | Description | Default
   <template>
     <style include="px-vis-pie-chart-styles"></style>
     <style include="px-theme-styles"></style>
+
     <div id="wrapper" class$="[[_chartWrapperClass]]">
       <!-- empty div for tooltip, do not remove !-->
       <div class="flex">
@@ -60,70 +61,38 @@ Custom property | Description | Default
               <span>{{_ttMessage}}</span>
             </div>
           </px-tooltip>
-          <px-vis-register
-            id="register"
-            class$="[[_getHideClass(hideRegister)]] u-ml-"
-            type="{{_registerType}}"
-            chart-data="[[_internalRegisterData]]"
-            chart-width="[[width]]"
-            dynamic-menu-config="[[dynamicMenuConfig]]"
-            complete-series-config="[[completeSeriesConfig]]"
-            x-axis-type="pie"
-            y-axis-type="pie"
-            use-percentage="[[usePercentage]]">
-          </px-vis-register>
+
+          <div id="div-fake-register">
+            <template is="dom-repeat" items="{{registerData}}" as="registerItem">
+              <div id="div-route-category" class$="{{registerItem.registerColor}}">
+                <span>{{registerItem.category}}</span>
+                <span><strong>F{{registerItem.firstClassCount}}J{{registerItem.businessClassCount}}Y{{registerItem.coachClassCount}}</strong></span>
+              </div>
+            </template>
+          </div>
+
           <!-- popover + svg -->
           <div>
             <div style="position:relative;width:[[_smallerSide]]px;height:0px;">
-              <px-popover
-                id="popover"
-                style="position:relative"
-                position="relative"
-                popover-title=""
-                orientation="top"
-                hide-overlay
-                for="popAnchor">
+              <px-popover id="popover" style="position:relative" position="relative" popover-title="" orientation="top" hide-overlay for="popAnchor">
               </px-popover>
               <div id="popAnchor"></div>
             </div>
             <!-- Core -->
-            <px-vis-svg
-              id="svg"
-              style="height:[[_smallerSide]]px;width:[[_smallerSide]]px"
-              width="[[_smallerSide]]"
-              height="[[_smallerSide]]"
-              offset="[[_center]]"
-              svg="{{svg}}"
-              px-svg-elem="{{pxSvgElem}}">
+            <px-vis-svg id="svg" style="height:[[_smallerSide]]px;width:[[_smallerSide]]px" width="[[_smallerSide]]" height="[[_smallerSide]]"
+              offset="[[_center]]" svg="{{svg}}" px-svg-elem="{{pxSvgElem}}">
             </px-vis-svg>
           </div>
         </div>
         <!-- pie series -->
-        <px-vis-pie
-          id="pie"
-          svg="[[svg]]"
-          class="absolute"
-          data-vis-colors="[[dataVisColors]]"
-          series-color-order="[[seriesColorOrder]]"
-          width="[[width]]"
-          height="[[height]]"
-          margin="[[margin]]"
-          radius="[[_radius]]"
-          preserve-data-order="[[preserveDataOrder]]"
-          chart-data="[[_internalChartData]]"
-          muted-series="[[mutedSeries]]"
-          clip-path="[[clipPath]]"
-          complete-series-config="[[completeSeriesConfig]]"
-          inner-radius="[[innerRadius]]"
-          donut="[[donut]]"
-          px-svg-elem="[[pxSvgElem]]"
-          use-percentage="[[usePercentage]]"
-          show-title="[[showTitle]]"
-          total="[[_total]]"
-          empty="[[_empty]]">
+        <px-vis-pie id="pie" svg="[[svg]]" class="absolute" data-vis-colors="[[dataVisColors]]" series-color-order="[[seriesColorOrder]]"
+          width="[[width]]" height="[[height]]" margin="[[margin]]" radius="[[_radius]]" preserve-data-order="[[preserveDataOrder]]"
+          chart-data="[[_internalChartData]]" muted-series="[[mutedSeries]]" clip-path="[[clipPath]]" complete-series-config="[[completeSeriesConfig]]"
+          inner-radius="[[innerRadius]]" donut="[[donut]]" px-svg-elem="[[pxSvgElem]]" use-percentage="[[usePercentage]]" show-title="[[showTitle]]"
+          total="[[_total]]" empty="[[_empty]]">
         </px-vis-pie>
       </div>
-</div>
+    </div>
   </template>
 </dom-module>
 
@@ -159,6 +128,10 @@ Custom property | Description | Default
       registerConfig: {
         type: Object,
         observer: '_registerConfigChanged'
+      },
+
+      registerData: {
+        type: Array,
       },
       /**
        * Whether to show a title in the middle of the pie/donut with the total value.
@@ -264,7 +237,7 @@ Custom property | Description | Default
        */
       _colorIndexMapping: {
         type: Object,
-        value: function() {
+        value: function () {
           return {};
         }
       },
@@ -322,9 +295,9 @@ Custom property | Description | Default
       }
     },
     observers: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)',
-               '_positionChanged(_center, _radius)',
-               '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'],
+      '_yAxisConfigChanged(yAxisConfig.*)',
+      '_positionChanged(_center, _radius)',
+      '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'],
     listeners: {
       'iron-resize': '_onIronResize',
       'px-vis-pie-centered-on-slice': '_showPopover',
@@ -332,77 +305,78 @@ Custom property | Description | Default
       'px-vis-pie-slice-clicked': '_hideTooltip',
       'px-vis-pie-mouse-leave-slice': '_hideTooltip'
     },
-    ready: function() {
+    ready: function () {
       this.xAxisType = 'pie';
       this.yAxisType = 'pie';
       this.includeAllSeries = true;
     },
-    attached: function() {
+    attached: function () {
       this._onIronResize();
 
       //if no data after 500ms draw an empty chart
-      setTimeout(function() {
-        if(!this.chartData || this.chartData.length === 0) {
+      setTimeout(function () {
+        if (!this.chartData || this.chartData.length === 0) {
           this.set('_empty', true);
         }
       }.bind(this), 500);
     },
-    _tooltipConfigChanged: function(conf) {
+    _tooltipConfigChanged: function (conf) {
       this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
     },
-    _registerConfigChanged: function(conf) {
+    _registerConfigChanged: function (conf) {
       this._applyConfigToElement(this.registerConfig, this.$.register);
     },
 
-    _drawTitle: function() {
-      if(this.showTitle) {
-        if(!this._titleGroup) {
+    _drawTitle: function () {
+      if (this.showTitle) {
+        if (!this._titleGroup) {
 
           this._titleGroup = this.svg.append('g')
-            .attr('class','title-group');
+            .attr('class', 'title-group');
 
           this._titleGroup.append('text')
-              .attr('class','title')
-              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.grey6))
-              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', 45) + 'px')
-              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .text(this.title)
-              .attr('text-anchor', 'middle')
-              .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+            .attr('class', 'title')
+            .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.black))
+            .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', 10) + 'px')
+            .style('font-family', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+            .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+            .text(this.title)
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'hanging')
+            .attr('transform', 'translate(0,' + '-' + this.titleSpacing + ')');
 
           this._titleGroup.append('text')
-              .attr('class','value')
-              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', this.colors.black))
-              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', 45) + 'px')
-              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
-              .attr('text-anchor', 'middle')
-              .attr('alignment-baseline', 'hanging')
-              .attr('transform','translate(0,' + this.titleSpacing + ')');
+            .attr('class', 'value')
+            .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', this.colors.black))
+            .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', 45) + 'px')
+            .style('font-family', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+            .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+            .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'hanging')
+            .attr('transform', 'translate(0,' + this.titleSpacing + ')');
         } else {
           this._titleGroup.select('text.title')
-                          .text(this.title)
-                          .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
+            .text(this.title)
+            .attr('transform', 'translate(0,' + '-' + this.titleSpacing + ')');
 
           this._titleGroup.select('text.value')
-              .text(this._total + ' ' + this._currentConfig.xAxisUnit)
-              .attr('transform','translate(0,' + this.titleSpacing + ')');
+            .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+            .attr('transform', 'translate(0,' + this.titleSpacing + ')');
         }
       } else if (this._titleGroup) {
         this._titleGroup.remove();
         this._titleGroup = null;
       }
     },
-    _getInternalData: function(chartData, completeSeriesConfig) {
+    _getInternalData: function (chartData, completeSeriesConfig) {
       var total = 0,
-          id = this._returnKeys(completeSeriesConfig)[0],
-          xKey = this.completeSeriesConfig[id].x,
-          yKey = this.completeSeriesConfig[id].y,
-          result = [];
+        id = this._returnKeys(completeSeriesConfig)[0],
+        xKey = this.completeSeriesConfig[id].x,
+        yKey = this.completeSeriesConfig[id].y,
+        result = [];
 
-      if(!chartData || chartData.length === 0) {
+      if (!chartData || chartData.length === 0) {
         this.set('_total', 0);
         this.set('_empty', true);
         this._colorIndexMapping = {};
@@ -412,7 +386,7 @@ Custom property | Description | Default
         var usedColors = [];
 
         //process new data
-        for(var i=0; i<chartData.length; i++) {
+        for (var i = 0; i < chartData.length; i++) {
 
           var colorIndex = this._colorIndexMapping[chartData[i][yKey]];
 
@@ -421,7 +395,7 @@ Custom property | Description | Default
           result.push(chartData[i]);
 
           //store used color indexes
-          if(colorIndex && !this.preventColorReuse) {
+          if (colorIndex && !this.preventColorReuse) {
             usedColors.push(colorIndex);
             result[i].colorIndex = colorIndex;
           }
@@ -432,20 +406,20 @@ Custom property | Description | Default
 
         //assign colors
         var freeIndex = 0,
-            maxColors = Math.min(Object.keys(dataVisColors.properties.dataVisColors.value).length,
+          maxColors = Math.min(Object.keys(dataVisColors.properties.dataVisColors.value).length,
             dataVisColors.properties.seriesColorOrder.value.length);
-        for(var i=0; i<result.length; i++) {
+        for (var i = 0; i < result.length; i++) {
 
           //assign a new color if needed
-          if(!result[i].colorIndex) {
+          if (!result[i].colorIndex) {
 
-            if(usedColors.length === maxColors || usedColors.length > maxColors) {
+            if (usedColors.length === maxColors || usedColors.length > maxColors) {
               //if we have used all colors just start looping again
               freeIndex++;
               freeIndex = freeIndex % maxColors;
             } else {
               //find the first available index
-              while(usedColors.indexOf(freeIndex) !== -1) {
+              while (usedColors.indexOf(freeIndex) !== -1) {
                 freeIndex++;
               }
             }
@@ -461,8 +435,8 @@ Custom property | Description | Default
         this.set('_total', total.toFixed(this.decimalPercentage));
 
         //make sure each slice is aware of its percentage value
-        for(var i=0; i<result.length; i++) {
-          result[i].percentage = ((result[i][xKey]/total) * 100).toFixed(this.decimalPercentage);
+        for (var i = 0; i < result.length; i++) {
+          result[i].percentage = ((result[i][xKey] / total) * 100).toFixed(this.decimalPercentage);
         }
       }
 
@@ -471,16 +445,16 @@ Custom property | Description | Default
     /**
      * Process data for the registers, limiting the max number of registers
      */
-    _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister) {
+    _getInternalRegisterData: function (_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister) {
 
       var result = [];
-      if(!maxRegisters || maxRegisters < 1) {
+      if (!maxRegisters || maxRegisters < 1) {
 
-        result = _internalChartData.slice(0).sort(function(a, b) {
+        result = _internalChartData.slice(0).sort(function (a, b) {
           return b.percentage - a.percentage;
         });
 
-        for(var i=0; i<result.length; i++) {
+        for (var i = 0; i < result.length; i++) {
           result[i].backgroundColor = this._getColor(result[i].colorIndex);
         }
 
@@ -488,36 +462,38 @@ Custom property | Description | Default
 
         //pass the ('maxRegisters'-1) biggest data slice and aggregate the rest in 'other'
         var id = this._returnKeys(completeSeriesConfig)[0],
-            xKey = this.completeSeriesConfig[id].x,
-            yKey = this.completeSeriesConfig[id].y,
-            mapped = _internalChartData.map(function(el, i) {
-              return { index: i, value: el[xKey] };
-            }),
-            count = 0,
-            effectiveMaxRegisters = maxRegisters,
-            lastSlice = {percentage: 0,
-                        backgroundColor: this.colors['white']};
-            lastSlice[xKey] = 0;
-            lastSlice[yKey] = 'Other';
+          xKey = this.completeSeriesConfig[id].x,
+          yKey = this.completeSeriesConfig[id].y,
+          mapped = _internalChartData.map(function (el, i) {
+            return { index: i, value: el[xKey] };
+          }),
+          count = 0,
+          effectiveMaxRegisters = maxRegisters,
+          lastSlice = {
+            percentage: 0,
+            backgroundColor: this.colors['white']
+          };
+        lastSlice[xKey] = 0;
+        lastSlice[yKey] = 'Other';
 
-        if(maxRegisters > 0 && aggregateOtherRegister) {
+        if (maxRegisters > 0 && aggregateOtherRegister) {
           effectiveMaxRegisters -= 1;
         }
 
         //sort mapped array
-        mapped.sort(function(a, b) {
+        mapped.sort(function (a, b) {
           return b.value - a.value;
         });
 
         //get slices we're interested in
-        mapped.map(function(el) {
-          if(count < effectiveMaxRegisters) {
+        mapped.map(function (el) {
+          if (count < effectiveMaxRegisters) {
             var slice = {};
             slice = _internalChartData[el.index];
             slice.backgroundColor = this._getColor(_internalChartData[el.index].colorIndex);
             result.push(slice);
           }
-           else  if(aggregateOtherRegister) {
+          else if (aggregateOtherRegister) {
             lastSlice[xKey] += Number(_internalChartData[el.index][xKey]);
             lastSlice['percentage'] += Number(_internalChartData[el.index].percentage);
           }
@@ -525,7 +501,7 @@ Custom property | Description | Default
           count++;
         }.bind(this));
 
-        if(aggregateOtherRegister) {
+        if (aggregateOtherRegister) {
           result.push(lastSlice);
         }
       }
@@ -537,62 +513,62 @@ Custom property | Description | Default
      * is the name of the property to be applied
      *
      */
-    _applyConfigToElement: function(config, element) {
-      if(typeof(config) !== 'object') {
+    _applyConfigToElement: function (config, element) {
+      if (typeof (config) !== 'object') {
         console.error('Configuration object must be valid JSON: ' + config);
         return;
       }
-      if(!element) {
-        console.error('Cannot apply config to undefined element');
+      if (!element) {
+        // console.error('Cannot apply config to undefined element');
         return;
       }
 
       var keys = Object.keys(config);
-      for(var i = 0; i < keys.length; i++){
+      for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         element.set(key, config[key])
       }
     },
-    _getSeriesId: function(completeSeriesConfig) {
+    _getSeriesId: function (completeSeriesConfig) {
       //should always have only 1 key for pies
       return this._returnKeys(completeSeriesConfig)[0];
     },
-    _onIronResize: function() {
-      if (this.preventResize){
+    _onIronResize: function () {
+      if (this.preventResize) {
         return;
       }
-      this.debounce('ironresize', function() {
+      this.debounce('ironresize', function () {
         var wrapperRect = this.$.wrapper.getBoundingClientRect(),
-            registerRect = this.$.register.getBoundingClientRect();
+          registerRect = this.$.register.getBoundingClientRect();
 
-        if(this.$.register.type === 'horizontal') {
-          this.set('width', Math.max(wrapperRect.width,0));
-          this.set('height', Math.max(wrapperRect.height - registerRect.height,0));
+        if (this.$.register.type === 'horizontal') {
+          this.set('width', Math.max(wrapperRect.width, 0));
+          this.set('height', Math.max(wrapperRect.height - registerRect.height, 0));
         } else {
-          this.set('width', Math.max(wrapperRect.width - registerRect.width,0));
-          this.set('height', Math.max(wrapperRect.height,0));
+          this.set('width', Math.max(wrapperRect.width - registerRect.width, 0));
+          this.set('height', Math.max(wrapperRect.height, 0));
         }
       }, this.debounceResizeTiming);
     },
-    _repositionTitle: function() {
+    _repositionTitle: function () {
       this.$.pie._repositionTitle();
     },
 
-    _getAlignment: function(hor, vert, type) {
+    _getAlignment: function (hor, vert, type) {
       var base = '';
 
-      if(type === 'horizontal') {
-        if(hor === 'center') {
+      if (type === 'horizontal') {
+        if (hor === 'center') {
           base += 'flex--middle ';
-        } else if(hor === 'right') {
+        } else if (hor === 'right') {
           base += 'flex--bottom ';
         } else {
           base += 'flex--top ';
         }
 
-        if(vert === 'center') {
+        if (vert === 'center') {
           base += 'flex--center';
-        } else if(vert === 'bottom') {
+        } else if (vert === 'bottom') {
           base += 'flex--right';
         } else {
           base += 'flex--left';
@@ -621,15 +597,15 @@ Custom property | Description | Default
 
       return base;
     },
-    _showPopover: function(evt) {
+    _showPopover: function (evt) {
       this.$.popover.popoverTitle = evt.detail.datum.data[this._currentConfig.y];
       this.$.popover.popoverBody = this._getSliceValue(evt.detail.datum);
 
       this.$.popover.show();
     },
-    _showTooltip: function(evt) {
+    _showTooltip: function (evt) {
       //get label and value
-      if(this._empty) {
+      if (this._empty) {
         this.set('_ttTitle', 'Empty');
         this.set('_ttMessage', '');
       } else {
@@ -638,33 +614,34 @@ Custom property | Description | Default
       }
 
       var center = Px.d3.arc().centroid(evt.detail.rotatedDatum),
-          rect = this.pxSvgElem.getBoundingClientRect();
+        rect = this.pxSvgElem.getBoundingClientRect();
 
-      this.$.tooltip.mouseCoords = [ center[0] + rect.left + this._center[0] + window. window.pageXOffset,
-                                     center[1] + rect.top + this._center[1] + window. window.pageYOffset];
+      this.$.tooltip.mouseCoords = [center[0] + rect.left + this._center[0] + window.window.pageXOffset,
+      center[1] + rect.top + this._center[1] + window.window.pageYOffset];
       this.$.tooltip._show();
     },
-    _hideTooltip: function(evt) {
+    _hideTooltip: function (evt) {
       this.$.tooltip._hide();
     },
-    _positionChanged: function() {
+    _positionChanged: function () {
       this.$.popover.style['top'] = this._center[1] - this._radius;
     },
-    _computeInternalUnits: function() {
+    _computeInternalUnits: function () {
       return this.usePercentage ? '%' : this._currentConfig.xAxisUnit;
     },
     /**
      * Return the value or the slice datum depending on use of percentages
      */
-    _getSliceValue: function(datum) {
-      if(this.usePercentage) {
+    _getSliceValue: function (datum) {
+      if (this.usePercentage) {
         return datum.data.percentage + this._internalUnits;
       } else {
         return datum.data[this._currentConfig.x] + ' ' + this._internalUnits;
       }
     },
-    _computeSeriesId: function(completeSeriesConfig) {
+    _computeSeriesId: function (completeSeriesConfig) {
       return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
     }
   });
+
 </script>
