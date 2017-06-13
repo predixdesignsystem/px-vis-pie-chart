@@ -3,7 +3,8 @@
   "plugins": {
     "local": {
       "browsers": [
-        "chrome"
+        "chrome",
+        "firefox"
       ]
     },
     "sauce": {
@@ -26,12 +27,8 @@
         },
         {
           "browserName": "safari",
-          "platform": "OS X 10.10",
-          "version": "8"
-        },
-        {
-          "browserName": "firefox",
-          "platform": "OS X 10.11"
+          "platform": "OS X 10.11",
+          "version": "10"
         }
       ]
     }
