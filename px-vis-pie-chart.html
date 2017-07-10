@@ -16,7 +16,6 @@
 <link rel="import" href="../px-vis/px-vis-register.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
-<link rel="import" href="../px-colors-design/colors.html" />
 
 
 <!--
@@ -103,8 +102,7 @@ Custom property | Description | Default
           id="pie"
           svg="[[svg]]"
           class="absolute"
-          data-vis-colors="[[dataVisColors]]"
-          series-color-order="[[seriesColorOrder]]"
+          color-series-list="[[colorSeriesList]]"
           width="[[width]]"
           height="[[height]]"
           margin="[[margin]]"
@@ -142,7 +140,7 @@ Custom property | Description | Default
       PxVisBehaviorChart.chartAutoResize,
       PxVisBehaviorChart.registerPositioning,
       PxVisBehaviorChart.circleChart,
-      PxVisBehavior.getSeriesColors,
+      PxColorsBehavior.getSeriesColors,
       PxColorsBehavior.dataVisColorTheming,
       PxVisBehavior.dynamicMenuConfig,
       PxVisBehaviorChart.actionRequest
@@ -363,20 +361,20 @@ Custom property | Description | Default
 
           this._titleGroup.append('text')
               .attr('class','title')
-              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', this.colors.grey6))
-              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', 45) + 'px')
-              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-color', 'rgb(0,0,0)'))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', '45px'))
+              .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
+              .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
               .text(this.title)
               .attr('text-anchor', 'middle')
               .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
 
           this._titleGroup.append('text')
               .attr('class','value')
-              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', this.colors.black))
-              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', 45) + 'px')
-              .style('font-family',this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
-              .attr('font-style', this._checkThemeVariable("--px-font-family", 'GE Inspira Sans'))
+              .attr('fill', this._checkThemeVariable('--px-vis-pie-title-value-color', 'rgb(0,0,0)'))
+              .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', '45px'))
+              .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
+              .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
               .text(this._total + ' ' + this._currentConfig.xAxisUnit)
               .attr('text-anchor', 'middle')
               .attr('alignment-baseline', 'hanging')
@@ -432,8 +430,7 @@ Custom property | Description | Default
 
         //assign colors
         var freeIndex = 0,
-            maxColors = Math.min(Object.keys(dataVisColors.properties.dataVisColors.value).length,
-            dataVisColors.properties.seriesColorOrder.value.length);
+            maxColors = this.seriesColorList.length
         for(var i=0; i<result.length; i++) {
 
           //assign a new color if needed
@@ -441,12 +438,12 @@ Custom property | Description | Default
 
             if(usedColors.length === maxColors || usedColors.length > maxColors) {
               //if we have used all colors just start looping again
-              freeIndex++;
+              freeIndex += 1;
               freeIndex = freeIndex % maxColors;
             } else {
               //find the first available index
               while(usedColors.indexOf(freeIndex) !== -1) {
-                freeIndex++;
+                freeIndex += 1;
               }
             }
 
