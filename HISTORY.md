@@ -1,3 +1,8 @@
+v2.0.0
+==================
+* Design refresh
+* See px-vis for a list of breaking changes
+
 v1.2.0
 ==================
 * upgraded to vis 2.0.0

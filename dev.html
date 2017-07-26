@@ -11,6 +11,7 @@
   <!-- <link rel="import" href="../px-dark-theme/px-dark-theme-styles.html"> -->
   <style include="px-theme-styles" is="custom-style"></style>
 
+  <link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">
   <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
   <link rel="import" href="../px-tabs/px-tab-set.html" />
   <link rel="import" href="../iron-ajax/iron-ajax.html" />
@@ -19,7 +20,7 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
   <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
-  <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
+  <link rel="import" href="../px-icon-set/px-icon-set.html" />
   <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
 
   </head>
@@ -61,7 +62,7 @@
               "name": "Delete",
               "action": "function(data) { console.log(\"bite\")}",
               "eventName": "delete",
-              "icon": "fa-trash"
+              "icon": "px-vis:trash-series"
             }
           ]'>
                   </px-vis-pie-chart>

@@ -1,8 +1,5 @@
 #px-vis-pie-chart [![Build Status](https://travis-ci.org/PredixDev/px-vis-pie-chart.svg?branch=master)](https://travis-ci.org/PredixDev/px-vis-pie-chart)
 
-[![px-vis-pie-chart demo](px-vis-pie-chart.png?raw=true)](https://predixdev.github.io/px-vis-pie-chart)
-
-
 ## Overview
 
 px-vis-pie-chart is a Predix UI component
