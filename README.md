@@ -2,7 +2,7 @@
 
 ## Overview
 
-px-vis-pie-chart is a Predix UI component
+`Px-vis-pie-chart` is a Predix UI component that allows the user to draw a pie or donut chart for some data.
 
 ## Usage
 
@@ -12,17 +12,17 @@ px-vis-pie-chart is a Predix UI component
 3. bower
 4. [webcomponents-lite.js polyfill](https://github.com/webcomponents/webcomponentsjs)
 
-Node, npm and bower are necessary to install the component and dependencies. webcomponents.js adds support for web components and custom elements to your application.
+Node, npm, and bower are necessary to install the component and dependencies. webcomponents.js adds support for web components and custom elements to your application.
 
 ## Getting Started
 
-First, install the component via bower on the command line.
+First, install the component via bower on the command line:
 
 ```
 bower install px-vis-pie-chart --save
 ```
 
-Second, import the component to your application with the following tag in your head.
+Second, import the component in your application with the following tag in your head:
 
 ```
 <link rel="import" href="/bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
@@ -31,13 +31,13 @@ Second, import the component to your application with the following tag in your 
 Finally, use the component in your application:
 
 ```
-Insert Your demo code here.
+See demo page for example usage.
 ```
 
 <br />
 <hr />
 
-## documentation
+## Documentation
 
 Read the full API and view the demo [here](https://predixdev.github.io/px-vis-pie-chart).
 
