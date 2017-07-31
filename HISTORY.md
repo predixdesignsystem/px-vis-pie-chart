@@ -1,3 +1,7 @@
+v2.0.1
+==================
+* Shorten text in update button in demo
+
 v2.0.0
 ==================
 * Design refresh
