@@ -47,11 +47,10 @@ Custom property | Description
 <dom-module id="px-vis-pie-chart">
   <template>
     <style include="px-vis-pie-chart-styles"></style>
-    <style include="px-theme-styles"></style>
     <div id="wrapper" class$="[[_chartWrapperClass]]">
       <!-- empty div for tooltip, do not remove !-->
       <div class="flex">
-        <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]]">
+        <div class$="[[_registerWrapperClass]] [[_getAlignment(chartHorizontalAlignment, chartVerticalAlignment, _registerType)]] safari-flex-fix">
           <!-- Legend -->
           <px-tooltip id="tooltip" for="popAnchor" orientation="top" delay="10" follow-mouse>
             <div style="display:flex; flex-direction:column; align-items:center">

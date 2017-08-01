@@ -1,3 +1,8 @@
+v2.0.2
+==================
+* fix sarfari 9 flex bug causing registers to overlap if screen is too small
+* Add hidden class for registers via sass partial
+
 v2.0.1
 ==================
 * Shorten text in update button in demo
