@@ -1,3 +1,7 @@
+v2.1.1
+==================
+* Fix doc format for static analyzer
+
 v2.1.0
 ==================
 * Change CodePen to Glitch
