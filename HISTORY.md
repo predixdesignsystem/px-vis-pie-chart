@@ -1,3 +1,7 @@
+v2.1.3
+==================
+* Fix typo in seriesColorList
+
 v2.1.2
 ==================
 * Update vis deps
