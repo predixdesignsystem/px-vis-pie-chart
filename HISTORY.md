@@ -1,3 +1,7 @@
+v2.1.4
+==================
+* add device flags
+
 v2.1.3
 ==================
 * Fix typo in seriesColorList
