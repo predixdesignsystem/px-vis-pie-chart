@@ -8,7 +8,9 @@
 
   <link rel="import" href="../px-theme/px-theme-styles.html">
   <!-- <link rel="import" href="../px-dark-theme/px-dark-theme-styles.html"> -->
-  <style include="px-theme-styles" is="custom-style"></style>
+  <custom-style>
+    <style include="px-demo-styles" is="custom-style"></style>
+  </custom-style>
 
   <link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">
   <link rel="import" href="../iron-ajax/iron-ajax.html" />
@@ -18,6 +20,7 @@
   </head>
 
 <body>
+  <dom-bind>
   <template id="just-for-demo" is="dom-bind" >
     <iron-ajax
       url="demo_data.json"
@@ -58,6 +61,7 @@
     </div>
 
   </template>
+  </dom-bind>
 
 </body>
 </html>

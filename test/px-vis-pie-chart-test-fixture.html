@@ -6,7 +6,7 @@
     <title>Web Component Test : Fixture for px-vis-pie-chart</title>
 
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <!-- web-component-tester automatically provides local copy of brower.js below
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
@@ -16,7 +16,9 @@
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
     <link rel="import" href="../../px-theme/px-theme-styles.html">
-    <style include="px-theme-styles" is="custom-style"></style>
+    <custom-style>
+      <style include="px-demo-styles" is="custom-style"></style>
+    </custom-style>
     <link rel="import" href="../iron-ajax/iron-ajax.html" />
 
     <script src="px-vis-pie-chart-custom-tests.js"></script>
@@ -24,6 +26,7 @@
 
   <body>
     <h3>Demo px-vis-pie-chart</h3>
+    <dom-bind>
     <template id="demo" is="dom-bind">
       <iron-ajax
                url="demo_data.json"
@@ -54,5 +57,6 @@
           </px-vis-pie-chart>
         </div>
     </template>
+  </dom-bind>
   </body>
 </html>

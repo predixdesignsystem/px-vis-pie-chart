@@ -12,6 +12,9 @@
 <link rel="import" href="../../px-demo/px-demo-component-snippet.html" />
 <link rel="import" href="../../px-demo/px-demo-code-editor.html" />
 <link rel="import" href="../../px-demo/css/px-demo-styles.html" />
+<custom-style>
+  <style include="px-demo-styles" is="custom-style"></style>
+</custom-style>
 
 <!-- Imports for this component -->
 <link rel="import" href="../px-vis-pie-chart.html"/>
@@ -19,7 +22,7 @@
 <!-- Demo DOM module -->
 <dom-module id="px-vis-pie-chart-demo">
   <template>
-    <style include="px-demo-styles" is="custom-style"></style>
+
 
     <!-- Header -->
     <px-demo-header
@@ -31,16 +34,16 @@
     <!-- Interactive -->
     <px-demo-interactive>
       <!-- Configs -->
-      <px-demo-configs configs="[[configs]]" props="{{props}}" chosen-config="{{chosenConfig}}"></px-demo-configs>
+      <px-demo-configs slot="px-demo-configs" configs="[[configs]]" props="{{props}}" chosen-config="{{chosenConfig}}"></px-demo-configs>
 
       <!-- Props -->
-      <px-demo-props props="{{props}}" config="[[chosenConfig]]"></px-demo-props>
+      <px-demo-props slot="px-demo-props" props="{{props}}" config="[[chosenConfig]]"></px-demo-props>
 
       <!-- Code Editor -->
       <px-demo-code-editor props="{{props}}"></px-demo-code-editor>
 
       <!-- Component ---------------------------------------------------------->
-      <px-demo-component class="flex__item flex flex--col" style="width:100%">
+      <px-demo-component slot="px-demo-component" class="flex__item flex flex--col" style="width:100%">
         <button id="buttonData" class="u-mb" style="width: 130px; height: 20px">Update Data</button>
         <div class="flex--column flex__item" style="width:100%;">
           <px-vis-pie-chart
@@ -73,6 +76,7 @@
       <!-- END Component ------------------------------------------------------>
 
       <px-demo-component-snippet
+        slot="px-demo-component-snippet"
         element-properties="{{props}}"
         element-name="px-vis-pie-chart"
         codepen-link="https://glitch.com/edit/#!/px-vis-pie-chart-demo"
