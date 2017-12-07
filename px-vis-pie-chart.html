@@ -177,7 +177,7 @@ Custom property | Description
        */
       _internalChartData: {
         type: Array,
-        computed: '_getInternalData(chartData, completeSeriesConfig, chartData.*)'
+        computed: '_getInternalData(chartData.*, completeSeriesConfig.*)'
       },
       /**
        * Internal data used for register, depedning on data and max nuymebr of registers
@@ -325,10 +325,12 @@ Custom property | Description
         computed: '_computeSeriesId(completeSeriesConfig)'
       }
     },
-    observers: ['_xAxisConfigChanged(xAxisConfig.*)',
-               '_yAxisConfigChanged(yAxisConfig.*)',
-               '_positionChanged(_center, _radius)',
-               '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'],
+    observers: [
+      '_xAxisConfigChanged(xAxisConfig.*)',
+      '_yAxisConfigChanged(yAxisConfig.*)',
+      '_positionChanged(_center, _radius)',
+      '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'
+    ],
     listeners: {
       'iron-resize': '_onIronResize',
       'px-vis-pie-centered-on-slice': '_showPopover',
@@ -352,13 +354,21 @@ Custom property | Description
       }.bind(this), 500);
     },
     _tooltipConfigChanged: function(conf) {
-      this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
+      if(this._doesObjHaveValues(conf)) {
+        this._applyConfigToElement(this.tooltipConfig, this.$.tooltip);
+      }
     },
     _registerConfigChanged: function(conf) {
-      this._applyConfigToElement(this.registerConfig, this.$.register);
+      if(this._doesObjHaveValues(conf)) {
+        this._applyConfigToElement(this.registerConfig, this.$.register);
+      }
     },
 
     _drawTitle: function() {
+      if(this.hasUndefinedArguments(arguments)) {
+        return;
+      }
+
       if(this.showTitle) {
         if(!this._titleGroup) {
 
@@ -400,13 +410,17 @@ Custom property | Description
       }
     },
     _getInternalData: function(chartData, completeSeriesConfig) {
+      if(this._isObjEmpty(this.completeSeriesConfig)) {
+        return;
+      }
+
       var total = 0,
-          id = this._returnKeys(completeSeriesConfig)[0],
+          id = this._returnKeys(this.completeSeriesConfig)[0],
           xKey = this.completeSeriesConfig[id].x,
           yKey = this.completeSeriesConfig[id].y,
           result = [];
 
-      if(!chartData || chartData.length === 0) {
+      if(!this.chartData || this.chartData.length === 0) {
         this.set('_total', 0);
         this.set('_empty', true);
         this._colorIndexMapping = {};
@@ -416,13 +430,13 @@ Custom property | Description
         var usedColors = [];
 
         //process new data
-        for(var i=0; i<chartData.length; i++) {
+        for(var i=0; i<this.chartData.length; i++) {
 
-          var colorIndex = this._colorIndexMapping[chartData[i][yKey]];
+          var colorIndex = this._colorIndexMapping[this.chartData[i][yKey]];
 
           //calculate total value of all data
-          total += chartData[i][xKey];
-          result.push(chartData[i]);
+          total += this.chartData[i][xKey];
+          result.push(this.chartData[i]);
 
           //store used color indexes
           if(colorIndex && !this.preventColorReuse) {
@@ -475,6 +489,10 @@ Custom property | Description
      * Process data for the registers, limiting the max number of registers
      */
     _getInternalRegisterData: function(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister) {
+
+      if(this.hasUndefinedArguments(arguments)) {
+        return;
+      }
 
       var result = [];
       if(!maxRegisters || maxRegisters < 1) {
@@ -556,10 +574,10 @@ Custom property | Description
         element.set(key, config[key])
       }
     },
-    _getSeriesId: function(completeSeriesConfig) {
-      //should always have only 1 key for pies
-      return this._returnKeys(completeSeriesConfig)[0];
-    },
+    // _getSeriesId: function(completeSeriesConfig) {
+    //   //should always have only 1 key for pies
+    //   return this._returnKeys(completeSeriesConfig)[0];
+    // },
     _onIronResize: function() {
       if (this.preventResize){
         return;
@@ -582,6 +600,10 @@ Custom property | Description
     },
 
     _getAlignment: function(hor, vert, type) {
+      if(this.hasUndefinedArguments(arguments)) {
+        return;
+      }
+
       var base = '';
 
       if(type === 'horizontal') {
@@ -605,21 +627,6 @@ Custom property | Description
         //when vertical just align the register at the top until
         //we provide similar config as horizontal
         base += 'flex--top';
-        // if(hor === 'center') {
-        //   base += 'flex--center ';
-        // } else if(hor === 'right') {
-        //   base += 'flex--right ';
-        // } else {
-        //   base += 'flex--left ';
-        // }
-
-        // if(vert === 'center') {
-        //   base += 'flex--middle';
-        // } else if(vert === 'bottom') {
-        //   base += 'flex--bottom';
-        // } else {
-        //   base += 'flex--top';
-        // }
       }
 
       return base;
@@ -651,9 +658,14 @@ Custom property | Description
       this.$.tooltip._hide();
     },
     _positionChanged: function() {
-      this.$.popover.style['top'] = this._center[1] - this._radius;
+      if(this.isVarNumber(this._center) && this.isVarNumber(thie._radius)) {
+        this.$.popover.style['top'] = this._center[1] - this._radius;
+      }
     },
     _computeInternalUnits: function() {
+      if(this.hasUndefinedArguments(arguments)) {
+        return;
+      }
       return this.usePercentage ? '%' : this._currentConfig.xAxisUnit;
     },
     /**
@@ -667,7 +679,9 @@ Custom property | Description
       }
     },
     _computeSeriesId: function(completeSeriesConfig) {
-      return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
+      if(this._doesObjHaveValues(completeSeriesConfig)) {
+        return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
+      }
     }
   });
 </script>

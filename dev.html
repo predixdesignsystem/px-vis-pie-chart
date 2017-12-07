@@ -3,8 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>px-vis-pie-chart Demo</title>
-  <link rel="stylesheet" type="text/css" href="css/px-vis-pie-chart-demo.css"/>
-  <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+
   <script src="../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../px-theme/px-theme-styles.html">
@@ -12,64 +11,53 @@
   <style include="px-theme-styles" is="custom-style"></style>
 
   <link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">
-  <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
-  <link rel="import" href="../px-tabs/px-tab-set.html" />
   <link rel="import" href="../iron-ajax/iron-ajax.html" />
 
   <link rel="import" href="px-vis-pie-chart.html"/>
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-
-  <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
-  <link rel="import" href="../px-icon-set/px-icon-set.html" />
-  <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
 
   </head>
 
 <body>
-<!-- <body style="padding:100px; background-color: rgb(27,42,51);"> -->
-
-  <!-- Wrap elements with auto-binding template to -->
-  <!-- allow use of Polymer bindings in main document -->
   <template id="just-for-demo" is="dom-bind" >
     <iron-ajax
       url="demo_data.json"
       handle-as="json"
-      last-response="{{data}}" auto></iron-ajax>
+      last-response="{{data}}" auto>
+    </iron-ajax>
 
-<div style="height:800px; background-color: salmon">
-                  <px-vis-pie-chart
-                    chart-data="{{data}}"
-                    height="500"
-                    donut
+    <div style="height:800px; background-color: salmon">
+      <px-vis-pie-chart
+        chart-data="{{data}}"
+        height="500"
+        donut
 
-                    width="500"
-                   show-title
-                    register-config='{
-                      "type": "horizontal",
-                      "horizontalAlignment": "center"
-                    }'
-                    chart-horizontal-alignment="center"
-                    chart-vertical-alignment="center"
-                    aggregate-other-register
-                    margin='{ "top": "50", "bottom": "10", "left": "80", "right": "80" }'
-                    series-config='{
-                      "mySerie" :{"xAxisUnit": "pints",
-                      "y": "y",
-                      "x": "x"}
-                      }'
-                    max-registers=0
-                    dynamic-menu-config='[{
-              "name": "Delete",
-              "action": "function(data) { console.log(\"bite\")}",
-              "eventName": "delete",
-              "icon": "px-vis:trash-series"
-            }
-          ]'>
-                  </px-vis-pie-chart>
-</div>
-                </div>
+        width="500"
+        show-title
+        register-config='{
+          "type": "horizontal",
+          "horizontalAlignment": "center"
+        }'
+        chart-horizontal-alignment="center"
+        chart-vertical-alignment="center"
+        aggregate-other-register
+        margin='{ "top": "50", "bottom": "10", "left": "80", "right": "80" }'
+        series-config='{
+          "mySerie" :{"xAxisUnit": "pints",
+          "y": "y",
+          "x": "x"}
+          }'
+        max-registers=0
+        dynamic-menu-config='[{
+          "name": "Delete",
+          "action": "function(data) { console.log(\"bite\")}",
+          "eventName": "delete",
+          "icon": "px-vis:trash-series"
+        }
+      ]'>
+      </px-vis-pie-chart>
+    </div>
 
-</template>
+  </template>
 
 </body>
 </html>
