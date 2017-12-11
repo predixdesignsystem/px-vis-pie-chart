@@ -6,20 +6,20 @@
     <title>Web Component Test : Fixture for px-vis-pie-chart</title>
 
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <!-- web-component-tester automatically provides local copy of brower.js below
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
-    <script src="../web-component-tester/browser.js"></script>
-    <link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">
     <link rel="import" href="../px-vis-pie-chart.html" />
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
     <link rel="import" href="../../px-theme/px-theme-styles.html">
     <custom-style>
-      <style include="px-demo-styles" is="custom-style"></style>
+      <style include="px-theme-styles" is="custom-style"></style>
     </custom-style>
-    <link rel="import" href="../iron-ajax/iron-ajax.html" />
+    <link rel="import" href="../../iron-ajax/iron-ajax.html" />
 
     <script src="px-vis-pie-chart-custom-tests.js"></script>
   </head>
@@ -29,33 +29,38 @@
     <dom-bind>
     <template id="demo" is="dom-bind">
       <iron-ajax
-               url="demo_data.json"
-               handle-as="json"
-               last-response="{{data}}" auto></iron-ajax>
-        <div style="display:flex">
-          <px-vis-pie-chart
-            id="pie"
-            chart-data="{{data}}"
-            width="400"
-            height="400"
-            use-percentage
-            margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
-            register-config='{
-              "width": 150,
-              "type": "vertical"}'>
-          </px-vis-pie-chart>
-          <px-vis-pie-chart
-            id="donut"
-            chart-data="{{data}}"
-            width="400"
-            height="400"
-            inner-radius="0.7"
-            show-title
-            register-config='{
-              "type": "horizontal"}'
-            units="Cans">
-          </px-vis-pie-chart>
-        </div>
+        id="aj"
+        url="../demo_data.json"
+        handle-as="json"
+        last-response="{{data}}">
+      </iron-ajax>
+      <div>
+        <px-vis-pie-chart
+          id="pie"
+          chart-data="[[data]]"
+          width="400"
+          height="400"
+          use-percentage
+          margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
+          register-config='{
+            "width": 150,
+            "type": "vertical"}'>
+        </px-vis-pie-chart>
+      </div>
+      <div>
+        <px-vis-pie-chart
+          id="donut"
+          donut
+          chart-data="[[data]]"
+          width="400"
+          height="400"
+          inner-radius="0.7"
+          show-title
+          series-config='{"donut":{"xAxisUnit": "Cans"}}'
+          register-config='{
+            "type": "horizontal"}'>
+        </px-vis-pie-chart>
+      </div>
     </template>
   </dom-bind>
   </body>

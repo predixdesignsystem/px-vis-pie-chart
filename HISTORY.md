@@ -1,5 +1,9 @@
+v2.2.0
 ==================
-* Polymer 2 hybrid
+* Polymer 1.x/2.x hybrid element support
+* Fix units in seriesConfig
+* Fix color assignment when new seriesColorList is loaded
+* Properly isolate internalData so as to not leak into chartData
 
 v2.1.4
 ==================

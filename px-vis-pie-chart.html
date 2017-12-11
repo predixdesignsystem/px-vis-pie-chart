@@ -177,14 +177,14 @@ Custom property | Description
        */
       _internalChartData: {
         type: Array,
-        computed: '_getInternalData(chartData.*, completeSeriesConfig.*)'
+        computed: '_getInternalData(chartData.*, completeSeriesConfig.*, _forceColorsUpdate)'
       },
       /**
        * Internal data used for register, depedning on data and max nuymebr of registers
        */
       _internalRegisterData: {
         type: Array,
-        computed: '_getInternalRegisterData(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister)'
+        computed: '_getInternalRegisterData(_internalChartData, maxRegisters, completeSeriesConfig, aggregateOtherRegister, _forceColorsUpdate)'
       },
       /**
        * Total value of all slices
@@ -322,14 +322,19 @@ Custom property | Description
       },
       _currentConfig: {
         type: String,
-        computed: '_computeSeriesId(completeSeriesConfig)'
+        computed: '_computeSeriesId(completeSeriesConfig.*)'
+      },
+      _forceColorsUpdate: {
+        type: Number,
+        value: 1
       }
     },
     observers: [
       '_xAxisConfigChanged(xAxisConfig.*)',
       '_yAxisConfigChanged(yAxisConfig.*)',
       '_positionChanged(_center, _radius)',
-      '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)'
+      '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing)',
+      '_resetColors(seriesColorList.*)'
     ],
     listeners: {
       'iron-resize': '_onIronResize',
@@ -436,7 +441,7 @@ Custom property | Description
 
           //calculate total value of all data
           total += this.chartData[i][xKey];
-          result.push(this.chartData[i]);
+          result.push(JSON.parse(JSON.stringify(this.chartData[i])));
 
           //store used color indexes
           if(colorIndex && !this.preventColorReuse) {
@@ -666,6 +671,7 @@ Custom property | Description
       if(this.hasUndefinedArguments(arguments)) {
         return;
       }
+
       return this.usePercentage ? '%' : this._currentConfig.xAxisUnit;
     },
     /**
@@ -681,6 +687,12 @@ Custom property | Description
     _computeSeriesId: function(completeSeriesConfig) {
       if(this._doesObjHaveValues(completeSeriesConfig)) {
         return this.completeSeriesConfig[Object.keys(this.completeSeriesConfig)[0]];
+      }
+    },
+    _resetColors: function() {
+      if(this._forceColorsUpdate) {
+        this._colorIndexMapping = {};
+        this.set('_forceColorsUpdate', this._forceColorsUpdate + 1);
       }
     }
   });
