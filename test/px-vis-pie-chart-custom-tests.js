@@ -125,15 +125,28 @@ function runCustomTests() {
     });
 
     test('internalData is correct', function() {
+      // Safari 10 puts a space in rgb, so need to get rid of it
+      var dataClone = JSON.parse(JSON.stringify(pie._internalChartData));
+
+      dataClone.forEach(function(item) {
+        item.backgroundColor = item.backgroundColor.split(' ').join('');
+      });
+
       assert.isFalse(pie._empty);
       assert.equal(pie._total, 57);
       assert.equal(pie._internalChartData.length, 8);
-      assert.deepEqual(pie._internalChartData, expected_data);
+      assert.deepEqual(dataClone, expected_data);
     });
 
     test('internalRegisterData is correct', function() {
+      var dataClone = JSON.parse(JSON.stringify(pie._internalRegisterData));
+
+      dataClone.forEach(function(item) {
+        item.backgroundColor = item.backgroundColor.split(' ').join('');
+      });
+
       assert.equal(pie._internalRegisterData.length, 8);
-      assert.deepEqual(pie._internalRegisterData, expected_register);
+      assert.deepEqual(dataClone, expected_register);
     });
 
     test('units is correct', function() {
@@ -156,15 +169,27 @@ function runCustomTests() {
     });
 
     test('internalData is correct', function() {
+      var dataClone = JSON.parse(JSON.stringify(donut._internalChartData));
+
+      dataClone.forEach(function(item) {
+        item.backgroundColor = item.backgroundColor.split(' ').join('');
+      });
+
       assert.isFalse(donut._empty);
       assert.equal(donut._total, 57);
       assert.equal(donut._internalChartData.length, 8);
-      assert.deepEqual(donut._internalChartData, expected_data);
+      assert.deepEqual(dataClone, expected_data);
     });
 
     test('internalRegisterData is correct', function() {
+      var dataClone = JSON.parse(JSON.stringify(donut._internalRegisterData));
+
+      dataClone.forEach(function(item) {
+        item.backgroundColor = item.backgroundColor.split(' ').join('');
+      });
+
       assert.equal(donut._internalRegisterData.length, 8);
-      assert.deepEqual(donut._internalRegisterData, expected_register);
+      assert.deepEqual(dataClone, expected_register);
     });
 
     test('units is correct', function() {
