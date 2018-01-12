@@ -1,3 +1,7 @@
+v2.2.1
+==================
+* fix demo code editor
+
 v2.2.0
 ==================
 * Polymer 1.x/2.x hybrid element support
