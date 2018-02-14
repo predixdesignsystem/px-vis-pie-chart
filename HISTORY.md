@@ -1,3 +1,7 @@
+v2.2.2
+==================
+* Fix demo for IE
+
 v2.2.1
 ==================
 * fix demo code editor

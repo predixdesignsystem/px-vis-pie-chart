@@ -11,14 +11,15 @@
 <link rel="import" href="../../px-demo/px-demo-interactive.html" />
 <link rel="import" href="../../px-demo/px-demo-component-snippet.html" />
 <link rel="import" href="../../px-demo/px-demo-code-editor.html" />
- 
+<link rel="import" href="../../px-demo/css/px-demo-content-helper-styles.html" />
+
 <!-- Imports for this component -->
 <link rel="import" href="../px-vis-pie-chart.html"/>
 
 <!-- Demo DOM module -->
 <dom-module id="px-vis-pie-chart-demo">
   <template>
-
+    <style include="px-demo-content-helper-styles"></style>
 
     <!-- Header -->
     <px-demo-header
@@ -40,7 +41,7 @@
 
       <!-- Component ---------------------------------------------------------->
       <px-demo-component slot="px-demo-component" class="flex__item flex flex--col" style="width:100%">
-        <button id="buttonData" class="u-mb" style="width: 130px; height: 20px">Update Data</button>
+        <button id="buttonData" class="u-mb btn btn--tertiary">Update Data</button>
         <div class="flex--column flex__item" style="width:100%;">
           <px-vis-pie-chart
             id="chart"
