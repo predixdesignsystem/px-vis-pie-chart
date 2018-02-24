@@ -218,7 +218,7 @@ function runCustomTests2() {
     setTimeout(function() {
       conditionalDonut = document.getElementById('conditionalDonut');
       done();
-    }, 200);
+    }, 500);
   });
 
   suite('Conditional Donut tests', function() {
@@ -227,9 +227,9 @@ function runCustomTests2() {
     });
 
     test('conditional donut has correct css variables applied', function() {
-      var themeVar = conditionalDonut._checkThemeVariable(conditionalDonut, '--px-vis-pie-title-color')
+      var themeVar = conditionalDonut._checkThemeVariable(conditionalDonut, '--px-vis-pie-title-color');
       assert.equal(themeVar, '--px-vis-pie-title-color', 'theme-var not set');
       assert.notEqual(conditionalDonut.$.svg.shadowRoot.querySelector('.title').getAttribute('fill'), 'rgb(0,0,0)');
-    })
+    });
   });
 }
