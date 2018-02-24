@@ -63,9 +63,8 @@
       </div>
 
       <div>
-        <template is="dom-if" if="[[showMe]]">
         <px-vis-pie-chart
-          id="conditionalDonut"
+          id="donut2"
           donut
           chart-data='[{"x":1,"y":"half"},{"x":1,"y":"other"}]' 
           width="400"
@@ -74,7 +73,6 @@
           title="Title"
           series-config='{"tests":{"xAxisUnit":"","y":"y","x":"x"}}' 
           ></px-vis-pie-chart>
-        </template>
       </div>
 
     </template>

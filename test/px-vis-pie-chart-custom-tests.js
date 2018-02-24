@@ -1,9 +1,8 @@
 document.addEventListener("WebComponentsReady", function() {
-  runCustomTests1();
-  runCustomTests2();
+  runCustomTests();
 });
 
-function runCustomTests1() {
+function runCustomTests() {
 
   var pie,
       donut;
@@ -209,27 +208,17 @@ function runCustomTests1() {
 
 
   });
-};
 
-function runCustomTests2() {
-  suiteSetup(function(done) {
-    var autoTemplate = document.querySelector('dom-bind');
-    autoTemplate.showMe = true;
-    setTimeout(function() {
-      conditionalDonut = document.getElementById('conditionalDonut');
-      done();
-    }, 500);
-  });
-
-  suite('Conditional Donut tests', function() {
+  suite('Fast Render', function() {
     test('conditional donut is created', function() {
-      assert.isTrue(conditionalDonut !== null);
+      assert.isTrue(donut2 !== null);
     });
 
     test('conditional donut has correct css variables applied', function() {
-      var themeVar = conditionalDonut._checkThemeVariable(conditionalDonut, '--px-vis-pie-title-color');
+      var themeVar = donut2._checkThemeVariable(donut2, '--px-vis-pie-title-color');
       assert.equal(themeVar, '--px-vis-pie-title-color', 'theme-var not set');
-      assert.notEqual(conditionalDonut.$.svg.shadowRoot.querySelector('.title').getAttribute('fill'), 'rgb(0,0,0)');
+      assert.notEqual(Polymer.dom(donut2.$.svg.root).querySelector('.title').getAttribute('fill'), 'rgb(0,0,0)');
     });
   });
-}
+};
+
