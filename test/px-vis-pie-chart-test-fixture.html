@@ -61,6 +61,22 @@
             "type": "horizontal"}'>
         </px-vis-pie-chart>
       </div>
+
+      <div>
+        <template is="dom-if" if="[[showMe]]">
+        <px-vis-pie-chart
+          id="conditionalDonut"
+          donut
+          chart-data='[{"x":1,"y":"half"},{"x":1,"y":"other"}]' 
+          width="400"
+          height="400"
+          show-title
+          title="Title"
+          series-config='{"tests":{"xAxisUnit":"","y":"y","x":"x"}}' 
+          ></px-vis-pie-chart>
+        </template>
+      </div>
+
     </template>
   </dom-bind>
   </body>
