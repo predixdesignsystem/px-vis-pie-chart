@@ -208,4 +208,17 @@ function runCustomTests() {
 
 
   });
+
+  suite('Fast Render', function() {
+    test('conditional donut is created', function() {
+      assert.isTrue(donut2 !== null);
+    });
+
+    test('conditional donut has correct css variables applied', function() {
+      var themeVar = donut2._checkThemeVariable(donut2, '--px-vis-pie-title-color');
+      assert.equal(themeVar, '--px-vis-pie-title-color', 'theme-var not set');
+      assert.notEqual(Polymer.dom(donut2.$.svg.root).querySelector('.title').getAttribute('fill'), 'rgb(0,0,0)');
+    });
+  });
 };
+
