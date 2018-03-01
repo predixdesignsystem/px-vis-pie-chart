@@ -1,3 +1,7 @@
+v2.2.3
+==================
+* Ensure title colors are updated at start and can be updated later. Thanks to @davidsteinberger
+
 v2.2.2
 ==================
 * Fix demo for IE
