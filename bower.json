@@ -42,7 +42,7 @@
     "promise-polyfill": "^2.0.0"
   },
   "variants": {
-    "1.x":{
+    "1.x": {
       "dependencies": {
         "polymer": "^1.9.0"
       },
@@ -55,5 +55,6 @@
         "promise-polyfill": "^1.0.0"
       }
     }
-  }
+  },
+  "license": "BSD-3-Clause"
 }
