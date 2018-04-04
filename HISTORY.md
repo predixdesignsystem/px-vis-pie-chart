@@ -1,3 +1,10 @@
+v3.0.0
+==================
+* Upgraded to px-vis v5
+* Added central tooltip
+* Breaking changes:
+  * See px-vis v5 for potential breaking changes
+
 v2.2.3
 ==================
 * Ensure title colors are updated at start and can be updated later. Thanks to @davidsteinberger

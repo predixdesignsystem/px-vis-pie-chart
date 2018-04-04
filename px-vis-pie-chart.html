@@ -1,8 +1,3 @@
-<!--
-    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
-    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
-    'grunt depserve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
--->
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../px-vis/px-vis-behavior-chart.html"/>
 <link rel="import" href="../px-vis/px-vis-behavior-common.html"/>
@@ -16,6 +11,8 @@
 <link rel="import" href="../px-vis/px-vis-register.html"/>
 <link rel="import" href="../px-vis/px-vis-cursor.html"/>
 <link rel="import" href="../px-vis/px-vis-clip-path.html"/>
+<link rel="import" href="../px-vis/px-vis-central-tooltip-content.html"/>
+<link rel="import" href="../px-tooltip/px-tooltip.html"/>
 <link rel="import" href="css/px-vis-pie-chart-styles.html">
 
 <!--
@@ -125,7 +122,22 @@ Custom property | Description
           empty="[[_empty]]">
         </px-vis-pie>
       </div>
-</div>
+    </div>
+    <px-tooltip
+      id="centralTooltip"
+      smart-orientation
+      ignore-target-events
+      orientation="[[tooltipOrientation]]">
+      <px-vis-central-tooltip-content
+        resources="[[resources]]"
+        use-key-if-missing="[[useKeyIfMissing]]"
+        language="[[language]]"
+        first-date-time-format="[[firstDateTimeFormat]]"
+        second-date-time-format="[[secondDateTimeFormat]]"
+        separator="[[separator]]"
+        timezone="[[timezone]]">
+      </px-vis-central-tooltip-content>
+    </px-tooltip>
   </template>
 </dom-module>
 
@@ -148,7 +160,8 @@ Custom property | Description
       PxColorsBehavior.dataVisColorTheming,
       PxVisBehavior.dynamicMenuConfig,
       PxVisBehaviorChart.actionRequest,
-      PxVisBehavior.updateStylesOverride
+      PxVisBehavior.updateStylesOverride,
+      PxVisBehaviorChart.centralTooltip
     ],
     properties: {
       /**
