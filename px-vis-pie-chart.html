@@ -201,6 +201,15 @@ Custom property | Description
         value: false
       },
       /**
+       * Whether to show value of a slice under mouse pointer in the middle of the pie/donut.
+       * Meant to be used with a donut chart.
+       * If mouse pointer is outside of any slice, title and the total are displayed
+       */
+      showSliceValueOnMouseover: {
+        type: Boolean,
+        value: false
+      },
+      /**
        * Internal data used, same as chartData but with percentages infos
        */
       _internalChartData: {
@@ -355,13 +364,26 @@ Custom property | Description
       _forceColorsUpdate: {
         type: Number,
         value: 1
+      },
+
+      _showCurrentSliceValueInTitle: {
+        type: Boolean,
+        value: false
+      },
+      _currentSliceLabel: {
+        type: String,
+        value: ''
+      },
+      _currentSliceValue: {
+        type: String,
+        value: ''
       }
     },
     observers: [
       '_xAxisConfigChanged(xAxisConfig.*)',
       '_yAxisConfigChanged(yAxisConfig.*)',
       '_positionChanged(_center, _radius)',
-      '_drawTitle(svg, showTitle, title, _total, _internalUnits, titleSpacing, _stylesUpdated)',
+      '_drawTitle(svg, showTitle, showSliceValueOnMouseover, _showCurrentSliceValueInTitle, title, _total, _internalUnits, titleSpacing, _stylesUpdated)',
       '_resetColors(seriesColorList.*)'
     ],
     listeners: {
@@ -405,7 +427,14 @@ Custom property | Description
         return;
       }
 
-      if(this.showTitle) {
+      if(this.showTitle || (this.showSliceValueOnMouseover && this._showCurrentSliceValueInTitle)) {
+
+        // In case if configured to do so (showSliceValueOnMouseover=true),
+        // on mouse over a slice, display current slice name and value instead of 'total' in the middle of the pie/donut
+        const showCurrentSliceValue = this.showSliceValueOnMouseover && this._showCurrentSliceValueInTitle;
+        const title = showCurrentSliceValue ? this._currentSliceLabel : this.title;
+        const value = showCurrentSliceValue ? this._currentSliceValue : this._total + ' ' + this._currentConfig.xAxisUnit;
+
         if(!this._titleGroup) {
 
           this._titleGroup = this.svg.append('g')
@@ -417,7 +446,7 @@ Custom property | Description
             .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', '45px'))
             .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
             .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
-            .text(this.title)
+            .text(title)
             .attr('text-anchor', 'middle')
             .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
 
@@ -427,7 +456,7 @@ Custom property | Description
             .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', '45px'))
             .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
             .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
-            .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+            .text(value)
             .attr('text-anchor', 'middle')
             .attr('alignment-baseline', 'hanging')
             .attr('transform','translate(0,' + this.titleSpacing + ')');
@@ -437,7 +466,7 @@ Custom property | Description
             .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-font-size', '45px'))
             .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
             .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
-            .text(this.title)
+            .text(title)
             .attr('transform','translate(0,' + '-' + this.titleSpacing + ')');
 
           this._titleGroup.select('text.value')
@@ -445,7 +474,7 @@ Custom property | Description
             .attr('font-size', this._checkThemeVariable('--px-vis-pie-title-value-font-size', '45px'))
             .style('font-family',this._checkThemeVariable("--px-vis-font-family", ''))
             .attr('font-style', this._checkThemeVariable("--px-vis-font-family", ''))
-            .text(this._total + ' ' + this._currentConfig.xAxisUnit)
+            .text(value)
             .attr('transform','translate(0,' + this.titleSpacing + ')');
         }
       } else if (this._titleGroup) {
@@ -683,6 +712,11 @@ Custom property | Description
       this.$.popover.show();
     },
     _showTooltip: function(evt) {
+      if (this.showSliceValueOnMouseover) {
+        //show slice label and value in the center of pie/donut instead of tooltip
+        this._showSliceValue(evt);
+        return;
+      }
       //get label and value
       if(this._empty) {
         this.set('_ttTitle', 'Empty');
@@ -700,6 +734,10 @@ Custom property | Description
       this.$.tooltip._show();
     },
     _hideTooltip: function(evt) {
+      if (this.showSliceValueOnMouseover) {
+        this._hideSliceValue();
+        return;
+      }
       this.$.tooltip._hide();
     },
     _positionChanged: function() {
@@ -734,6 +772,22 @@ Custom property | Description
         this._colorIndexMapping = {};
         this.set('_forceColorsUpdate', this._forceColorsUpdate + 1);
       }
+    },
+    _showSliceValue: function(evt) {
+      const label = evt.detail.datum.data[this._currentConfig.y];
+      const value = this._getSliceValue(evt.detail.datum);
+      this.setProperties({
+        _showCurrentSliceValueInTitle: true,
+        _currentSliceLabel: label,
+        _currentSliceValue: value
+      });
+    },
+    _hideSliceValue: function() {
+      this.setProperties({
+        _showCurrentSliceValueInTitle: false,
+        _currentSliceTitle: '',
+        _currentSliceValue: ''
+      });
     }
   });
 </script>

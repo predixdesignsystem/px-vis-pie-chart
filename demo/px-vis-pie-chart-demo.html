@@ -82,7 +82,8 @@ limitations under the License.
             title-spacing="{{props.titleSpacing.value}}"
             register-config="{{props.registerConfig.value}}"
             title="{{props.title.value}}"
-            decimal-percentage="{{props.decimalPercentage.value}}">
+            decimal-percentage="{{props.decimalPercentage.value}}"
+            show-slice-value-on-mouseover="{{props.showSliceValueOnMouseover.value}}">
           </px-vis-pie-chart>
       </div>
       </px-demo-component>
@@ -507,6 +508,12 @@ limitations under the License.
           }
         ],
         inputType: 'code:JSON'
+      },
+
+      showSliceValueOnMouseover: {
+        type: Boolean,
+        defaultValue: false,
+        inputType: 'toggle'
       },
 
     },
