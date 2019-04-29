@@ -1266,7 +1266,7 @@
         {
           "name": "showSliceValueOnMouseover",
           "type": "boolean | null | undefined",
-          "description": "Whether to show current slice label and value in the middle of the pie/donut instead of a tooltip on mouse over slice.\nMeant to be used with a donut chart",
+          "description": "Whether to show current slice label and value in the middle of the pie/donut instead of tooltip when mouse pointer enters a slice.\nMeant to be used with a donut chart",
           "privacy": "public",
           "sourceRange": {
             "start": {
