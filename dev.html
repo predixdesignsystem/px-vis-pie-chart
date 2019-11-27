@@ -20,64 +20,79 @@ limitations under the License.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>px-vis-pie-chart Demo</title>
 
-  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-  <link rel="import" href="../px-theme/px-theme-styles.html">
+  <script type="module" src="../px-theme/px-theme-styles.js"></script>
   <!-- <link rel="import" href="../px-dark-theme/px-dark-theme-styles.html"> -->
-  <custom-style>
+  <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
     <style include="px-theme-styles" is="custom-style"></style>
-  </custom-style>
+  </custom-style>`;
 
-  <link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">
-  <link rel="import" href="../iron-ajax/iron-ajax.html" />
+document.body.appendChild($_documentContainer.content);
+</script>
 
-  <link rel="import" href="px-vis-pie-chart.html"/>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../promise-polyfill/promise-polyfill-lite.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>lite.js"></script>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../iron-ajax/iron-ajax.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>ax.js"></script>
+
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="px-vis-pie-chart.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>></script>
 
   </head>
 
 <body>
-  <dom-bind>
-  <template id="just-for-demo" is="dom-bind" >
-    <iron-ajax
-      url="demo_data.json"
-      handle-as="json"
-      last-response="{{data}}" auto>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-bind>
+  <template id="just-for-demo" is="dom-bind">
+    <iron-ajax url="demo_data.json" handle-as="json" last-response="{{data}}" auto="">
     </iron-ajax>
 
     <div style="height:800px; background-color: salmon">
-      <px-vis-pie-chart
-        chart-data="{{data}}"
-        height="500"
-        donut
-
-        width="500"
-        show-title
-        register-config='{
-          "type": "horizontal",
-          "horizontalAlignment": "center"
-        }'
-        chart-horizontal-alignment="center"
-        chart-vertical-alignment="center"
-        aggregate-other-register
-        margin='{ "top": "50", "bottom": "10", "left": "80", "right": "80" }'
-        series-config='{
-          "mySerie" :{"xAxisUnit": "pints",
-          "y": "y",
-          "x": "x"}
-          }'
-        max-registers=0
-        dynamic-menu-config='[{
-          "name": "Delete",
-          "action": "function(data) { console.log(\"bite\")}",
-          "eventName": "delete",
-          "icon": "px-vis:trash-series"
+      <px-vis-pie-chart chart-data="{{data}}" height="500" donut="" width="500" show-title="" register-config="{
+          &quot;type&quot;: &quot;horizontal&quot;,
+          &quot;horizontalAlignment&quot;: &quot;center&quot;
+        }" chart-horizontal-alignment="center" chart-vertical-alignment="center" aggregate-other-register="" margin="{ &quot;top&quot;: &quot;50&quot;, &quot;bottom&quot;: &quot;10&quot;, &quot;left&quot;: &quot;80&quot;, &quot;right&quot;: &quot;80&quot; }" series-config="{
+          &quot;mySerie&quot; :{&quot;xAxisUnit&quot;: &quot;pints&quot;,
+          &quot;y&quot;: &quot;y&quot;,
+          &quot;x&quot;: &quot;x&quot;}
+          }" max-registers="0" dynamic-menu-config="[{
+          &quot;name&quot;: &quot;Delete&quot;,
+          &quot;action&quot;: &quot;function(data) { console.log(\\&quot;bite\\&quot;)}&quot;,
+          &quot;eventName&quot;: &quot;delete&quot;,
+          &quot;icon&quot;: &quot;px-vis:trash-series&quot;
         }
-      ]'>
+      ]">
       </px-vis-pie-chart>
     </div>
 
   </template>
-  </dom-bind>
+  </dom-bind>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 
 </body>
 </html>

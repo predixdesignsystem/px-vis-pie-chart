@@ -22,76 +22,75 @@ limitations under the License.
     <title>Web Component Test : Fixture for px-vis-pie-chart</title>
 
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <!-- web-component-tester automatically provides local copy of brower.js below
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
-    <script src="../../web-component-tester/browser.js"></script>
-    <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">
-    <link rel="import" href="../px-vis-pie-chart.html" />
+    <script src="../../wct-browser-legacy/browser.js"></script>
+    <script type="module" src="../../@polymer/promise-polyfill/promise-polyfill-lite.js"></script>
+    <script type="module" src="../px-vis-pie-chart.js"></script>
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
-    <link rel="import" href="../../px-theme/px-theme-styles.html">
-    <custom-style>
-      <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
-    <link rel="import" href="../../iron-ajax/iron-ajax.html" />
+    <script type="module" src="../../px-theme/px-theme-styles.js"></script>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
 
-    <script src="px-vis-pie-chart-custom-tests.js"></script>
+$_documentContainer.innerHTML = `<custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../iron-ajax/iron-ajax.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>ax.js"></script>
+
+    <script src="./px-vis-pie-chart-custom-tests.js"></script>
   </head>
 
   <body>
-    <h3>Demo px-vis-pie-chart</h3>
-    <dom-bind>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>Demo px-vis-pie-chart</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-bind>
     <template id="demo" is="dom-bind">
-      <iron-ajax
-        id="aj"
-        url="../demo_data.json"
-        handle-as="json"
-        last-response="{{data}}">
+      <iron-ajax id="aj" url="../demo_data.json" handle-as="json" last-response="{{data}}">
       </iron-ajax>
       <div>
-        <px-vis-pie-chart
-          id="pie"
-          chart-data="[[data]]"
-          width="400"
-          height="400"
-          use-percentage
-          margin='{ "top": "10", "bottom": "60", "left": "50", "right": "10" }'
-          register-config='{
-            "width": 150,
-            "type": "vertical"}'>
+        <px-vis-pie-chart id="pie" chart-data="[[data]]" width="400" height="400" use-percentage="" margin="{ &quot;top&quot;: &quot;10&quot;, &quot;bottom&quot;: &quot;60&quot;, &quot;left&quot;: &quot;50&quot;, &quot;right&quot;: &quot;10&quot; }" register-config="{
+            &quot;width&quot;: 150,
+            &quot;type&quot;: &quot;vertical&quot;}">
         </px-vis-pie-chart>
       </div>
       <div>
-        <px-vis-pie-chart
-          id="donut"
-          donut
-          chart-data="[[data]]"
-          width="400"
-          height="400"
-          inner-radius="0.7"
-          show-title
-          series-config='{"donut":{"xAxisUnit": "Cans"}}'
-          register-config='{
-            "type": "horizontal"}'>
+        <px-vis-pie-chart id="donut" donut="" chart-data="[[data]]" width="400" height="400" inner-radius="0.7" show-title="" series-config="{&quot;donut&quot;:{&quot;xAxisUnit&quot;: &quot;Cans&quot;}}" register-config="{
+            &quot;type&quot;: &quot;horizontal&quot;}">
         </px-vis-pie-chart>
       </div>
 
       <div>
-        <px-vis-pie-chart
-          id="donut2"
-          donut
-          chart-data='[{"x":1,"y":"half"},{"x":1,"y":"other"}]' 
-          width="400"
-          height="400"
-          show-title
-          title="Title"
-          series-config='{"tests":{"xAxisUnit":"","y":"y","x":"x"}}' 
-          ></px-vis-pie-chart>
+        <px-vis-pie-chart id="donut2" donut="" chart-data="[{&quot;x&quot;:1,&quot;y&quot;:&quot;half&quot;},{&quot;x&quot;:1,&quot;y&quot;:&quot;other&quot;}]" width="400" height="400" show-title="" title="Title" series-config="{&quot;tests&quot;:{&quot;xAxisUnit&quot;:&quot;&quot;,&quot;y&quot;:&quot;y&quot;,&quot;x&quot;:&quot;x&quot;}}"></px-vis-pie-chart>
       </div>
 
     </template>
-  </dom-bind>
+  </dom-bind>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
   </body>
 </html>
